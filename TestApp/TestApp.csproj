@@ -34,10 +34,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <HintPath>..\packages\Flowing.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+      <HintPath>..\packages\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

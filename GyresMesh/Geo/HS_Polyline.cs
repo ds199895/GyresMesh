@@ -11,5 +11,9 @@ namespace Hsy.Geo
         internal List<HS_Point> points;
 
         internal int numberOfPoints;
+
+        internal List<HS_Vector> directions;
+
+        internal double[] incLengths;
     }
 }

@@ -33,6 +33,12 @@ namespace Hsy.Geo
             this.z = hs_coord.Z();
         }
 
+        public HS_Vector(HS_Coord from,HS_Coord to)
+        {
+            this.x = to.X() - from.X();
+            this.y = to.Y() - from.Y();
+            this.z = to.Z() - from.Z();
+        }
         public HS_Vector(double x, double y)
         {
             this.x = x;
@@ -55,6 +61,11 @@ namespace Hsy.Geo
         public HS_Vector get()
         {
             return this;
+        }
+
+        public double GetLength()
+        {
+            return this.dist(new HS_Vector());
         }
         public Vector3D ToVector3D()
         {
@@ -229,6 +240,20 @@ namespace Hsy.Geo
             }
 
             return this;
+        }
+
+        public HS_Vector united()
+        {
+            HS_Vector vn = new HS_Vector();
+            double l = this.len();
+            if (l != 0.0D)
+            {
+                vn.x= this.x /l;
+                vn.x=this.y /l;
+                vn.x=this.z /l;
+            }
+
+            return vn;
         }
 
         public double dist(HS_Vector v)
