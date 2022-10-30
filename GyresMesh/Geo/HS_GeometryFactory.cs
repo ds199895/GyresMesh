@@ -22,6 +22,10 @@ namespace Hsy.Geo
         {
             return new HS_Polygon(points);
         }
+        //public HS_Map2D createEmbeddedPlane()
+        //{
+        //    return new HS_PlanarMap();
+        //}
 
     }
 }

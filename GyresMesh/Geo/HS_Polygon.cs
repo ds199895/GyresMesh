@@ -97,28 +97,75 @@ namespace Hsy.Geo
             }
         }
 
-
-        public int[] getTriangles(bool optimize)
-        {
-            if (triangles == null)
+        public int getNumberOfPoints()
             {
-                if (numberOfShellPoints == 0)
-                {
-                    return new int[] { };
-                }else if (numberOfShellPoints < 3)
-                {
-                    return new int[] { 0, 0, 0 };
-                }else if (numberOfShellPoints == 3 && numberOfContours == 1)
-                {
-                    return new int[] { 0, 1, 2 };
-                }else if (numberOfShellPoints == 4 && numberOfContours == 1)
-                {
-                    return 
-                }
-                {
-
-                }
+                return points.Count;
             }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public int getNumberOfShellPoints()
+        {
+            return numberOfShellPoints;
         }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public int getNumberOfHoles()
+        {
+            return numberOfContours - 1;
+        }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public int GetNumberOfContours()
+        {
+            return numberOfContours;
+        }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public int[] GetNumberOfPointsPerContour()
+        {
+            return numberOfPointsPerContour;
+        }
+        public HS_Point GetPoint(int i)
+        {
+            return points[i];
+        }
+        //public int[] getTriangles(bool optimize)
+        //{
+        //    if (triangles == null)
+        //    {
+        //        if (numberOfShellPoints == 0)
+        //        {
+        //            return new int[] { };
+        //        }else if (numberOfShellPoints < 3)
+        //        {
+        //            return new int[] { 0, 0, 0 };
+        //        }else if (numberOfShellPoints == 3 && numberOfContours == 1)
+        //        {
+        //            return new int[] { 0, 1, 2 };
+        //        }else if (numberOfShellPoints == 4 && numberOfContours == 1)
+        //        {
+        //            return 
+        //        }
+        //        {
+
+        //        }
+        //    }
+        //}
     }
 }
