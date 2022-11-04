@@ -9,19 +9,19 @@ namespace Hsy.Geo
     public class HS_Polygon :HS_Polyline
     {
 
-        int[] triangles;
+        public int[] triangles;
         /**
          *
          */
-        int numberOfContours;
+        public int numberOfContours;
         /**
          *
          */
-        int[] numberOfPointsPerContour;
+        public int[] numberOfPointsPerContour;
         /**
          *
          */
-        int numberOfShellPoints;
+        public int numberOfShellPoints;
         /**
          *
          */
@@ -152,15 +152,18 @@ namespace Hsy.Geo
         //        if (numberOfShellPoints == 0)
         //        {
         //            return new int[] { };
-        //        }else if (numberOfShellPoints < 3)
+        //        }
+        //        else if (numberOfShellPoints < 3)
         //        {
         //            return new int[] { 0, 0, 0 };
-        //        }else if (numberOfShellPoints == 3 && numberOfContours == 1)
+        //        }
+        //        else if (numberOfShellPoints == 3 && numberOfContours == 1)
         //        {
         //            return new int[] { 0, 1, 2 };
-        //        }else if (numberOfShellPoints == 4 && numberOfContours == 1)
+        //        }
+        //        else if (numberOfShellPoints == 4 && numberOfContours == 1)
         //        {
-        //            return 
+        //            return
         //        }
         //        {
 

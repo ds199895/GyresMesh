@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics;
 
 namespace TestApp
 {
@@ -28,10 +30,23 @@ namespace TestApp
         HS_Polygon hsPoly;
         Polygon JtsPoly;
         CamController cam;
+        HS_Vector[] vertices = new HS_Vector[9];
+       
         public override void SetUp()
         {
             Size(1200, 1000);
             cam = new CamController(this);
+            //HS_Coord c = new HS_Coord();
+            this.vertices[0] = new HS_Vector(-400, 600);
+            this.vertices[1] = new HS_Vector(0, 200);
+            this.vertices[2] = new HS_Vector(200, 500);
+            this.vertices[3] = new HS_Vector(700, 0);
+            this.vertices[4] = new HS_Vector(500, -600);
+            this.vertices[5] = new HS_Vector(300, 300);
+            this.vertices[6] = new HS_Vector(0,-500);
+            this.vertices[7] = new HS_Vector(-600, 0);
+            this.vertices[8] = new HS_Vector(-200, 100);
+
             for (int i = 0; i < 10; i++)
             {
                 float y = 0;
@@ -48,8 +63,6 @@ namespace TestApp
                 GE_Vertex vs = new GE_Vertex(p1);
                 GE_Vertex ve = new GE_Vertex(p2);
 
-                ps.Add(p1);
-             
                 GE_Halfedge h = new GE_Halfedge();
                 GE_Halfedge hp = new GE_Halfedge();
                 h.SetVertex(vs);
@@ -60,7 +73,7 @@ namespace TestApp
 
                 hes.Add(h);
                 heps.Add(hp);
-                Print(vs.GetPosition());
+                Print("vertex: "+vs.GetPosition());
 
                 mesh.Add(vs);
             }
@@ -95,9 +108,9 @@ namespace TestApp
             Print(HS_Math.fastInvSqrt(6.25f));
 
             hsPoly = HS_GeometryFactory.instance().CreateSimplePolygon(ps);
-            JtsPoly = HS_JTS.toJTSPolygon2D(hsPoly);
-            Print(JtsPoly.Coordinates.Length);
-            cam.Front();
+            //JtsPoly = HS_JTS.toJTSPolygon2D(hsPoly);
+            //Print(JtsPoly.Coordinates.Length);
+            //cam.Front();
         }
 
         public override void Draw()
@@ -105,20 +118,32 @@ namespace TestApp
             Background(255);
             Fill(0);
             cam.DrawSystem(this,200);
-            BeginShape();
-            //foreach(GE_Halfedge he in mesh.GetHalfedges()){
-            //    Vertex(he.GetStart().X(), he.GetStart().Y(), he.GetStart().Z());
+            //BeginShape(OpenTK.Graphics.OpenGL.PrimitiveType.TriangleFan);
+            ////foreach (GE_Halfedge he in mesh.GetHalfedges())
+            ////{
+            ////    Vertex(he.GetStart().xf, he.GetStart().yf, he.GetStart().zf);
+            ////}
+            //foreach (HS_Vector v in vertices)
+            //{
+            //    Vertex(v.xf, v.yf, v.zf);
             //}
-
-            foreach (Coordinate c in JtsPoly.Coordinates)
+            GL.Begin(PrimitiveType.TriangleStrip);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            GL.Color4(Color4.Black);
+            foreach(HS_Vector v in vertices)
             {
-                Vertex((float)c.X, (float)c.Y, (float)c.Z);
+                GL.Vertex2(v.xd, v.yd);
             }
+            GL.End();
+            //foreach (Coordinate c in JtsPoly.Coordinates)
+            //{
+            //    Vertex((float)c.X, (float)c.Y);
+            //}
             //for (int i=0;i<hsPoly.getNumberOfPoints();i++)
             //{
             //    Vertex(hsPoly.GetPoint(i).X(), hsPoly.GetPoint(i).Y(), hsPoly.GetPoint(i).Z());
             //}
-            EndShape();
+            //EndShape();
 
 
         }

@@ -9,12 +9,14 @@ namespace Hsy.Geo
     public interface HS_MutableCoord :HS_Coord
     {
 
-        void SetX(float x);
+        public void SetX(float x);
 
         void SetY(float y);
 
         void SetZ(float z);
-
+        void SetX(double x);
+        void SetY(double y);
+        void SetZ(double z);
         void Set(HS_Coord z);
 
     }

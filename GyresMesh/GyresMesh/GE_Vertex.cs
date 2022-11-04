@@ -13,7 +13,18 @@ namespace Hsy.GyresMesh
     {
         private HS_Point pos;
         private GE_Halfedge _halfedge;
-
+        private double _xd;
+        private double _yd;
+        private double _zd;
+        private float _xf;
+        private float _yf;
+        private float _zf;
+        public float xf { get { return (float)this.pos.xf; } set => this.pos.xf = (float)(this.pos.xd = value); }
+        public float yf { get { return (float)this.pos.yf; } set => this.pos.yf = (float)(this.pos.yd = value); }
+        public float zf { get { return (float)this.pos.zf; } set => this.pos.zf = (float)(this.pos.zd = value); }
+        public double xd { get { return this.pos.xd; } set => this.pos.xd = value; }
+        public double yd { get { return this.pos.yd; } set => this.pos.yd = value; }
+        public double zd { get { return this.pos.zd; } set => this.pos.zd = value; }
         public GE_Vertex()
         {
             pos = new HS_Point();
@@ -21,6 +32,7 @@ namespace Hsy.GyresMesh
 
         public GE_Vertex(HS_Coord hs_coord)
         {
+            
             this.pos = new HS_Point(hs_coord);
         }
 
@@ -189,21 +201,7 @@ namespace Hsy.GyresMesh
         }
 
 
-        public float X()
-        {
-            return (float)pos.x;
-        }
-
-        public float Y()
-        {
-            return (float)pos.y;
-        }
-
-        public float Z()
-        {
-            return (float)pos.z;
-        }
-
+      
 
         public void Set(HS_Coord c)
         {
@@ -212,17 +210,17 @@ namespace Hsy.GyresMesh
 
         public void SetX(float x)
         {
-            pos.x = x;
+            pos.xf = x;
         }
 
         public void SetY(float y)
         {
-            pos.y = y;
+            pos.yf = y;
         }
 
         public void SetZ(float z)
         {
-            pos.z = z;
+            pos.zf = z;
         }
         override
         public bool Equals(Object o)
@@ -240,15 +238,15 @@ namespace Hsy.GyresMesh
                 return false;
             }
             GE_Vertex v = (GE_Vertex)o;
-            if (!HS_Epsilon.isEqual(this.X(), v.X()))
+            if (!HS_Epsilon.isEqual(this.xd, v.xd))
             {
                 return false;
             }
-            if (!HS_Epsilon.isEqual(this.Y(), v.Y()))
+            if (!HS_Epsilon.isEqual(this.yd, v.yd))
             {
                 return false;
             }
-            if (!HS_Epsilon.isEqual(this.Z(), v.Z()))
+            if (!HS_Epsilon.isEqual(this.zd, v.zd))
             {
                 return false;
             }
@@ -274,29 +272,44 @@ namespace Hsy.GyresMesh
         override
         public String ToString()
         {
-            return "GE_Vertex key: " + GetKey() + " [x=" +X() + ", y=" + Y()
-        + ", z=" + Z() + "]" + " (userLabelInt：" +GetUserLabelInt() + " userLabelDouble：" +GetUserLabelDouble() + ","+ " internalLabel："+
+            return "GE_Vertex key: " + GetKey() + "  Position: [x=" +xd + ", y=" + yd
+        + ", z=" + zd + "]" + " (userLabelInt：" +GetUserLabelInt() + " userLabelDouble：" +GetUserLabelDouble() + ","+ " internalLabel："+
         + GetInternalLabel() + ")";
         }
 
         public int CompareTo(HS_Coord p)
         {
-            int cmp = this.X().CompareTo(p.X());
+            int cmp = this.xd.CompareTo(p.xd);
             if (cmp != 0)
             {
                 return cmp;
             }
-            cmp = this.Y().CompareTo(p.Y());
+            cmp = this.yd.CompareTo(p.yd);
             if (cmp != 0)
             {
                 return cmp;
             }
-            cmp = this.Z().CompareTo(p.Z());
+            cmp = this.zd.CompareTo(p.zd);
             if (cmp != 0)
             {
                 return cmp;
             }
             return 0;
+        }
+
+        public void SetX(double x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetY(double y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetZ(double z)
+        {
+            throw new NotImplementedException();
         }
     }
 }

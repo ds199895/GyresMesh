@@ -6,13 +6,38 @@ using System.Threading.Tasks;
 
 namespace Hsy.Geo
 {
-    public interface HS_Coord: IComparable<HS_Coord>
+    public interface HS_Coord : IComparable<HS_Coord>
     {
-        float X();
 
-        float Y();
+        public float xf
+        {
+            get; set;
+        }
 
-        float Z();
+        public float yf
+        {
+            get;set;
+        }
 
+        public float zf
+        {
+            get;set;
+        }
+
+        public double xd
+        {
+            get; set;
+        }
+
+        public double yd
+        {
+            get;set;
+        }
+
+        public double zd
+        {
+            get;set;
+        }
+         
     }
 }

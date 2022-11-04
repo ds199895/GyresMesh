@@ -305,22 +305,22 @@ namespace Hsy.HsMath
 
         public static HS_Coord abs(HS_Coord v)
         {
-            return new HS_Vector(Math.Abs(v.X()), Math.Abs(v.Y()), Math.Abs(v.Z()));
+            return new HS_Vector(Math.Abs(v.xd), Math.Abs(v.yd), Math.Abs(v.zd));
         }
 
         public static HS_Coord sign(HS_Coord v)
         {
-            return new HS_Vector(Math.Sign(v.X()), Math.Sign(v.Y()), Math.Sign(v.Z()));
+            return new HS_Vector(Math.Sign(v.xd), Math.Sign(v.yd), Math.Sign(v.zd));
         }
 
         public static HS_Coord floor(HS_Coord v)
         {
-            return new HS_Vector(Math.Floor(v.X()), Math.Floor(v.Y()), Math.Floor(v.Z()));
+            return new HS_Vector(Math.Floor(v.xd), Math.Floor(v.yd), Math.Floor(v.zd));
         }
 
         public static HS_Coord ceiling(HS_Coord v)
         {
-            return new HS_Vector(Math.Ceiling(v.X()), Math.Ceiling(v.Y()), Math.Ceiling(v.Z()));
+            return new HS_Vector(Math.Ceiling(v.xd), Math.Ceiling(v.yd), Math.Ceiling(v.zd));
         }
 
         public static double fract(double x)
@@ -330,47 +330,47 @@ namespace Hsy.HsMath
 
         public static HS_Coord fract(HS_Coord v)
         {
-            return new HS_Vector(fract(v.X()), fract(v.Y()), fract(v.Z()));
+            return new HS_Vector(fract(v.xd), fract(v.yd), fract(v.zd));
         }
 
         public static HS_Coord mod(HS_Coord u, HS_Coord v)
         {
-            return new HS_Vector(u.X() % v.X(), u.Y() % v.Y(), u.Z() % v.Z());
+            return new HS_Vector(u.xd % v.xd, u.yd % v.yd, u.zd % v.zd);
         }
 
         public static HS_Coord mod(HS_Coord u, double v)
         {
-            return new HS_Vector(u.X() % v, u.Y() % v, u.Z() % v);
+            return new HS_Vector(u.xd % v, u.yd % v, u.zd % v);
         }
 
         public static HS_Coord min(HS_Coord u, HS_Coord v)
         {
-            return new HS_Vector(min(u.X(), v.X()), min(u.Y(), v.Y()), min(u.Z(), v.Z()));
+            return new HS_Vector(min(u.xd, v.xd), min(u.yd, v.yd), min(u.zd, v.zd));
         }
 
         public static HS_Coord min(HS_Coord u, double v)
         {
-            return new HS_Vector(min(u.X(), v), min(u.Y(), v), min(u.Z(), v));
+            return new HS_Vector(min(u.xd, v), min(u.yd, v), min(u.zd, v));
         }
 
         public static HS_Coord max(HS_Coord u, HS_Coord v)
         {
-            return new HS_Vector(max(u.X(), v.X()), max(u.Y(), v.Y()), max(u.Z(), v.Z()));
+            return new HS_Vector(max(u.xd, v.xd), max(u.yd, v.yd), max(u.zd, v.zd));
         }
 
         public static HS_Coord max(HS_Coord u, double v)
         {
-            return new HS_Vector(max(u.X(), v), max(u.Y(), v), max(u.Z(), v));
+            return new HS_Vector(max(u.xd, v), max(u.yd, v), max(u.zd, v));
         }
 
         public static HS_Coord clamp(HS_Coord u, HS_Coord min, HS_Coord max)
         {
-            return new HS_Vector(clamp(u.X(), min.X(), max.X()), clamp(u.Y(), min.Y(), max.Y()), clamp(u.Z(), min.Z(), max.Z()));
+            return new HS_Vector(clamp(u.xd, min.xd, max.xd), clamp(u.yd, min.yd, max.yd), clamp(u.zd, min.zd, max.zd));
         }
 
         public static HS_Coord clamp(HS_Coord u, double min, double max)
         {
-            return new HS_Vector(clamp(u.X(), min, max), clamp(u.Y(), min, max), clamp(u.Z(), min, max));
+            return new HS_Vector(clamp(u.xd, min, max), clamp(u.yd, min, max), clamp(u.zd, min, max));
         }
 
         public static double mix(double x, double y, double a)
@@ -380,12 +380,12 @@ namespace Hsy.HsMath
 
         public static HS_Coord mix(HS_Coord u, HS_Coord v, double a)
         {
-            return new HS_Vector(mix(u.X(), v.X(), a), mix(u.Y(), v.Y(), a), mix(u.Z(), v.Z(), a));
+            return new HS_Vector(mix(u.xd, v.xd, a), mix(u.yd, v.yd, a), mix(u.zd, v.zd, a));
         }
 
         public static HS_Coord mix(HS_Coord u, HS_Coord v, HS_Coord a)
         {
-            return new HS_Vector(mix(u.X(), v.X(), a.X()), mix(u.Y(), v.Y(), a.Y()), mix(u.Z(), v.Z(), a.Z()));
+            return new HS_Vector(mix(u.xd, v.xd, a.xd), mix(u.yd, v.yd, a.yd), mix(u.zd, v.zd, a.zd));
         }
 
         public static double step(double edge, double x)
@@ -395,12 +395,12 @@ namespace Hsy.HsMath
 
         public static HS_Vector step(double edge, HS_Coord v)
         {
-            return new HS_Vector(step(v.X(), edge), step(v.Y(), edge), step(v.Z(), edge));
+            return new HS_Vector(step(v.xd, edge), step(v.yd, edge), step(v.zd, edge));
         }
 
         public static HS_Vector step(HS_Coord edge, HS_Coord v)
         {
-            return new HS_Vector(step(v.X(), edge.X()), step(v.Y(), edge.Y()), step(v.Z(), edge.Z()));
+            return new HS_Vector(step(v.xd, edge.xd), step(v.yd, edge.yd), step(v.zd, edge.zd));
         }
 
         public static double smoothstep(double edge0, double edge1, double x)
@@ -411,12 +411,12 @@ namespace Hsy.HsMath
 
         public static HS_Vector smoothstep(double edge0, double edge1, HS_Coord v)
         {
-            return new HS_Vector(smoothstep(edge0, edge1, v.X()), smoothstep(edge0, edge1, v.Y()), smoothstep(edge0, edge1, v.Z()));
+            return new HS_Vector(smoothstep(edge0, edge1, v.xd), smoothstep(edge0, edge1, v.yd), smoothstep(edge0, edge1, v.zd));
         }
 
         public static HS_Vector smoothstep(HS_Coord edge0, HS_Coord edge1, HS_Coord v)
         {
-            return new HS_Vector(smoothstep(edge0.X(), edge1.X(), v.X()), smoothstep(edge0.Y(), edge1.Y(), v.Y()), smoothstep(edge0.Z(), edge1.Z(), v.Z()));
+            return new HS_Vector(smoothstep(edge0.xd, edge1.xd, v.xd), smoothstep(edge0.yd, edge1.yd, v.yd), smoothstep(edge0.zd, edge1.zd, v.zd));
         }
     }
 }

@@ -8,47 +8,21 @@ namespace Hsy.Geo
 {
     public class HS_Point:HS_Vector
     {
-        public HS_Point(HS_Coord hs_coord)
+        public HS_Point(HS_Coord hs_coord):base(hs_coord)
         {
-            
-            this.x = hs_coord.X();
-            this.y = hs_coord.Y();
-            this.z = hs_coord.Z();
         }
         public HS_Point()
         {
-            this.x = this.y = this.z = 0;
+            this.xd = this.yd = this.zd = 0;
         }
-        public HS_Point(float x,float y,float z)
+        public HS_Point(float x, float y, float z):base(x,y,z)
         {
-
-            this.x = x;
-            this.y = y;
-            this.z = z;
         }
 
 
-        public HS_Point(double x, double y, double z)
+        public HS_Point(double x, double y, double z):base(x,y,z)
         {
-            this.x = (float)x;
-            this.y = (float)y;
-            this.z = (float)z;
         }
-        //public float X()
-        //{
-        //    return (float)this.x;
-        //}
-
-        //public float Y()
-        //{
-        //    return (float)this.y;
-        //}
-
-        //public float Z()
-        //{
-        //    return (float)this.z;
-        //}
-
 
         //public void Set(HS_Coord c)
         //{
@@ -95,8 +69,8 @@ namespace Hsy.Geo
         override
         public String ToString()
         {
-            return "HS_Point "  + " [x=" + X() + ", y=" + Y()
-        + ", z=" + Z() + "]";
+            return "HS_Point "  + " [x=" + xd + ", y=" + yd
+        + ", z=" + zd+ "]";
         }
     }
 }

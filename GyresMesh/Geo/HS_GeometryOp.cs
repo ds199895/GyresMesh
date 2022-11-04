@@ -11,7 +11,7 @@ namespace Hsy.Geo
 
         public static double GetDistance3D(HS_Coord p, HS_Coord q)
         {
-            return Math.Sqrt((q.X() - p.X()) * (q.X() - p.X()) + (q.Y() - p.Y()) * (q.Y() - p.Y())+ (q.Z() - p.Z()) * (q.Z() - p.Z()));
+            return Math.Sqrt((q.xd - p.xd) * (q.xd - p.xd) + (q.yd - p.yd) * (q.yd - p.yd)+ (q.zd - p.zd) * (q.zd - p.zd));
         }
     }
 }
