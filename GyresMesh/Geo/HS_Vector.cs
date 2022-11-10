@@ -98,44 +98,33 @@ namespace Hsy.Geo
         }
         public HS_Vector add(HS_Coord v)
         {
-            this.xd += v.xd;
-            this.yd += v.yd;
-            this.zd += v.zd;
-            return this;
+            return new HS_Vector(this.xd + v.xd, this.yd + v.yd, this.zd + v.zd);
         }
         public HS_Vector sub(double x, double y, double z)
         {
-            this.xd -= x;
-            this.yd -= y;
-            this.zd -= z;
-            return this;
+            return new HS_Vector(this.xd - x, this.yd - y, this.zd -z);
         }
 
         public HS_Vector sub(HS_Vector v)
         {
-            this.xd -= v.xd;
-            this.yd -= v.yd;
-            this.zd -= v.zd;
-            return this;
+            return new HS_Vector(this.xd - v.xd, this.yd- v.yd, this.zd -v.zd);
         }
 
         public HS_Vector mul(double v)
         {
-            this.xd *= v;
-            this.yd *= v;
-            this.zd *= v;
+            return new HS_Vector(this.xd * v, this.yd *v, this.zd *v) ;
+        }
+        public HS_Vector addMulSelf(double f, HS_Coord p)
+        {
+            Set(xd + f * p.xd, yd + f * p.yd, zd + f * p.zd);
             return this;
         }
-
         public HS_Vector div(double v)
         {
-            this.xd /= v;
-            this.yd /= v;
-            this.zd /= v;
-            return this;
+            return new HS_Vector(this.xd / v, this.yd/ v, this.zd / v);
         }
 
-        public HS_Vector neg()
+        public HS_Vector negtive()
         {
             this.xd = -this.xd;
             this.yd = -this.yd;
@@ -143,14 +132,14 @@ namespace Hsy.Geo
             return this;
         }
 
-        public HS_Vector rev()
+        public HS_Vector reverse()
         {
-            return this.neg();
+            return this.negtive();
         }
 
         public HS_Vector flip()
         {
-            return this.neg();
+            return this.negtive();
         }
 
         public HS_Vector zero()
@@ -163,10 +152,7 @@ namespace Hsy.Geo
 
         public HS_Vector add(HS_Vector v, double f)
         {
-            this.xd += f * v.xd;
-            this.yd += f * v.yd;
-            this.zd += f * v.zd;
-            return this;
+            return new HS_Vector(this.xd + f*v.xd, this.yd + f*v.yd, this.zd +f*v.zd);
         }
 
         public HS_Vector add(double f, HS_Vector v)
@@ -737,7 +723,10 @@ namespace Hsy.Geo
         {
             return new HS_Vector((p1.xd + p2.xd) / 2.0D, (p1.yd + p2.yd) / 2.0D, (p1.zd + p2.zd) / 2.0D);
         }
-
+        public HS_Vector copy()
+        {
+            return new HS_Vector(xd, yd, zd);
+        }
         //public float X
         //{
         //    get
@@ -813,6 +802,12 @@ namespace Hsy.Geo
             this.zd=z.zd;
         }
 
+        public void Set(double x,double y,double z)
+        {
+            this.xd = x;
+            this.yd = y;
+            this.zd = z;
+        }
         public int CompareTo(HS_Coord p)
         {
             int cmp = this.xd.CompareTo(p.xd);
@@ -839,7 +834,6 @@ namespace Hsy.Geo
             return "HS_Vector : (" + xd + " , " + yd + " , " + zd+")";
         }
 
-       
 
         public static HS_Vector operator +(HS_Vector left, HS_Vector right)
         {
@@ -869,7 +863,15 @@ namespace Hsy.Geo
         {
             return vec.mul(scale);
         }
+        public static HS_Vector operator *(HS_Vector vec, double scale)
+        {
+            return vec.mul(scale);
+        }
         public static HS_Vector operator *(float scale, HS_Vector vec)
+        {
+            return vec.mul(scale);
+        }
+        public static HS_Vector operator *(double scale, HS_Vector vec)
         {
             return vec.mul(scale);
         }
@@ -883,6 +885,10 @@ namespace Hsy.Geo
         //}
         //public static HS_Vector operator *(Matrix3 mat, HS_Vector vec);
         public static HS_Vector operator /(HS_Vector vec, float scale)
+        {
+            return vec.mul(1 / scale);
+        }
+        public static HS_Vector operator /(HS_Vector vec, double scale)
         {
             return vec.mul(1 / scale);
         }

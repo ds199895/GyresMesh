@@ -31,7 +31,8 @@ namespace TestApp
         Polygon JtsPoly;
         CamController cam;
         HS_Vector[] vertices = new HS_Vector[9];
-       
+        int[] triangles;
+
         public override void SetUp()
         {
             Size(1200, 1000);
@@ -40,13 +41,18 @@ namespace TestApp
             this.vertices[0] = new HS_Vector(-400, 600);
             this.vertices[1] = new HS_Vector(0, 200);
             this.vertices[2] = new HS_Vector(200, 500);
+            //this.vertices[3] = new HS_Vector(-200, 100);
+
             this.vertices[3] = new HS_Vector(700, 0);
             this.vertices[4] = new HS_Vector(500, -600);
             this.vertices[5] = new HS_Vector(300, 300);
-            this.vertices[6] = new HS_Vector(0,-500);
+            this.vertices[6] = new HS_Vector(0, -500);
             this.vertices[7] = new HS_Vector(-600, 0);
             this.vertices[8] = new HS_Vector(-200, 100);
-
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Print("first: "+vertices[i]);
+            }
             for (int i = 0; i < 10; i++)
             {
                 float y = 0;
@@ -108,6 +114,18 @@ namespace TestApp
             Print(HS_Math.fastInvSqrt(6.25f));
 
             hsPoly = HS_GeometryFactory.instance().CreateSimplePolygon(ps);
+            //if (!Triangulator.Triangulate(vertices, out triangles, out string errorMessage))
+            //{
+            //    throw new Exception("unable to create a polygon");
+            //}
+            //for (int i = 0; i < triangles.Length; i += 3)
+            //{
+            //    int a = triangles[i];
+            //    int b = triangles[i + 1];
+            //    int c = triangles[i + 2];
+            //    Print("triangle " + i/3 + " :" + a + " " + b + " " + c + " ");
+            //}
+
             //JtsPoly = HS_JTS.toJTSPolygon2D(hsPoly);
             //Print(JtsPoly.Coordinates.Length);
             //cam.Front();
@@ -118,6 +136,7 @@ namespace TestApp
             Background(255);
             Fill(0);
             cam.DrawSystem(this,200);
+            //DrawPolygonTriangles(vertices, triangles);
             //BeginShape(OpenTK.Graphics.OpenGL.PrimitiveType.TriangleFan);
             ////foreach (GE_Halfedge he in mesh.GetHalfedges())
             ////{
@@ -127,14 +146,17 @@ namespace TestApp
             //{
             //    Vertex(v.xf, v.yf, v.zf);
             //}
-            GL.Begin(PrimitiveType.TriangleStrip);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            GL.Color4(Color4.Black);
-            foreach(HS_Vector v in vertices)
+            //GL.Begin(PrimitiveType.TriangleStrip);
+            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            //GL.Color4(Color4.Black);
+            BeginShape();
+            //Print(vertices.Length);
+            for (int i = 0; i < vertices.Length; i++)
             {
-                GL.Vertex2(v.xd, v.yd);
+                Vertex(vertices[i].xf, vertices[i].yf, 0);
             }
-            GL.End();
+            EndShape();
+            //GL.End();
             //foreach (Coordinate c in JtsPoly.Coordinates)
             //{
             //    Vertex((float)c.X, (float)c.Y);
@@ -146,6 +168,31 @@ namespace TestApp
             //EndShape();
 
 
+        }
+
+        public void DrawPolygonTriangles(HS_Vector[] vertices,int[] triangles)
+        {
+            
+            for (int i = 0; i < triangles.Length; i += 3)
+            {
+                int a = triangles[i];
+                int b = triangles[i+1];
+                int c = triangles[i+2];
+                HS_Vector va = vertices[a];
+                HS_Vector vb = vertices[b];
+                HS_Vector vc = vertices[c];
+                //Print(va);
+                //Print(vb);
+                BeginShape();
+                Vertex(va.xf, va.yf, va.zf);
+                Vertex(vb.xf, vb.yf, vb.zf);
+                Vertex(vc.xf, vc.yf, vc.zf);
+                //Line(va.xf, va.yf, va.zf, vb.xf, vb.yf, vb.zf);
+                //Line(vb.xf, vb.yf, vb.zf, vc.xf, vc.yf, vc.zf);
+                //Line(vc.xf, vc.yf, vc.zf, va.xf, va.yf, va.zf);
+                EndShape();
+            }
+            
         }
     }
 }

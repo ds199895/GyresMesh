@@ -72,5 +72,7 @@ namespace Hsy.Geo
             return "HS_Point "  + " [x=" + xd + ", y=" + yd
         + ", z=" + zd+ "]";
         }
+
+
     }
 }

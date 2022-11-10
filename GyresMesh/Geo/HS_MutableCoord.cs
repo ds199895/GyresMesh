@@ -18,6 +18,6 @@ namespace Hsy.Geo
         void SetY(double y);
         void SetZ(double z);
         void Set(HS_Coord z);
-
+        void Set(double x, double y, double z);
     }
 }
