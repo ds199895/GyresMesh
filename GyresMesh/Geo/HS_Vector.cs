@@ -91,10 +91,7 @@ namespace Hsy.Geo
         }
         public HS_Vector add(HS_Vector v)
         {
-            this.xd += v.xd;
-            this.yd += v.yd;
-            this.zd += v.zd;
-            return this;
+            return new HS_Vector(this.xd+v.xd,this.yd+v.yd,this.zd+v.zd);
         }
         public HS_Vector add(HS_Coord v)
         {
@@ -119,6 +116,12 @@ namespace Hsy.Geo
             Set(xd + f * p.xd, yd + f * p.yd, zd + f * p.zd);
             return this;
         }
+        public HS_Vector addMul(double f, HS_Coord p)
+        {
+            
+            return new HS_Vector(xd + f * p.xd, yd + f * p.yd, zd + f * p.zd);
+        }
+
         public HS_Vector div(double v)
         {
             return new HS_Vector(this.xd / v, this.yd/ v, this.zd / v);

@@ -8,7 +8,7 @@ namespace Hsy.Geo
 {
     public interface HS_Map
     {
-        public void mapPoint3D(HS_Coord p, out HS_MutableCoord result);
+        public void mapPoint3D(HS_Coord p, HS_MutableCoord result);
 
         public void mapPoint3D(double x, double y, double z, out HS_MutableCoord result);
 

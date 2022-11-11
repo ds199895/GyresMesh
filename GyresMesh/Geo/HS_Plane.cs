@@ -112,7 +112,12 @@ namespace Hsy.Geo
 
         public HS_Vector getNormal()
         {
-            return n.
+            return n.copy();
+        }
+
+        public HS_Point getOrigin()
+        {
+            return origin.copy();
         }
 
         public void setAxes()

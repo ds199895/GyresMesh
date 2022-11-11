@@ -70,12 +70,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geo\HS_GeometryFactory2D.cs" />
     <Compile Include="Geo\HS_OrthoProject.cs" />
     <Compile Include="Geo\HS_Coord.cs" />
     <Compile Include="Geo\HS_Curve.cs" />
     <Compile Include="Geo\HS_Line.cs" />
     <Compile Include="Geo\HS_Map.cs" />
     <Compile Include="Geo\HS_Plane.cs" />
+    <Compile Include="Geo\HS_Triangulate2D.cs" />
     <Compile Include="Geo\Triangulator.cs" />
     <Compile Include="HsMath\HS_Epsilon.cs" />
     <Compile Include="Geo\HS_Geometry.cs" />

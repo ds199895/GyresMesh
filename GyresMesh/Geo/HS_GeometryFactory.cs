@@ -27,5 +27,19 @@ namespace Hsy.Geo
         //    return new HS_PlanarMap();
         //}
 
+        public HS_Plane createPlane( HS_Coord origin,  HS_Coord normal)
+        {
+            return new HS_Plane(origin, normal);
+        }
+        public HS_Vector createVector()
+        {
+            return createVector(0, 0, 0);
+        }
+
+        public HS_Vector createVector(double _x, double _y, double _z)
+        {
+            return new HS_Vector(_x, _y, _z);
+        }
+
     }
 }
