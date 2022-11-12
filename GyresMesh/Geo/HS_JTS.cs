@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Generic.Dictionary<TKey, TValue>;
+//using static System.Collections.Generic.Dictionary<TKey, TValue>;
 
 namespace Hsy.Geo
 {

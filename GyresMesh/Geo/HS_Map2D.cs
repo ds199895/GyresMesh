@@ -13,7 +13,7 @@
 
         public void unmapPoint2D(double x, double y,  HS_MutableCoord result);
 
-        public void unmapVector2D(HS_Coord p, out HS_MutableCoord result);
+        public void unmapVector2D(HS_Coord p, HS_MutableCoord result);
 
         public void unmapVector2D(double x, double y,  HS_MutableCoord result);
 

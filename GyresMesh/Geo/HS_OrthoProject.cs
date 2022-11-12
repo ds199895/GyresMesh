@@ -75,7 +75,7 @@ namespace Hsy.Geo
                 mode = XZrev;
             }
         }
-        public void mapPoint3D(HS_Coord p, out HS_MutableCoord result)
+        public void mapPoint3D(HS_Coord p,  HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
@@ -87,7 +87,7 @@ namespace Hsy.Geo
 
         }
 
-        public void mapPoint3D(double x, double y, double z,out HS_MutableCoord result)
+        public void mapPoint3D(double x, double y, double z, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(x, y, 0);
@@ -122,7 +122,7 @@ namespace Hsy.Geo
             return result;
         }
 
-        public void mapVector3D(HS_Coord p, out HS_MutableCoord result)
+        public void mapVector3D(HS_Coord p, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
@@ -133,7 +133,7 @@ namespace Hsy.Geo
             if (mode == XZrev) result.Set(p.xd, p.zd, 0);
         }
 
-        public void mapVector3D(double x, double y, double z, out HS_MutableCoord result)
+        public void mapVector3D(double x, double y, double z, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(x, y, 0);
@@ -168,7 +168,7 @@ namespace Hsy.Geo
             return result;
         }
 
-        public void unmapPoint2D(HS_Coord p, out HS_MutableCoord result)
+        public void unmapPoint2D(HS_Coord p, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
@@ -180,7 +180,7 @@ namespace Hsy.Geo
 
         }
 
-        public void unmapPoint2D(double x, double y, out HS_MutableCoord result)
+        public void unmapPoint2D(double x, double y,  HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(x,y, 0);
@@ -215,7 +215,7 @@ namespace Hsy.Geo
             return result;
         }
 
-        public void unmapPoint3D(HS_Coord p, out HS_MutableCoord result)
+        public void unmapPoint3D(HS_Coord p, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
@@ -227,7 +227,7 @@ namespace Hsy.Geo
             
         }
 
-        public void unmapPoint3D(double x, double y, double z,out HS_MutableCoord result)
+        public void unmapPoint3D(double x, double y, double z, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(x, y, z);
@@ -262,7 +262,7 @@ namespace Hsy.Geo
             return result;
         }
 
-        public void unmapVector2D(HS_Coord p, out HS_MutableCoord result)
+        public void unmapVector2D(HS_Coord p, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
@@ -273,7 +273,7 @@ namespace Hsy.Geo
             if (mode == XZrev) result.Set(p.xd, 0, p.yd);
         }
 
-        public void unmapVector2D(double x, double y, out HS_MutableCoord result)
+        public void unmapVector2D(double x, double y, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(x, y, 0);
@@ -308,7 +308,7 @@ namespace Hsy.Geo
             return result;
         }
 
-        public void unmapVector3D(HS_Coord p, out HS_MutableCoord result)
+        public void unmapVector3D(HS_Coord p, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
@@ -319,7 +319,7 @@ namespace Hsy.Geo
             if (mode == XZrev) result.Set(p.xd, 0, p.yd);
         }
 
-        public void unmapVector3D(double x, double y, double z,out HS_MutableCoord result)
+        public void unmapVector3D(double x, double y, double z, HS_MutableCoord result)
         {
             result = new HS_Point();
             if (mode == XY) result.Set(x, y, z);

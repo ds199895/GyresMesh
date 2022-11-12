@@ -10,19 +10,19 @@ namespace Hsy.Geo
     {
         public void mapPoint3D(HS_Coord p, HS_MutableCoord result);
 
-        public void mapPoint3D(double x, double y, double z, out HS_MutableCoord result);
+        public void mapPoint3D(double x, double y, double z, HS_MutableCoord result);
 
-        public void unmapPoint3D(HS_Coord p, out HS_MutableCoord result);
+        public void unmapPoint3D(HS_Coord p,  HS_MutableCoord result);
 
-        public void unmapPoint3D(double x, double y, double z, out HS_MutableCoord result);
+        public void unmapPoint3D(double x, double y, double z,  HS_MutableCoord result);
 
-        public void mapVector3D(HS_Coord p, out HS_MutableCoord result);
+        public void mapVector3D(HS_Coord p,  HS_MutableCoord result);
 
-        public void mapVector3D(double x, double y, double z, out HS_MutableCoord result);
+        public void mapVector3D(double x, double y, double z, HS_MutableCoord result);
 
-        public void unmapVector3D(HS_Coord p, out HS_MutableCoord result);
+        public void unmapVector3D(HS_Coord p,  HS_MutableCoord result);
 
-        public void unmapVector3D(double x, double y, double z, out HS_MutableCoord result);
+        public void unmapVector3D(double x, double y, double z,  HS_MutableCoord result);
 
         public HS_Coord mapPoint3D(HS_Coord p);
 

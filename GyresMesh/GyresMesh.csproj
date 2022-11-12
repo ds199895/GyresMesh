@@ -70,6 +70,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geo\HS_GeometryFactory3D.cs" />
+    <Compile Include="Geo\HS_PlanarMap.cs" />
+    <Compile Include="Geo\HS_Triangulation2DWithPoints.cs" />
     <Compile Include="Geo\HS_GeometryFactory2D.cs" />
     <Compile Include="Geo\HS_OrthoProject.cs" />
     <Compile Include="Geo\HS_Coord.cs" />
