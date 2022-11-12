@@ -128,6 +128,17 @@ namespace Hsy.Geo
         }
 
 
+        public void applyInvAsPointInto(HS_Coord p,HS_MutableCoord result)
+        {
+            _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd + invT.m14;
+            _yt= invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd + invT.m24;
+            _zt=invT.m31* p.xd + invT.m32 * p.yd + invT.m33 * p.zd + invT.m34;
+            double wp= invT.m41 * p.xd + invT.m42 * p.yd + invT.m43 * p.zd + invT.m44;
+            wp = 1.0D / wp;
+            result.Set(_xt * wp, _yt * wp, _zt * wp);
+        }
+
+
 
     }
 
