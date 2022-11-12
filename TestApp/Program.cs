@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
+using OpenTK;
 
 namespace TestApp
 {
@@ -32,6 +33,7 @@ namespace TestApp
         CamController cam;
         HS_Vector[] vertices = new HS_Vector[9];
         int[] triangles;
+        Matrix4
 
         public override void SetUp()
         {

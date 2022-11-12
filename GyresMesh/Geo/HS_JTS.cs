@@ -380,7 +380,7 @@ namespace Hsy.Geo
                 int[] triangles = triangulation.getTriangles();
                 int[] edges = triangulation.getEdges();
                 //HS_CoordCollection tripoints = triangulation.GetPoints();
-                List<HS_Point> tripoints = triangulation.GetPoints();
+                List<HS_Coord> tripoints = triangulation.getPoints();
                 int[] intmap = new int[tripoints.Count];
                 index = 0;
 
@@ -404,7 +404,7 @@ namespace Hsy.Geo
                 return new HS_Triangulation2D(triangles, edges);
             }
 
-            public HS_Triangulation2DWithPoints triangulatePolygon2D(List<HS_Coord> outerPolygon, List<HS_Coord>[] innerPolygons, bool optimize, HS_Map2D context)
+            public HS_Triangulation2DWithPoints triangulatePolygon2D<T>(List<T> outerPolygon, List<T>[] innerPolygons, bool optimize, HS_Map2D context)where T:HS_Coord
             {
                 Coordinate[] coords = new Coordinate[outerPolygon.Count + 1];
                 HS_Point point = new HS_Point();
@@ -484,7 +484,7 @@ namespace Hsy.Geo
                 for (int i = 0; i < this.shellCoords.Count - 1; ++i)
                 {
                     point = new HS_Point();
-                    context.unmapPoint2D(((Coordinate)this.shellCoords[i]).x, ((Coordinate)this.shellCoords[i]).y, point);
+                    context.unmapPoint2D(((Coordinate)this.shellCoords[i]).X, ((Coordinate)this.shellCoords[i]).Y, point);
                     Points.Add(point);
                 }
 
@@ -524,11 +524,11 @@ namespace Hsy.Geo
                 HS_Swizzle coordViewer;
                 if (Math.Abs(normal.xd) > Math.Abs(normal.yd))
                 {
-                    coordViewer = Math.Abs(normal.xd) > Math.Abs(normal.zd) ? HS_Swizzle.YZ : HS_Swizzle.XY;
+                    coordViewer = Math.Abs(normal.xd) > Math.Abs(normal.zd) ? HS_Swizzle.yz : HS_Swizzle.xy;
                 }
                 else
                 {
-                    coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.ZX : HS_Swizzle.XY;
+                    coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.zx : HS_Swizzle.xy;
                 }
 
                 HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger();
@@ -585,11 +585,11 @@ namespace Hsy.Geo
                 HS_Swizzle coordViewer;
                 if (Math.Abs(normal.xd) > Math.Abs(normal.yd))
                 {
-                    coordViewer = Math.Abs(normal.xd) > Math.Abs(normal.zd) ? HS_Swizzle.YZ : HS_Swizzle.XY;
+                    coordViewer = Math.Abs(normal.xd) > Math.Abs(normal.zd) ? HS_Swizzle.yz : HS_Swizzle.xy;
                 }
                 else
                 {
-                    coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.ZX : HS_Swizzle.XY;
+                    coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.zx: HS_Swizzle.xy;
                 }
 
                 HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger();

@@ -308,7 +308,7 @@ namespace Hsy.Geo
                 center = (HS_Point)(center +points[i]);
 
             }
-            center /= nsp;
+            center = (HS_Point)(center / nsp);
             return center; 
         }
         //public int[] getTriangles(bool optimize)

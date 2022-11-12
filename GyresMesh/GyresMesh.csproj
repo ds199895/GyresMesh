@@ -71,7 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Geo\HS_GeometryFactory3D.cs" />
+    <Compile Include="HsMath\HS_Matrix44.cs" />
     <Compile Include="Geo\HS_PlanarMap.cs" />
+    <Compile Include="Geo\HS_Swizzle.cs" />
+    <Compile Include="Geo\HS_Transform3D.cs" />
     <Compile Include="Geo\HS_Triangulation2DWithPoints.cs" />
     <Compile Include="Geo\HS_GeometryFactory2D.cs" />
     <Compile Include="Geo\HS_OrthoProject.cs" />

@@ -14,22 +14,23 @@ namespace Hsy.Geo
 
         }
 
-        public HS_Triangulation2DWithPoints(int[] T, int[] E, List<HS_Coord> P):base(T,E)
+        public HS_Triangulation2DWithPoints(int[] Tr, int[] E, List<HS_Coord> P):base(Tr,E)
         {
+            //base(T, E);
             this._points = P;
 
         }
 
-        public HS_Triangulation2DWithPoints(int[] T, int[] E, HS_Coord[] P) : base(T, E)
+        public HS_Triangulation2DWithPoints(int[] Tr, int[] E, HS_Coord[] P) : base(Tr, E)
         {
             this._points = P.ToList<HS_Coord>();
 
         }
-        public HS_Triangulation2DWithPoints(int[] T, List<HS_Coord> P):base(T)
+        public HS_Triangulation2DWithPoints(int[] Tr, int[] e, List<HS_Point> P)
         {
-            this._points = P;
+            this._points = P.ToList<HS_Coord>();
         }
-        public HS_Triangulation2DWithPoints(int[] T, HS_Coord[] P) : base(T)
+        public HS_Triangulation2DWithPoints(int[] Tr, HS_Coord[] P) : base(Tr)
         {
             this._points = P.ToList<HS_Coord>();
         }

@@ -144,6 +144,23 @@ namespace Hsy.Geo
             return new HS_Vector(_x, _y, _z);
         }
 
+        public HS_Vector createVector(HS_Coord p)
+        {
+            return new HS_Vector(p.xd, p.yd, p.zd);
+        }
+
+        public HS_Vector createNormalizedVector(double _x, double _y, double _z)
+        {
+            HS_Vector vec = createVector(_x, _y, _z);
+            vec = vec.united();
+            return vec;
+        }
+        public HS_Vector createNormalizedVector(HS_Coord p)
+        {
+            HS_Vector vec = createVector(p.xd, p.yd, p.zd);
+            vec = vec.united();
+            return vec;
+        }
         public HS_Map2D createEmbeddedPlane(HS_Plane P)
         {
             return new HS_PlanarMap(P);

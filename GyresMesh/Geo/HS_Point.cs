@@ -86,80 +86,80 @@ namespace Hsy.Geo
         + ", z=" + zd+ "]";
         }
 
-        public static HS_Point operator +(HS_Point left, HS_Point right)
-        {
-            return (HS_Point)left.add(right);
-        }
-        public static HS_Point operator +(HS_Point left, HS_Coord right)
-        {
-            return (HS_Point)left.add(right);
-        }
-        public static HS_Point operator -(HS_Point vec)
-        {
-            return (HS_Point)vec.mul(-1D);
-        }
-        public static HS_Point operator -(HS_Point left, HS_Point right)
-        {
-            return (HS_Point)left.sub(right);
-        }
-        public static HS_Point operator -(HS_Point left,HS_Coord right)
-        {
-            return new HS_Point(left.xd - right.xd, left.yd - right.yd, left.zd - right.zd);
-        }
-        //public static HS_Vector operator *(Quaternion quat, HS_Vector vec)
+        //public static HS_Point operator +(HS_Point left, HS_Point right)
+        //{
+        //    return (HS_Point)left.add(right);
+        //}
+        //public static HS_Point operator +(HS_Point left, HS_Coord right)
+        //{
+        //    return (HS_Point)left.add(right);
+        //}
+        //public static HS_Point operator -(HS_Point vec)
+        //{
+        //    return (HS_Point)vec.mul(-1D);
+        //}
+        //public static HS_Point operator -(HS_Point left, HS_Point right)
+        //{
+        //    return (HS_Point)left.sub(right);
+        //}
+        //public static HS_Point operator -(HS_Point left,HS_Coord right)
+        //{
+        //    return new HS_Point(left.xd - right.xd, left.yd - right.yd, left.zd - right.zd);
+        //}
+        ////public static HS_Vector operator *(Quaternion quat, HS_Vector vec)
+        ////{
+
+        ////}
+        //public static HS_Point operator *(HS_Point vec, float scale)
+        //{
+        //    return (HS_Point)vec.mul(scale);
+        //}
+        //public static HS_Point operator* (HS_Point vec, double scale)
+        //{
+        //    return (HS_Point)vec.mul(scale);
+        //}
+        //public static HS_Point operator* (float scale, HS_Point vec)
+        //{
+        //    return (HS_Point)vec.mul(scale);
+        //}
+        //public static HS_Point operator* (double scale, HS_Point vec)
+        //{
+        //    return (HS_Point)vec.mul(scale);
+        //}
+        //public static HS_Point operator *(HS_Point vec, HS_Point scale)
+        //{
+        //    return new HS_Point(vec.xd * scale.xd, vec.yd * scale.yd, vec.zd * scale.zd);
+        //}
+        ////public static HS_Vector operator *(HS_Vector vec, Matrix3 mat)
+        ////{
+
+        ////}
+        ////public static HS_Vector operator *(Matrix3 mat, HS_Vector vec);
+        //public static HS_Point operator /(HS_Point vec, float scale)
+        //{
+        //    return (HS_Point)vec.mul(1 / scale);
+        //}
+        //public static HS_Point operator /(HS_Point vec, double scale)
+        //{
+        //    return (HS_Point)vec.mul(1 / scale);
+        //}
+        //public static bool operator ==(HS_Point left, HS_Point right)
+        //{
+        //    //if(HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.y - right.y) && HS_Epsilon.isZero(left.z - right.z))
+        //    //{
+        //    //    return true;
+        //    //}
+        //    //else
+        //    //{
+        //    //    return false;
+        //    //}
+        //    return HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.yd - right.yd) && HS_Epsilon.isZero(left.zd - right.zd);
+        //}
+        //public static bool operator !=(HS_Point left, HS_Point right)
         //{
 
+        //    return !(HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.yd - right.yd) && HS_Epsilon.isZero(left.zd - right.zd));
         //}
-        public static HS_Point operator *(HS_Point vec, float scale)
-        {
-            return (HS_Point)vec.mul(scale);
-        }
-        public static HS_Point operator* (HS_Point vec, double scale)
-        {
-            return (HS_Point)vec.mul(scale);
-        }
-        public static HS_Point operator* (float scale, HS_Point vec)
-        {
-            return (HS_Point)vec.mul(scale);
-        }
-        public static HS_Point operator* (double scale, HS_Point vec)
-        {
-            return (HS_Point)vec.mul(scale);
-        }
-        public static HS_Point operator *(HS_Point vec, HS_Point scale)
-        {
-            return new HS_Point(vec.xd * scale.xd, vec.yd * scale.yd, vec.zd * scale.zd);
-        }
-        //public static HS_Vector operator *(HS_Vector vec, Matrix3 mat)
-        //{
-
-        //}
-        //public static HS_Vector operator *(Matrix3 mat, HS_Vector vec);
-        public static HS_Point operator /(HS_Point vec, float scale)
-        {
-            return (HS_Point)vec.mul(1 / scale);
-        }
-        public static HS_Point operator /(HS_Point vec, double scale)
-        {
-            return (HS_Point)vec.mul(1 / scale);
-        }
-        public static bool operator ==(HS_Point left, HS_Point right)
-        {
-            //if(HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.y - right.y) && HS_Epsilon.isZero(left.z - right.z))
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-            return HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.yd - right.yd) && HS_Epsilon.isZero(left.zd - right.zd);
-        }
-        public static bool operator !=(HS_Point left, HS_Point right)
-        {
-
-            return !(HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.yd - right.yd) && HS_Epsilon.isZero(left.zd - right.zd));
-        }
 
     }
 }

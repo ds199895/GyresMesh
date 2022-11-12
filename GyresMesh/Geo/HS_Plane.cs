@@ -83,7 +83,7 @@ namespace Hsy.Geo
             origin = new HS_Point(ox, oy, oz);
             n = new HS_Vector(nx, ny, nz).united();
             //origin.addMulSelf(d, n);
-            origin = (HS_Point)(origin + n*d);
+            origin = (HS_Point)(origin +n*d);
             setAxes();
         }
 
