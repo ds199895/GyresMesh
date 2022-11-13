@@ -62,5 +62,10 @@ namespace Hsy.Geo
 		{
 			return new HS_Polygon(points, innerpoints);
 		}
+
+		public HS_CoordinateSystem WORLD()
+        {
+			return HS_CoordinateSystem.WORLD();
+        }
 	}
 }

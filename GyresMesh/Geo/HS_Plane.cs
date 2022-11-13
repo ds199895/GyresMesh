@@ -120,6 +120,19 @@ namespace Hsy.Geo
             return origin.copy();
         }
 
+        public HS_Vector getU()
+        {
+            return this.u.copy();
+        }
+        public HS_Vector getV()
+        {
+            return this.v.copy();
+        }
+        public HS_Vector getW()
+        {
+            return this.w.copy();
+        }
+
         public void setAxes()
         {
             double x = HS_Math.fastAbs(n.xd);

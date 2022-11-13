@@ -36,7 +36,7 @@ namespace Hsy.Geo
             HS_Vector v2 = geometryFactory.createNormalizedVector(targetDirection);
             HS_Vector axis = v1.cross(v2);
             double l = axis.len();
-            if (HS_Epsilon.isZero(l){
+            if (HS_Epsilon.isZero(l)){
                 if (v1.dot(v2) < 0.0D)
                 {
                     axis = geometryFactory.createNormalizedVector(sourceDirection);
@@ -128,6 +128,26 @@ namespace Hsy.Geo
         }
 
 
+        public void applyAsPointInto(HS_Coord p, HS_MutableCoord result)
+        {
+            _xt = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd + T.m14;
+            _yt = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd + T.m24;
+            _zt = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd + T.m34;
+            double wp = T.m41 * p.xd + T.m42 * p.yd + T.m43 * p.zd + T.m44;
+            wp = 1.0D / wp;
+            result.Set(_xt * wp, _yt * wp, _zt * wp);
+        }
+
+        public void applyAsPointInto(double x, double y, double z, HS_MutableCoord result)
+        {
+            _xt = T.m11 * x + T.m12 * y + T.m13 * z + T.m14;
+            _yt = T.m21 * x + T.m22 * y + T.m23 * z + T.m24;
+            _zt = T.m31 * x + T.m32 * y + T.m33 * z + T.m34;
+            double wp = T.m41 * x + T.m42 * y + T.m43 * z + T.m44;
+            wp = 1.0D / wp;
+            result.Set(_xt * wp, _yt * wp, _zt * wp);
+        }
+
         public void applyInvAsPointInto(HS_Coord p,HS_MutableCoord result)
         {
             _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd + invT.m14;
@@ -138,6 +158,108 @@ namespace Hsy.Geo
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
 
+        public void applyInvAsPointInto(double x,double y,double z, HS_MutableCoord result)
+        {
+            _xt = invT.m11 * x + invT.m12 * y+ invT.m13 * z + invT.m14;
+            _yt = invT.m21 *x + invT.m22 * y + invT.m23 * z + invT.m24;
+            _zt = invT.m31 * x + invT.m32 * y + invT.m33 *z + invT.m34;
+            double wp = invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44;
+            wp = 1.0D / wp;
+            result.Set(_xt * wp, _yt * wp, _zt * wp);
+        }
+        public void applyAsVectorInto(HS_Coord p, HS_MutableCoord result)
+        {
+            _xt = T.m11 * p.xd +T.m12 * p.yd + T.m13 * p.zd;
+            _yt =T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
+            _zt = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd;
+            result.Set(_xt, _yt, _zt);
+        }
+
+        public void applyAsVectorInto(double x,double y,double z, HS_MutableCoord result)
+        {
+            _xt = T.m11 * x + T.m12 * y+ T.m13 * z;
+            _yt = T.m21 * x + T.m22 * y + T.m23 * z;
+            _zt = T.m31 * x + T.m32 * y + T.m33 * z;
+            result.Set(_xt, _yt, _zt);
+        }
+
+        public void applyInvAsVectorInto(HS_Coord p,HS_MutableCoord result)
+        {
+            _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd;
+            _yt = invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd;
+            _zt = invT.m31 * p.xd + invT.m32 * p.yd + invT.m33 * p.zd;
+            result.Set(_xt, _yt, _zt);
+        }
+        public void applyInvAsVectorInto(double x, double y, double z, HS_MutableCoord result)
+        {
+            _xt = invT.m11 * x + invT.m12 * y + invT.m13 * z;
+            _yt = invT.m21 * x + invT.m22 * y + invT.m23 * z;
+            _zt = invT.m31 * x + invT.m32 * y + invT.m33 * z;
+            result.Set(_xt, _yt, _zt);
+        }
+
+        public HS_Transform3D addFromCSToWorld(HS_CoordinateSystem CS)
+        {
+            for (HS_CoordinateSystem current= CS; !current.isWorld(); current = current.getParent())
+            {
+                this.addFromCSToParent(current);
+            }
+            return this;
+        }
+
+        public HS_Transform3D addFromParentToCS(HS_CoordinateSystem CS)
+        {
+            if (CS.isWorld())
+            {
+                return this;
+            }
+            else
+            {
+                HS_Transform3D tmp = new HS_Transform3D();
+                tmp.addFromCSToParent(CS);
+                this.T = tmp.invT * this.T;
+                this.invT = this.invT * tmp.T;
+                return this;
+            }
+        }
+
+        public HS_Transform3D addFromCSToParent(HS_CoordinateSystem CS)
+        {
+            HS_CoordinateSystem WCS = HS_CoordinateSystem.WORLD();
+            if (CS.isWorld())
+            {
+                return this;
+            }
+            else
+            {
+                HS_Vector ex1 = CS.getX();
+                HS_Vector ey1 = CS.getY();
+                HS_Vector ez1 = CS.getZ();
+                HS_Point o1 = CS.getOrigin();
+                HS_Vector ex2 = WCS.getX();
+                HS_Vector ey2 = WCS.getY();
+                HS_Vector ez2 = WCS.getZ();
+                HS_Point o2 = WCS.getOrigin();
+
+                double xx = ex2.dot(ex1);
+                double xy = ex2.dot(ey1);
+                double xz = ex2.dot(ey1);
+                double yx = ey2.dot(ex1);
+                double yy = ey2.dot(ey1);
+                double yz = ey2.dot(ez1);
+                double zx = ez2.dot(ex1);
+                double zy = ez2.dot(ey1);
+                double zz = ez2.dot(ez1);
+
+                HS_Matrix44 tmp = new HS_Matrix44(xx, xy, xz, 0.0D, yx, yy, yz, 0.0D, zx, zy, zz, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+                HS_Matrix44 invtmp = new HS_Matrix44(xx, yx, zx, 0.0D,xy,yy,zy,0.0D, xz, yz, zz, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+                this.T = tmp * this.T;
+                this.invT = this.invT * invtmp;
+                this.addTranslate(o1 - o2);
+                return this;
+            }
+
+        }
 
 
     }

@@ -134,6 +134,11 @@ namespace Hsy.Geo
         {
             return new HS_Plane(origin, normal);
         }
+
+        public HS_Point createPoint(double _x,double _y,double _z)
+        {
+            return new HS_Point(_x, _y, _z);
+        } 
         public HS_Vector createVector()
         {
             return createVector(0, 0, 0);

@@ -70,7 +70,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geo\HS_CoordinateSystem.cs" />
     <Compile Include="Geo\HS_GeometryFactory3D.cs" />
+    <Compile Include="Geo\HS_KDTree.cs" />
+    <Compile Include="Geo\HS_KDTreeInteger.cs" />
     <Compile Include="HsMath\HS_Matrix44.cs" />
     <Compile Include="Geo\HS_PlanarMap.cs" />
     <Compile Include="Geo\HS_Swizzle.cs" />
