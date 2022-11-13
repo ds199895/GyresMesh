@@ -38,6 +38,8 @@ namespace Hsy.Geo
         {
             get;set;
         }
+
+        public double getd(int i);
          
     }
 }

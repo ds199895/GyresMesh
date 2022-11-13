@@ -837,6 +837,27 @@ namespace Hsy.Geo
             return "HS_Vector : (" + xd + " , " + yd + " , " + zd+")";
         }
 
+        public double getd(int i)
+        {
+            if (i < 0 || i > 3)
+            {
+                throw new IndexOutOfRangeException("Index should larger than 0 and less than 3");
+            }
+            switch (i){
+
+                case 0:
+                    return this.xd;
+                    break;
+                case 1:
+                    return this.yd;
+                    break;
+                case 2:
+                    return this.zd;
+                    break;
+            }
+            return double.NaN;
+
+        }
 
         public static HS_Vector operator +(HS_Vector left, HS_Vector right)
         {
