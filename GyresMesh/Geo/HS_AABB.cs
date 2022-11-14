@@ -8,8 +8,8 @@ namespace Hsy.Geo
 {
     public class HS_AABB
     {
-        protected double[] _min;
-        protected double[] _max;
+        public double[] _min;
+        public double[] _max;
         int _id;
 
         public HS_AABB(HS_Coord p)

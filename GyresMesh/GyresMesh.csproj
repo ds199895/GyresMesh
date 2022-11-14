@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Geo\HS_AABB.cs" />
     <Compile Include="Geo\HS_CoordinateSystem.cs" />
+    <Compile Include="Geo\HS_CoordOp3D.cs" />
     <Compile Include="Geo\HS_GeometryFactory3D.cs" />
     <Compile Include="Geo\HS_KDTree.cs" />
     <Compile Include="Geo\HS_KDTreeInteger.cs" />
