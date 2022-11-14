@@ -12,6 +12,7 @@ namespace Hsy.Geo
         public  int _dim;
         public int _maximumBinSize;
         private HS_KDNodeInteger<T> root;
+        
         public HS_KDTreeInteger()
         {
             this._dim = 3;
@@ -32,7 +33,7 @@ namespace Hsy.Geo
         private  int capacity;
         private int size;
 
-        protected QueryResultInteger(int capacity)
+        public QueryResultInteger(int capacity)
         {
             this.entries = new HS_KDEntryInteger<T>[capacity];
             this.distSqs = new double[capacity];
@@ -40,7 +41,7 @@ namespace Hsy.Geo
             this.size = 0;
         }
 
-        protected void tryToAdd(double dist,HS_KDEntryInteger<T> entry)
+        public void tryToAdd(double dist,HS_KDEntryInteger<T> entry)
         {
             int i;
             for (i = this.size; i > 0 && this.distSqs[i - 1] > dist; --i)
@@ -55,10 +56,12 @@ namespace Hsy.Geo
                 }
 
                 int j = i + 1;
-                System.arraycopy(this.distSqs, i, this.distSqs, j, this.size - j);
+                //System.arraycopy(this.distSqs, i, this.distSqs, j, this.size - j);
+                    Array.Copy(this.distSqs, i, this.distSqs, j, this.size - j);
 
                 this.distSqs[i] = dist;
-                System.arraycopy(this.entries, i, this.entries, j, this.size - j);
+                //System.arraycopy(this.entries, i, this.entries, j, this.size - j);
+                    Array.Copy(this.entries, i, this.entries, j, this.size - j);
                 entry.d2 = dist;
                 this.entries[i] = entry;
             }
@@ -109,9 +112,12 @@ namespace Hsy.Geo
             private double _sliveValue;
             private int _id;
 
+            private int _maximumBinSize;
+
             public HS_KDNodeInteger(HS_KDTreeInteger<T> tree)
             {
-                _bin = new HS_KDEntryInteger<T>[tree._maximumBinSize];
+                this._maximumBinSize = tree._maximumBinSize;
+                _bin = new HS_KDEntryInteger<T>[this._maximumBinSize];
                 _negative = _positive = null;
                 _limits = null;
                 _isLeaf = true;
@@ -255,7 +261,7 @@ namespace Hsy.Geo
                 if (lookup == -1)
                 {
                     this.extendBounds(entry.coord);
-                    if (this._binSize + 1 > HS_KDTreeInteger<T>.maximumBinSize) {
+                    if (this._binSize + 1 >this._maximumBinSize) {
                         this.addLevel();
                         this.add(entry);
                         return -1;
@@ -294,7 +300,33 @@ namespace Hsy.Geo
                 return -1;
             }
 
-            private void findNearest()
+            private void findNearest(QueryResultInteger<T> heap,HS_Coord data)
+            {
+                if (_binSize == 0)
+                {
+                    return;
+                }
+                if (_isLeaf)
+                {
+                    for (int i = 0; i < _binSize; i++)
+                    {
+                        double dist = HS_CoordOp3D.getSqDistance3D(_bin[i].coord, data);
+                        heap.tryToAdd(dist, _bin[i]);
+                    }
+                }
+                else
+                {
+                    if (data.getd(_discriminator) > _sliveValue)
+                    {
+                        _positive.findNearest(heap, data);
+                        if (_negative._binSize == 0)
+                        {
+                            return;
+                        }
+                        //if()
+                    }
+                }
+            }
 
             private void extendBounds(HS_Coord coord)
             {
