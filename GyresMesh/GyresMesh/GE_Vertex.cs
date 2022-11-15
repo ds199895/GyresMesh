@@ -200,7 +200,14 @@ namespace Hsy.GyresMesh
             return he.GetNextInFace().GetStart();
         }
 
-
+        public void SetUVW(HS_Coord uvw)
+        {
+            //if (uvw == null)
+            //{
+            //    return;
+            //}
+            //this.uvw = new HE_TextureCoordinate(uvw);
+        }
       
 
         public void Set(HS_Coord c)
@@ -222,6 +229,7 @@ namespace Hsy.GyresMesh
         {
             pos.zf = z;
         }
+
         override
         public bool Equals(Object o)
         {
@@ -258,12 +266,12 @@ namespace Hsy.GyresMesh
             base.Clone(ob);
         }
 
-        protected override void Clear()
+        protected internal override void Clear()
         {
             _halfedge=null;
         }
 
-        protected override void ClearPreComputed()
+        protected internal override void ClearPreComputed()
         {
             throw new NotImplementedException();
         }
@@ -299,17 +307,27 @@ namespace Hsy.GyresMesh
 
         public void SetX(double x)
         {
-            throw new NotImplementedException();
+            pos.SetX(x);
         }
 
         public void SetY(double y)
         {
-            throw new NotImplementedException();
+            pos.SetY(y);
         }
 
         public void SetZ(double z)
         {
-            throw new NotImplementedException();
+            pos.SetZ(z);
+        }
+
+        public void Set(double x, double y, double z)
+        {
+            pos.Set(x, y, z);
+        }
+
+        public double getd(int i)
+        {
+            return pos.getd(i);
         }
     }
 }

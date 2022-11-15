@@ -10,16 +10,19 @@ namespace Hsy.GyresMesh
     {
         private static long currentkey = 0;
         private protected long key;
-        private protected int internalLabel;
-        private protected int userLabelInt;
-        private double userLabelDouble;
-
+        private protected int _internalLabel;
+        private protected int _userLabelInt;
+        private double _userLabelDouble;
+        //public  int internalLabel { get{ return this._internalLabel; }private set { this._internalLabel = value; }}
+        //private protected int userLabelInt { get { return this._userLabelInt; } set { this._userLabelInt= value; } }
+        //private double userLabelDouble { get { return this._userLabelDouble; } set { this._userLabelDouble = value; } }
+        
         public GE_Object()
         {
             key = currentkey++;
-            internalLabel = -1;
-            userLabelInt = -1;
-            userLabelDouble = -1;
+            _internalLabel = -1;
+            _userLabelInt = -1;
+            _userLabelDouble = -1;
         }
 
         public long GetKey()
@@ -27,36 +30,43 @@ namespace Hsy.GyresMesh
             return key;
         }
 
+
         protected void GetInternalLabel(int label)
         {
-            internalLabel = label;
+            _internalLabel = label;
         }
+        protected internal void SetInternalLabel(int label)
+        {
+            _internalLabel = label;
+        }
+
 
         public int GetInternalLabel()
         {
-            return internalLabel;
+            return _internalLabel;
         }
 
-        public void GetUserLabel(int label)
-        {
-            userLabelInt = label;
-        }
 
-        public void GetUserLabel(double label)
-        {
-            userLabelDouble = label;
-        }
 
         public int GetUserLabelInt()
         {
-            return userLabelInt;
+            return _userLabelInt;
         }
+        public void SetUserLabel(int label)
+        {
+            _userLabelInt = label;
+        }
+
+
 
         public double GetUserLabelDouble()
         {
-            return userLabelDouble;
+            return _userLabelDouble;
         }
-
+        public void SetUserLabel(double label)
+        {
+            _userLabelDouble = label;
+        }
         override
         public bool Equals(Object other)
         {
@@ -82,13 +92,13 @@ namespace Hsy.GyresMesh
 
         public void Clone(GE_Object ob)
         {
-            internalLabel = ob.GetInternalLabel();
-            userLabelInt = ob.GetUserLabelInt();
-            userLabelDouble = ob.GetUserLabelDouble();
+            _internalLabel = ob.GetInternalLabel();
+            _userLabelInt = ob.GetUserLabelInt();
+            _userLabelDouble = ob.GetUserLabelDouble();
         }
 
-        protected abstract void Clear();
+        protected internal abstract void Clear();
 
-        protected abstract void ClearPreComputed();
+        protected internal abstract void ClearPreComputed();
     }
 }

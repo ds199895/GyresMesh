@@ -8,6 +8,8 @@ namespace Hsy.Geo
 {
     public class HS_Polygon :HS_Polyline
     {
+        static bool USE_JTS = true;
+        static bool OPTIMIZE_DEFAULT = true;
 
         public int[] triangles;
         /**
@@ -27,122 +29,19 @@ namespace Hsy.Geo
          */
         private static  HS_GeometryFactory gf	= new HS_GeometryFactory();
 
-        public HS_Polygon(List<HS_Coord>points)
+        public HS_Polygon(List<HS_Coord> points)
         {
-            numberOfPoints = points.Count;
-            numberOfShellPoints = points.Count;
-            this.points = new List<HS_Point>();
-            foreach(HS_Coord p in points)
-            {
-                this.points.Add(new HS_Point(p));
+            //numberOfPoints = points.Count;
+            //numberOfShellPoints = points.Count;
+            //this.points = new List<HS_Point>();
+            //foreach (HS_Coord p in points)
+            //{
+            //    this.points.Add(new HS_Point(p));
 
-            }
-            numberOfContours = 1;
-            numberOfPointsPerContour = new int[] { numberOfPoints};
-        }
-        public HS_Polygon(HS_Coord[] points)
-        {
-            numberOfPoints = points.Length;
-            numberOfShellPoints = points.Length;
-            this.points = new List<HS_Point>();
-            foreach (HS_Coord p in points)
-            {
-                this.points.Add(new HS_Point(p));
-
-            }
-            numberOfContours = 1;
-            numberOfPointsPerContour = new int[] { numberOfPoints };
-        }
-
-
-        public HS_Polygon()
-        {
-            numberOfPoints = 0;
-            numberOfShellPoints = 0;
-            this.points = new List<HS_Point>();
-            numberOfContours = 0;
-            numberOfPointsPerContour = new int[] { numberOfPoints};
-        }
-
-
-        public HS_Polygon(HS_Coord[] points, HS_Coord[] innerpoints)
-        {
-            numberOfShellPoints = points.Length;
-            numberOfPoints = points.Length + innerpoints.Length;
-            List<HS_Coord> tmp = new List<HS_Coord>();
-            foreach (HS_Coord p in points)
-            {
-                tmp.Add(p);
-            }
-            foreach (HS_Coord p in innerpoints)
-            {
-                tmp.Add(p);
-            }
-            this.points = new List<HS_Point>();
-            foreach (HS_Coord p in tmp)
-            {
-                this.points.Add(new HS_Point(p));
-            }
-            calculateDirections();
-            numberOfContours = 2;
-            numberOfPointsPerContour = new int[] { numberOfShellPoints,
-                innerpoints.Length };
-        }
-
-        public HS_Polygon(List<HS_Coord> points, List<HS_Coord> innerpoints)
-        {
-            numberOfShellPoints = points.Count;
-            numberOfPoints = points.Count + innerpoints.Count;
-            List<HS_Coord> tmp = new List<HS_Coord>();
-            foreach (HS_Coord p in points)
-            {
-                tmp.Add(p);
-            }
-            foreach (HS_Coord p in innerpoints)
-            {
-                tmp.Add(p);
-            }
-            this.points = new List<HS_Point>();
-            foreach (HS_Coord p in tmp)
-            {
-                this.points.Add(new HS_Point(p));
-            }
-            calculateDirections();
-            numberOfContours = 2;
-            numberOfPointsPerContour = new int[] { numberOfShellPoints,
-                innerpoints.Count };
-        }
-
-
-
-        public HS_Polygon(HS_Coord[] points,List<HS_Coord>[] innerpoints)
-        {
-            numberOfShellPoints = points.Length;
-            numberOfPoints = points.Length;
-            List<HS_Coord> tmp = new List<HS_Coord>();
-            foreach( HS_Coord p in points)
-            {
-                tmp.Add(p);
-            }
-            numberOfContours = innerpoints.Length + 1;
-            numberOfPointsPerContour = new int[innerpoints.Length + 1];
-            numberOfPointsPerContour[0] = numberOfShellPoints;
-            int i = 1;
-            foreach ( List<HS_Coord > hole in innerpoints)
-            {
-                foreach( HS_Coord p in hole)
-                {
-                    tmp.Add(p);
-                }
-                numberOfPointsPerContour[i++] = hole.Count;
-                numberOfPoints += hole.Count;
-            }
-            this.points = new List<HS_Point>();
-            foreach (HS_Coord p in tmp)
-            {
-                this.points.Add(new HS_Point(p));
-            }
-            calculateDirections();
+            //}
+            //numberOfContours = 1;
+            //numberOfPointsPerContour = new int[] { numberOfPoints };
+            Create(points);
         }
         public HS_Polygon(List<HS_Coord> points, List<HS_Coord>[] innerpoints)
         {
@@ -203,8 +102,378 @@ namespace Hsy.Geo
             }
             calculateDirections();
         }
+        public HS_Polygon(FastList<HS_Coord> points)
+        {
+            numberOfPoints = points.Count;
+            numberOfShellPoints = points.Count;
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in points)
+            {
+                this.points.Add(new HS_Point(p));
+
+            }
+            numberOfContours = 1;
+            numberOfPointsPerContour = new int[] { numberOfPoints };
+            
+        }
+        public HS_Polygon(HS_Coord[] points)
+        {
+            numberOfPoints = points.Length;
+            numberOfShellPoints = points.Length;
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in points)
+            {
+                this.points.Add(new HS_Point(p));
+
+            }
+            numberOfContours = 1;
+            numberOfPointsPerContour = new int[] { numberOfPoints };
+        }
 
 
+        public HS_Polygon()
+        {
+            numberOfPoints = 0;
+            numberOfShellPoints = 0;
+            this.points = new List<HS_Point>();
+            numberOfContours = 0;
+            numberOfPointsPerContour = new int[] { numberOfPoints };
+        }
+
+
+        public HS_Polygon(HS_Coord[] points, HS_Coord[] innerpoints)
+        {
+            numberOfShellPoints = points.Length;
+            numberOfPoints = points.Length + innerpoints.Length;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            foreach (HS_Coord p in innerpoints)
+            {
+                tmp.Add(p);
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            numberOfContours = 2;
+            numberOfPointsPerContour = new int[] { numberOfShellPoints,
+                innerpoints.Length };
+        }
+
+        public HS_Polygon(List<HS_Coord> points, List<HS_Coord> innerpoints)
+        {
+            numberOfShellPoints = points.Count;
+            numberOfPoints = points.Count + innerpoints.Count;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            foreach (HS_Coord p in innerpoints)
+            {
+                tmp.Add(p);
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            numberOfContours = 2;
+            numberOfPointsPerContour = new int[] { numberOfShellPoints,
+                innerpoints.Count };
+        }
+
+
+
+        public HS_Polygon(HS_Coord[] points, List<HS_Coord>[] innerpoints)
+        {
+            numberOfShellPoints = points.Length;
+            numberOfPoints = points.Length;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            numberOfContours = innerpoints.Length + 1;
+            numberOfPointsPerContour = new int[innerpoints.Length + 1];
+            numberOfPointsPerContour[0] = numberOfShellPoints;
+            int i = 1;
+            foreach (List<HS_Coord> hole in innerpoints)
+            {
+                foreach (HS_Coord p in hole)
+                {
+                    tmp.Add(p);
+                }
+                numberOfPointsPerContour[i++] = hole.Count;
+                numberOfPoints += hole.Count;
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+        }
+        //simple
+        public HS_Polygon Create<T>(List<T>points)where T:HS_Coord
+        {
+            this.numberOfPoints = points.Count;
+            this.numberOfShellPoints = points.Count;
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in points)
+            {
+                this.points.Add(new HS_Point(p));
+
+            }
+            this.numberOfContours = 1;
+            this.numberOfPointsPerContour = new int[] { numberOfPoints };
+            return this;
+        }
+
+        public HS_Polygon Create<T>(T[] points) where T : HS_Coord
+        {
+            this.numberOfPoints = points.Length;
+            this.numberOfShellPoints = points.Length;
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in points)
+            {
+                this.points.Add(new HS_Point(p));
+
+            }
+            this.numberOfContours = 1;
+            this.numberOfPointsPerContour = new int[] { numberOfPoints };
+            return this;
+        }
+
+
+        //one hole
+        public HS_Polygon Create<T,K>(T[] points, K[] innerpoints)where T:HS_Coord where K:HS_Coord
+        {
+            numberOfShellPoints = points.Length;
+            numberOfPoints = points.Length + innerpoints.Length;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            foreach (HS_Coord p in innerpoints)
+            {
+                tmp.Add(p);
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            numberOfContours = 2;
+            numberOfPointsPerContour = new int[] { numberOfShellPoints,
+                innerpoints.Length };
+            return this;
+        }
+        public HS_Polygon Create<T, K>(T[] points,List<K>innerpoints) where T : HS_Coord where K : HS_Coord
+        {
+            numberOfShellPoints = points.Length;
+            numberOfPoints = points.Length + innerpoints.Count;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            foreach (HS_Coord p in innerpoints)
+            {
+                tmp.Add(p);
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            numberOfContours = 2;
+            numberOfPointsPerContour = new int[] { numberOfShellPoints,
+                innerpoints.Count };
+            return this;
+        }
+        public HS_Polygon Create<T, K>(List<T>points, K[] innerpoints) where T : HS_Coord where K : HS_Coord
+        {
+            numberOfShellPoints = points.Count;
+            numberOfPoints = points.Count + innerpoints.Length;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            foreach (HS_Coord p in innerpoints)
+            {
+                tmp.Add(p);
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            numberOfContours = 2;
+            numberOfPointsPerContour = new int[] { numberOfShellPoints,
+                innerpoints.Length };
+            return this;
+        }
+        public HS_Polygon Create<T, K>(List<T> points, List<K> innerpoints) where T : HS_Coord where K : HS_Coord
+        {
+            numberOfShellPoints = points.Count;
+            numberOfPoints = points.Count + innerpoints.Count;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            foreach (HS_Coord p in innerpoints)
+            {
+                tmp.Add(p);
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            numberOfContours = 2;
+            numberOfPointsPerContour = new int[] { numberOfShellPoints,
+                innerpoints.Count };
+            return this;
+        }
+
+        //many holes
+        public HS_Polygon Create<T,K>(List<T> points, List<K>[] innerpoints)where T:HS_Coord where K:HS_Coord
+        {
+            numberOfShellPoints = points.Count;
+            numberOfPoints = points.Count;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            numberOfContours = innerpoints.Length + 1;
+            numberOfPointsPerContour = new int[innerpoints.Length + 1];
+            numberOfPointsPerContour[0] = numberOfShellPoints;
+            int i = 1;
+            foreach (List<K> hole in innerpoints)
+            {
+                foreach (HS_Coord p in hole)
+                {
+                    tmp.Add(p);
+                }
+                numberOfPointsPerContour[i++] = hole.Count;
+                numberOfPoints += hole.Count;
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            return this;
+        }
+
+        public HS_Polygon Create<T, K>(List<T> points, K[][] innerpoints) where T : HS_Coord where K : HS_Coord
+        {
+            numberOfShellPoints = points.Count;
+            numberOfPoints = points.Count;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            numberOfContours = innerpoints.Length + 1;
+            numberOfPointsPerContour = new int[innerpoints.Length + 1];
+            numberOfPointsPerContour[0] = numberOfShellPoints;
+            int i = 1;
+            foreach (K[]hole in innerpoints)
+            {
+                foreach (HS_Coord p in hole)
+                {
+                    tmp.Add(p);
+                }
+                numberOfPointsPerContour[i++] = hole.Length;
+                numberOfPoints += hole.Length;
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            return this;
+        }
+
+
+        public HS_Polygon Create<T, K>(T[] points, K[][] innerpoints) where T : HS_Coord where K : HS_Coord
+        {
+            numberOfShellPoints = points.Length;
+            numberOfPoints = points.Length;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            numberOfContours = innerpoints.Length + 1;
+            numberOfPointsPerContour = new int[innerpoints.Length + 1];
+            numberOfPointsPerContour[0] = numberOfShellPoints;
+            int i = 1;
+            foreach (K[] hole in innerpoints)
+            {
+                foreach (HS_Coord p in hole)
+                {
+                    tmp.Add(p);
+                }
+                numberOfPointsPerContour[i++] = hole.Length;
+                numberOfPoints += hole.Length;
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            return this;
+        }
+        public HS_Polygon Create<T, K>(T[] points, List<K>[] innerpoints) where T : HS_Coord where K : HS_Coord
+        {
+            numberOfShellPoints = points.Length;
+            numberOfPoints = points.Length;
+            List<HS_Coord> tmp = new List<HS_Coord>();
+            foreach (HS_Coord p in points)
+            {
+                tmp.Add(p);
+            }
+            numberOfContours = innerpoints.Length + 1;
+            numberOfPointsPerContour = new int[innerpoints.Length + 1];
+            numberOfPointsPerContour[0] = numberOfShellPoints;
+            int i = 1;
+            foreach (List<K> hole in innerpoints)
+            {
+                foreach (HS_Coord p in hole)
+                {
+                    tmp.Add(p);
+                }
+                numberOfPointsPerContour[i++] = hole.Count;
+                numberOfPoints += hole.Count;
+            }
+            this.points = new List<HS_Point>();
+            foreach (HS_Coord p in tmp)
+            {
+                this.points.Add(new HS_Point(p));
+            }
+            calculateDirections();
+            return this;
+        }
         private void calculateDirections()
         {
             directions = new List<HS_Vector>();
@@ -311,30 +580,77 @@ namespace Hsy.Geo
             center = (HS_Point)(center / nsp);
             return center; 
         }
-        //public int[] getTriangles(bool optimize)
-        //{
-        //    if (triangles == null)
-        //    {
-        //        if (numberOfShellPoints == 0)
-        //        {
-        //            return new int[] { };
-        //        }
-        //        else if (numberOfShellPoints < 3)
-        //        {
-        //            return new int[] { 0, 0, 0 };
-        //        }
-        //        else if (numberOfShellPoints == 3 && numberOfContours == 1)
-        //        {
-        //            return new int[] { 0, 1, 2 };
-        //        }
-        //        else if (numberOfShellPoints == 4 && numberOfContours == 1)
-        //        {
-        //            return
-        //        }
-        //        {
+        public bool isSimple()
+        {
+            return numberOfContours == 1;
+        }
 
-        //        }
-        //    }
-        //}
+        public HS_Polygon toPolygon2DOrtho()
+        {
+            FastList<HS_Point> shellpoints = new FastList<HS_Point>();
+            HS_Plane P = GetPlane(0);
+            HS_OrthoProject OP = new HS_OrthoProject(P);
+            for(int i = 0; i < numberOfShellPoints; i++)
+            {
+                HS_Point p2D = new HS_Point();
+                OP.mapPoint3D(points[i], p2D);
+                shellpoints.Add(p2D);
+            }
+            if (isSimple())
+            {
+                return new HS_Polygon().Create(shellpoints);
+            }
+            else
+            {
+                List<HS_Point>[] holepoints = new List<HS_Point>[numberOfContours - 1];
+                int index = numberOfShellPoints;
+                for (int i = 0; i < numberOfContours - 1; i++)
+                {
+                    holepoints[i] = new List<HS_Point>();
+                    for (int j = 0; j < numberOfPointsPerContour[i + 1]; j++)
+                    {
+                        HS_Point p2D = new HS_Point();
+                        OP.mapPoint3D(points[index++], p2D);
+                        holepoints[i].Add(p2D);
+                    }
+                }
+                return new HS_Polygon().Create(shellpoints, holepoints);
+            }
+        }
+
+        public int[] getTriangles(bool optimize)
+        {
+            if (triangles == null)
+            {
+                if (numberOfShellPoints == 0)
+                {
+                    return new int[] { };
+                }
+                else if (numberOfShellPoints < 3)
+                {
+                    return new int[] { 0, 0, 0 };
+                }
+                else if (numberOfShellPoints == 3 && numberOfContours == 1)
+                {
+                    return new int[] { 0, 1, 2 };
+                }
+                else if (numberOfShellPoints == 4 && numberOfContours == 1)
+                {
+                    return HS_JTS.PolygonTriangulatorJTS.triangulateQuad(points[0], points[1], points[2], points[3]);
+                }else
+                {
+                    if (USE_JTS)
+                    {
+                        HS_Triangulation2D triangulation = new HS_JTS.PolygonTriangulatorJTS().triangulatePolygon2D(this.toPolygon2DOrtho(), optimize);
+                        triangles = triangulation.getTriangles();
+                    }
+                    else
+                    {
+                        //triangles
+                    }
+                }
+            }
+            return triangles;
+        }
     }
 }

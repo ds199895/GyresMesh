@@ -129,12 +129,12 @@ namespace Hsy.GyresMesh
             return s;
         }
 
-        protected override void Clear()
+        protected internal  override void Clear()
         {
             throw new NotImplementedException();
         }
 
-        protected override void ClearPreComputed()
+        protected internal  override void ClearPreComputed()
         {
             throw new NotImplementedException();
         }

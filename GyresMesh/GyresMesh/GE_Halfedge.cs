@@ -14,7 +14,7 @@ namespace Hsy.GyresMesh
         private GE_Halfedge _nxt;
         private GE_Halfedge _pre;
         private GE_Face _face;
-
+        //private GE_TextureCoordinate uvw;
         public GE_Halfedge()
         {
             _vertex = null;
@@ -47,6 +47,10 @@ namespace Hsy.GyresMesh
         public GE_Halfedge Pair()
         {
             return _pair;
+        }
+        public void ClearPair()
+        {
+            _pair = null;
         }
 
         public GE_Halfedge GetPrevInFace()
@@ -136,6 +140,14 @@ namespace Hsy.GyresMesh
             this._pair = he;
             he._pair = this;
         }
+        public void SetUVW(HS_Coord uvw)
+        {
+            if (uvw == null)
+            {
+                return;
+            }
+            //this.uvw = new HE_TextureCoordinate(uvw);
+        }
 
         public GE_Face GetFace()
         {
@@ -202,12 +214,12 @@ namespace Hsy.GyresMesh
             }
             return GetKey() < _pair.GetKey();
         }
-        protected override void Clear()
+        protected internal override void Clear()
         {
             throw new NotImplementedException();
         }
 
-        protected override void ClearPreComputed()
+        protected internal override void ClearPreComputed()
         {
             throw new NotImplementedException();
         }

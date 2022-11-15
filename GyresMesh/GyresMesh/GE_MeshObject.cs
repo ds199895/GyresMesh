@@ -23,7 +23,10 @@ namespace Hsy.GyresMesh
         {
             used = false;
         }
-
+        public void SetUsed()
+        {
+            used = true;
+        }
         public void InitialUsed()
         {
             used = true;
