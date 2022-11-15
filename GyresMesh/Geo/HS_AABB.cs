@@ -156,6 +156,29 @@ namespace Hsy.Geo
             return new HS_AABB(_min, _max);
         }
 
+        public int maxOrdinate()
+        {
+            if (this.isNull())
+            {
+                return 0;
+            }
+            else
+            {
+                double res = -1.0D / 0.0;
+                int ord = 0;
+                for(int i = 0; i < 3; i++)
+                {
+                    double w = this.getSize(i);
+                    if (res < w)
+                    {
+                        res = w;
+                        ord = i;
+                    }
+                }
+                return ord;
+            }
+        }
+
         public double getMinX()
         {
             return _min[0];
@@ -183,6 +206,15 @@ namespace Hsy.Geo
         {
             return _max[2];
         }
+        public double getMin(int i)
+        {
+            return this._min[i];
+        }
+        public double getMax(int i)
+        {
+            return this._max[i];
+        }
+
 
         public double getCenterX()
         {
@@ -200,9 +232,27 @@ namespace Hsy.Geo
 
         public double getArea()
         {
-            return 2.0D*(get)
+            return 2.0D * (this.getWidth() * this.getHeight() + this.getWidth() * this.getDepth() + this.getDepth() * this.getHeight());
         }
+        public double getDistanceSquare(HS_Coord tuple)
+        {
+            double dx = 0.0D;
+            double sqr = 0.0D;
 
+            for (int i = 0; i < 3; ++i)
+            {
+                if (this._max[i] < tuple.getd(i))
+                {
+                    sqr += (dx = tuple.getd(i) - this._max[i]) * dx;
+                }
+                else if (this._min[i] > tuple.getd(i))
+                {
+                    sqr += (dx = this._min[i] - tuple.getd(i)) * dx;
+                }
+            }
+
+            return sqr;
+        }
         public double getSize(int i)
         {
             if (isNull())
@@ -224,7 +274,182 @@ namespace Hsy.Geo
         {
             return getSize(2);
         }
+        public bool intersects(HS_AABB other)
+        {
+            if (!this.isNull() && !other.isNull())
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (other._min[i] > this._max[i])
+                    {
+                        return false;
+                    }
+                    if (other._max[i] < this._min[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool intersects(HS_Coord p)
+        {
+            return this.intersects(p.xd, p.yd, p.zd);
+        }
+        public bool intersects(double[] p)
+        {
+            if (this.isNull())
+            {
+                return false;
+            }
+            else
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    if (p[i] > this._max[i]){
+                        return false;
+                    }
+                    if (p[i] < this._min[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
 
+        public bool intersects(double x, double y, double z)
+        {
+            if (this.isNull())
+            {
+                return false;
+            }
+            else if (x > this._max[0])
+            {
+                return false;
+            }
+            else if (x < this._min[0])
+            {
+                return false;
+            }
+            else if (y > this._max[1])
+            {
+                return false;
+            }
+            else if (y < this._min[1])
+            {
+                return false;
+            }
+            else if (z > this._max[2])
+            {
+                return false;
+            }
+            else
+            {
+                return !(z < this._min[2]);
+            }
+        }
+
+        public bool contains(HS_AABB other)
+        {
+            return this.covers(other);
+        }
+        public bool contains(HS_Coord p)
+        {
+            return this.covers(p);
+        }
+        public bool contains(double[] x)
+        {
+            return this.covers(x);
+        }
+
+        public bool covers(double[] x)
+        {
+            if (this.isNull())
+            {
+                return false;
+            }
+            else
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    if (x[i] > this._max[i])
+                    {
+                        return false;
+                    }
+
+                    if (x[i] < this._min[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        public bool covers(double x, double y, double z)
+        {
+            if (this.isNull())
+            {
+                return false;
+            }
+            else if (x > this._max[0])
+            {
+                return false;
+            }
+            else if (x < this._min[0])
+            {
+                return false;
+            }
+            else if (y > this._max[1])
+            {
+                return false;
+            }
+            else if (y < this._min[1])
+            {
+                return false;
+            }
+            else if (z > this._max[2])
+            {
+                return false;
+            }
+            else
+            {
+                return !(z < this._min[2]);
+            }
+        }
+
+        public bool covers(HS_Coord p)
+        {
+            return this.covers(p.xd, p.yd, p.zd);
+        }
+        public bool covers(HS_AABB other)
+        {
+            if (!this.isNull() && !other.isNull())
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    if (other._max[i] > this._max[i])
+                    {
+                        return false;
+                    }
+                    if (other._min[i] < this._min[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void setId(int id)
         {

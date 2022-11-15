@@ -370,11 +370,11 @@ namespace Hsy.Geo
 
                 HS_Plane P = polygon.GetPlane(0.0D);
                 HS_Triangulation2DWithPoints triangulation = this.triangulatePolygon2D(pts,hpts, optimize, (new HS_GeometryFactory3D()).createEmbeddedPlane(P));
-                HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger();
+                HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger<HS_Point>();
 
                 for (int i = 0; i < polygon.numberOfPoints; ++i)
                 {
-                    pointmap.Add(polygon.GetPoint(i), i);
+                    pointmap.add(polygon.GetPoint(i), i);
                 }
 
                 int[] triangles = triangulation.getTriangles();
@@ -531,14 +531,14 @@ namespace Hsy.Geo
                     coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.zx : HS_Swizzle.xy;
                 }
 
-                HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger();
+                HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger<HS_Point>();
                 int i = 0;
                 GE_Halfedge GE = face.GetHalfedge();
 
                 do
                 {
                     coords[i] = new Coordinate(coordViewer.xd(GE.GetStart()), coordViewer.yd(GE.GetStart()), 0.0D);
-                    pointmap.Add(new HS_Point(coordViewer.xd(GE.GetStart()), coordViewer.yd(GE.GetStart())), i);
+                    pointmap.add(new HS_Point(coordViewer.xd(GE.GetStart()), coordViewer.yd(GE.GetStart())), i);
                     ++i;
                     GE = GE.GetNextInFace();
                 } while (GE != face.GetHalfedge());
@@ -592,14 +592,14 @@ namespace Hsy.Geo
                     coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.zx: HS_Swizzle.xy;
                 }
 
-                HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger();
+                HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger<HS_Point>();
 
-                for (int i = 0; i <= polygon.getNumberOfShellPoints(); ++i)
+                for (int j = 0; j <= polygon.getNumberOfShellPoints(); ++j)
                 {
-                    HS_Coord c = polygon.GetPoint(i);
-                    coords[i] = new Coordinate(coordViewer.xd(c), coordViewer.yd(c), 0.0D);
-                    pointmap.Add(new HS_Point(coordViewer.xd(c), coordViewer.yd(c)), i);
-                    ++i;
+                    HS_Coord c = polygon.GetPoint(j);
+                    coords[j] = new Coordinate(coordViewer.xd(c), coordViewer.yd(c), 0.0D);
+                    pointmap.add(new HS_Point(coordViewer.xd(c), coordViewer.yd(c)), j);
+                    ++j;
                 }
 
                 LinearRing shell = HS_JTS.JTSgf.CreateLinearRing(coords) as LinearRing;
