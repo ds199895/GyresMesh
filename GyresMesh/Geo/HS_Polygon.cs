@@ -327,6 +327,7 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(List<T> points, List<K> innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count + innerpoints.Count;
             List<HS_Coord> tmp = new List<HS_Coord>();

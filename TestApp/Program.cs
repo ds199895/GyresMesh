@@ -152,8 +152,9 @@ namespace TestApp
             //}
             List<HS_Point> hole = new List<HS_Point>();
             hole.Add(new HS_Point(100, 250, 0));
-            hole.Add(new HS_Point(50, 50, 0));
+            
             hole.Add(new HS_Point(-50, 50, 0));
+            hole.Add(new HS_Point(50, 50, 0));
             List<HS_Point>[]holes=new List<HS_Point>[]{ hole };
             //HS_Polygon poly = HS_GeometryFactory.instance().createPolygonWithHoles(vertices, holes);
             HS_Polygon poly = new HS_Polygon().Create(vertices, holes);
