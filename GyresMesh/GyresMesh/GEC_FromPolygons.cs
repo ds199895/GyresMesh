@@ -69,7 +69,9 @@ namespace Hsy.GyresMesh
                     int j;
                     if (!poly.isSimple())
                     {
-                        face= poly.getTriangles();
+                        Console.WriteLine("check num: " + poly.getNumberOfPoints());
+                        face = poly.getTriangles();
+                        
                         for (j = 0; j < face.Length; j += 3)
                         {
                             int[] face_ = new int[3];
@@ -80,10 +82,12 @@ namespace Hsy.GyresMesh
                             vertices.Add(poly.GetPoint(face[j + 2]));
                             face_[2] = id++;
                             faces.Add(face_);
+                            Console.WriteLine(face[j] + " " + face[j + 1] + " " + face[j + 2]);
                         }
                     }
                     else
                     {
+                        
                         face = new int[poly.getNumberOfPoints()];
                         for (j = 0; j < poly.getNumberOfPoints(); j++)
                         {

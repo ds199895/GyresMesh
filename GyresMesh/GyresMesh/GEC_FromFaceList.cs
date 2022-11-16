@@ -57,12 +57,12 @@ namespace Hsy.GyresMesh
             vertices = vs;
             return this;
         }
-        public GEC_FromFaceList setVertices<T>(List<T> vs)where T:HS_Coord
+        public GEC_FromFaceList setVertices<T>(List<T> vs) where T : HS_Coord
         {
             int n = vs.Count;
             var Etr = vs.GetEnumerator();
             this.vertices = new HS_Coord[n];
-            for(int i = 0; Etr.MoveNext(); i++)
+            for (int i = 0; Etr.MoveNext(); i++)
             {
                 this.vertices[i] = (HS_Coord)Etr.Current;
             }
@@ -79,7 +79,7 @@ namespace Hsy.GyresMesh
         {
             this.faces = new int[fs.Count][];
             int i = 0;
-            for(var var4 = fs.GetEnumerator(); var4.MoveNext(); i++)
+            for (var var4 = fs.GetEnumerator(); var4.MoveNext(); i++)
             {
                 int[] indices = (int[])var4.Current;
                 this.faces[i] = indices;
@@ -346,7 +346,7 @@ namespace Hsy.GyresMesh
                             locfaceuvw[li] = faceuvw[0];
                         }
                         li++;
-                        for(int i = 1; i < fl - 1; i++)
+                        for (int i = 1; i < fl - 1; i++)
                         {
                             if (uniqueVertices[face[i]] != uniqueVertices[face[i - 1]])
                             {
@@ -358,7 +358,7 @@ namespace Hsy.GyresMesh
                                 li++;
                             }
                         }
-                        if (uniqueVertices[face[fl - 1]] != uniqueVertices[face[fl - 2]]&&uniqueVertices[face[fl-1]]!=uniqueVertices[face[0]])
+                        if (uniqueVertices[face[fl - 1]] != uniqueVertices[face[fl - 2]] && uniqueVertices[face[fl - 1]] != uniqueVertices[face[0]])
                         {
                             locface[li] = face[fl - 1];
                             if (useFaceUVW)
@@ -369,7 +369,7 @@ namespace Hsy.GyresMesh
                         }
                         if (li > 2)
                         {
-                            for(int i = 0; i < li; i++)
+                            for (int i = 0; i < li; i++)
                             {
                                 he = new GE_Halfedge();
                                 faceEdges.Add(he);

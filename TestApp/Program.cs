@@ -178,7 +178,25 @@ namespace TestApp
             Fill(0);
             cam.DrawSystem(this,200);
             Stroke(255, 0, 0);
-            render.drawEdges(mesh);
+            //render.drawEdges(mesh);
+            foreach(GE_Face f in mesh.GetFaces())
+            {
+                render.drawFace(f);
+            }
+            //PushMatrix();
+
+            //PopMatrix();
+            foreach (GE_Vertex v in mesh.GetVertices())
+            {
+                PushStyle();
+                Fill(0);
+                PushMatrix();
+                Translate(v.xf, v.yf, v.zf);
+                render.drawPoint(v);
+
+                PopMatrix();
+                PopStyle();
+            }
             //DrawPolygonTriangles(vertices, triangles);
             //BeginShape(OpenTK.Graphics.OpenGL.PrimitiveType.TriangleFan);
             ////foreach (GE_Halfedge he in mesh.GetHalfedges())

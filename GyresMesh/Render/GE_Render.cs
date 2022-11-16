@@ -1,6 +1,7 @@
 ﻿using Flowing;
 using Hsy.Geo;
 using Hsy.GyresMesh;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,65 @@ namespace Hsy.Render
                 }
             }
         }
+        public void drawPoint<T>(T p)where T:HS_Coord
+        {
+            //this.home.PushMatrix();
 
+            //this.home.Translate(p.xf, p.yf, p.zf);
+            this.Cube(10, 10, 10);
+            //this.home.PopMatrix();
+        }
+        public void drawFace(GE_Face face)
+        {
+            this.home.BeginShape();
+            foreach(GE_Vertex v in face.GetFaceVertices())
+            {
+                this.vertex(v);
+            }
+            this.home.EndShape();
+        }
+
+        public void Cube(float length, float width, float height)
+        {
+            this.home.BeginShape();
+
+            this.home.Vertex(-length / 2, width / 2, height / 2);
+            this.home.Vertex(-length / 2, width / 2, -height / 2);
+            this.home.Vertex(-length / 2, -width / 2, -height / 2);
+            this.home.Vertex(-length / 2, -width / 2, height / 2);
+            this.home.EndShape();
+            this.home.BeginShape();
+            this.home.Vertex(length / 2, width / 2, height / 2);
+            this.home.Vertex(length / 2, width / 2, -height / 2);
+            this.home.Vertex(length / 2, -width / 2, -height / 2);
+            this.home.Vertex(length / 2, -width / 2, height / 2);
+            this.home.EndShape();
+            this.home.BeginShape();
+            this.home.Vertex(length / 2, -width / 2, height / 2);
+            this.home.Vertex(length / 2, -width / 2, -height / 2);
+            this.home.Vertex(-length / 2, -width / 2, -height / 2);
+            this.home.Vertex(-length / 2, -width / 2, height / 2);
+            this.home.EndShape();
+            this.home.BeginShape();
+            this.home.Vertex(length / 2, width / 2, height / 2);
+            this.home.Vertex(length / 2, width / 2, -height / 2);
+            this.home.Vertex(-length / 2, width / 2, -height / 2);
+            this.home.Vertex(-length / 2, width / 2, height / 2);
+            this.home.EndShape();
+            this.home.BeginShape();
+
+            this.home.Vertex(length / 2, width / 2, -height / 2);
+            this.home.Vertex(length / 2, -width / 2, -height / 2);
+            this.home.Vertex(-length / 2, -width / 2, -height / 2);
+            this.home.Vertex(-length / 2, width / 2, -height / 2);
+            this.home.EndShape();
+            this.home.BeginShape();
+            this.home.Vertex(length / 2, width / 2, height / 2);
+            this.home.Vertex(length / 2, -width / 2, height / 2);
+            this.home.Vertex(-length / 2, -width / 2, height / 2);
+            this.home.Vertex(-length / 2, width / 2, height / 2);
+            this.home.EndShape();
+        }
         public void vertex(HS_Coord p)
         {
             this.home.Vertex(p.xf, p.yf, p.zf);

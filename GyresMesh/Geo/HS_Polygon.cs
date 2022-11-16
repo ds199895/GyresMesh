@@ -561,7 +561,7 @@ namespace Hsy.Geo
         public HS_Plane GetPlane(double d)
         {
             HS_Vector normal = GetNormal();
-            Console.WriteLine("normal: " + normal);
+            //Console.WriteLine("normal: " + normal);
             if (normal.len2() < 0.5)
             {
                 return null;
@@ -590,7 +590,7 @@ namespace Hsy.Geo
         {
             List<HS_Point> shellpoints = new List<HS_Point>();
             HS_Plane P = GetPlane(0);
-            Console.WriteLine("plane: " + P.getNormal());
+            //Console.WriteLine("plane: " + P.getNormal());
             HS_OrthoProject OP = new HS_OrthoProject(P);
             for(int i = 0; i < numberOfShellPoints; i++)
             {
@@ -612,10 +612,10 @@ namespace Hsy.Geo
                     for (int j = 0; j < numberOfPointsPerContour[i + 1]; j++)
                     {
                         HS_Point p2D = new HS_Point();
-                        Console.WriteLine("mode: " + OP.mode);
-                        Console.WriteLine("pre: " + points[1]);
+                        //Console.WriteLine("mode: " + OP.mode);
+                        //Console.WriteLine("pre: " + points[1]);
                         OP.mapPoint3D(points[index++], p2D);
-                        Console.WriteLine(p2D);
+                        //Console.WriteLine(p2D);
                         holepoints[i].Add(p2D);
                     }
                 }

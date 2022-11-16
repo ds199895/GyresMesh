@@ -236,7 +236,12 @@ namespace Hsy.HsMath
         public static unsafe int getExp(double v)
         {
             long tolong = *(long*)&v;
-            return v == 0.0D ? 0 : (int)((9218868437227405312L & tolong) >> 52) - 1022;
+
+            if (v == 0)
+            {
+                return 0;
+            }
+            return (int)((0x7ff0000000000000L & tolong) >> 52) - 1022;
         }
 
         public static double hypot(double a, double b)

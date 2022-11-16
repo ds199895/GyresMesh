@@ -11,7 +11,7 @@ namespace Hsy.Geo
         private double offset;
         int id;
         private HS_Transform3D T2D3D;
-        private int mode;
+        public int mode;
         public static int YZ = 0;
         public static int XZ= 1;
         public static int XY = 2;
@@ -19,18 +19,52 @@ namespace Hsy.Geo
         public static int XZrev = 4;
         public static int XYrev = 5;
         public static int PLANE = 6;
-        public static HS_GeometryFactory geometryFactory;
-
-        public HS_Point _origin;
-        public HS_Vector _x;
-        public HS_Vector _y;
-        public HS_Vector _z;
+        public static HS_GeometryFactory geometryFactory=new HS_GeometryFactory();
 
        
 
         public HS_PlanarMap()
         {
-            new HS_PlanarMap(XY, 0);
+            this.mode = XY;
+            this.offset = 0;
+
+            if (mode < 0 || mode > 5)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (mode == YZ)
+            {
+                set(geometryFactory.createPoint(offset, 0, 0), geometryFactory.Y(), geometryFactory.Z(), geometryFactory.X(), geometryFactory.WORLD());
+                this.mode = YZ;
+            }
+            else if (mode == XZ)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.Z(), geometryFactory.X(), geometryFactory.Y(), geometryFactory.WORLD());
+                this.mode = XZ;
+            }
+            else if (mode == YZrev)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.Z(), geometryFactory.Y(), geometryFactory.minX(), geometryFactory.WORLD());
+                this.mode = YZrev;
+            }
+            else if (mode == XZrev)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.X(), geometryFactory.Z(), geometryFactory.minY(), geometryFactory.WORLD());
+                this.mode = XZrev;
+            }
+            else if (mode == XYrev)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.Y(), geometryFactory.X(), geometryFactory.minZ(), geometryFactory.WORLD());
+                this.mode = XYrev;
+            }
+            else
+            {
+                //XY
+                set(geometryFactory.createPoint(0, 0, offset), geometryFactory.X(), geometryFactory.Y(), geometryFactory.Z(), geometryFactory.WORLD());
+                this.mode = XY;
+            }
+
+            this.T2D3D = this.getTransformToWorld();
         }
 
         public HS_PlanarMap(HS_Coord c)
@@ -125,12 +159,51 @@ namespace Hsy.Geo
 
         public HS_PlanarMap(int mode)
         {
-            new HS_PlanarMap(mode, 0);
+            this.mode = mode;
+            this.offset =0;
+
+            if (mode < 0 || mode > 5)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (mode == YZ)
+            {
+                set(geometryFactory.createPoint(offset, 0, 0), geometryFactory.Y(), geometryFactory.Z(), geometryFactory.X(), geometryFactory.WORLD());
+                this.mode = YZ;
+            }
+            else if (mode == XZ)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.Z(), geometryFactory.X(), geometryFactory.Y(), geometryFactory.WORLD());
+                this.mode = XZ;
+            }
+            else if (mode == YZrev)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.Z(), geometryFactory.Y(), geometryFactory.minX(), geometryFactory.WORLD());
+                this.mode = YZrev;
+            }
+            else if (mode == XZrev)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.X(), geometryFactory.Z(), geometryFactory.minY(), geometryFactory.WORLD());
+                this.mode = XZrev;
+            }
+            else if (mode == XYrev)
+            {
+                set(geometryFactory.createPoint(0, offset, 0), geometryFactory.Y(), geometryFactory.X(), geometryFactory.minZ(), geometryFactory.WORLD());
+                this.mode = XYrev;
+            }
+            else
+            {
+                //XY
+                set(geometryFactory.createPoint(0, 0, offset), geometryFactory.X(), geometryFactory.Y(), geometryFactory.Z(), geometryFactory.WORLD());
+                this.mode = XY;
+            }
+
+            this.T2D3D = this.getTransformToWorld();
         }
 
         public HS_PlanarMap(HS_Plane P) : base(P.getOrigin(), P.getU(), P.getV(), P.getW(), new HS_CoordinateSystem())
         {
-            Console.WriteLine("map:  " + P.getU()+ " " + P.getV());
+            Console.WriteLine("map:  " + P.getU()+ " " + P.getV()+" "+P.getW());
             mode = PLANE;
             T2D3D = getTransformToWorld();
         }
@@ -220,6 +293,7 @@ namespace Hsy.Geo
                     result.Set(p.yd, p.xd, this.offset - p.zd);
                     break;
                 default:
+                    
                     this.T2D3D.applyInvAsPointInto(p, result);
                     break;
             }

@@ -60,22 +60,22 @@ namespace Hsy.Geo
             //return new Polygon(shell, holes) ;
         }
 
-        static HS_Polygon CreatePolygonFromJTSPolygon2D( Polygon JTSpoly)
+        static HS_Polygon CreatePolygonFromJTSPolygon2D(Polygon JTSpoly)
         {
-             LineString shell = (LineString)JTSpoly.ExteriorRing;
+            LineString shell = (LineString)JTSpoly.ExteriorRing;
             Coordinate[] coords = shell.Coordinates;
-             HS_Coord[] points = new HS_Coord[coords.Length - 1];
+            HS_Coord[] points = new HS_Coord[coords.Length - 1];
             for (int i = 0; i < coords.Length - 1; i++)
             {
                 points[i] = createPoint2D(coords[i]);
             }
-             int numholes = JTSpoly.NumInteriorRings;
+            int numholes = JTSpoly.NumInteriorRings;
             if (numholes > 0)
             {
-                 HS_Coord[][] holecoords = new HS_Coord[numholes][];
+                HS_Coord[][] holecoords = new HS_Coord[numholes][];
                 for (int i = 0; i < numholes; i++)
                 {
-                     LineString hole = (LineString)JTSpoly.GetInteriorRingN(i);
+                    LineString hole = (LineString)JTSpoly.GetInteriorRingN(i);
                     coords = hole.Coordinates;
                     holecoords[i] = new HS_Coord[coords.Length - 1];
                     for (int j = 0; j < coords.Length - 1; j++)
@@ -349,13 +349,12 @@ namespace Hsy.Geo
             {
                 List<HS_Point> pts = new List<HS_Point>();
 
-                int index;
-                for (index = 0; index < polygon.numberOfShellPoints; ++index)
+                for (int i = 0; i< polygon.numberOfShellPoints; ++i)
                 {
-                    pts.Add(polygon.GetPoint(index));
+                    pts.Add(polygon.GetPoint(i));
                 }
 
-                index = polygon.numberOfShellPoints;
+                int index = polygon.numberOfShellPoints;
                 List<HS_Point>[] hpts = new List<HS_Point>[polygon.numberOfContours - 1];
 
                 for (int i = 0; i < polygon.numberOfContours - 1; ++i)
@@ -364,13 +363,13 @@ namespace Hsy.Geo
 
                     for (int j = 0; j < polygon.numberOfPointsPerContour[i + 1]; ++j)
                     {
-                        hpts[i].Add((HS_Point)polygon.points[index++]);
+                        hpts[i].Add(polygon.points[index++]);
                     }
                 }
 
                 HS_Plane P = polygon.GetPlane(0.0D);
-                Console.WriteLine("pl: " + P.getNormal());
-                HS_Triangulation2DWithPoints triangulation = this.triangulatePolygon2D(pts,hpts, optimize, (new HS_GeometryFactory3D()).createEmbeddedPlane(P));
+                //Console.WriteLine("pl: " + P.getNormal());
+                HS_Triangulation2DWithPoints triangulation = this.triangulatePolygon2D(pts, hpts, optimize, (new HS_GeometryFactory3D()).createEmbeddedPlane(P));
                 HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger<HS_Point>();
 
                 for (int i = 0; i < polygon.numberOfPoints; ++i)
@@ -380,12 +379,10 @@ namespace Hsy.Geo
 
                 int[] triangles = triangulation.getTriangles();
                 int[] edges = triangulation.getEdges();
-                //HS_CoordCollection tripoints = triangulation.GetPoints();
                 List<HS_Coord> tripoints = triangulation.getPoints();
                 int[] intmap = new int[tripoints.Count];
                 index = 0;
 
-                //int i;
                 for (int i = 0; i < tripoints.Count; ++i)
                 {
                     int found = pointmap.getNearestNeighbor(tripoints[i]).value;
@@ -405,19 +402,21 @@ namespace Hsy.Geo
                 return new HS_Triangulation2D(triangles, edges);
             }
 
-            public HS_Triangulation2DWithPoints triangulatePolygon2D<T>(List<T> outerPolygon, List<T>[] innerPolygons, bool optimize, HS_Map2D context)where T:HS_Coord
+            public HS_Triangulation2DWithPoints triangulatePolygon2D<T>(List<T> outerPolygon, List<T>[] innerPolygons, bool optimize, HS_Map2D context) where T : HS_Coord
             {
                 Coordinate[] coords = new Coordinate[outerPolygon.Count + 1];
                 HS_Point point = new HS_Point();
 
                 for (int i = 0; i < outerPolygon.Count; ++i)
                 {
-                    context.mapPoint3D((HS_Coord)outerPolygon[i], point);
+                    context.mapPoint3D(outerPolygon[i], point);
                     coords[i] = new Coordinate(point.xd, point.yd, 0.0D);
                 }
 
-                context.mapPoint3D((HS_Coord)outerPolygon[0],point);
+                context.mapPoint3D(outerPolygon[0], point);
                 coords[outerPolygon.Count] = new Coordinate(point.xd, point.yd, 0.0D);
+                //Console.WriteLine("mode: " + ((HS_PlanarMap)context).mode);
+
                 LinearRing[] holes = null;
                 if (innerPolygons != null)
                 {
@@ -429,19 +428,21 @@ namespace Hsy.Geo
 
                         for (int i = 0; i < innerPolygons[j].Count; ++i)
                         {
-                            context.mapPoint3D((HS_Coord)innerPolygons[j][i], point);
+                            context.mapPoint3D(innerPolygons[j][i], point);
                             icoords[i] = new Coordinate(point.xd, point.yd, 0.0D);
                         }
 
                         context.mapPoint3D((HS_Coord)innerPolygons[j][0], point);
                         icoords[innerPolygons[j].Count] = new Coordinate(point.xd, point.yd, 0.0D);
-                        LinearRing hole = HS_JTS.JTSgf.CreateLinearRing(icoords) as LinearRing;
+                        LinearRing hole =JTSgf.CreateLinearRing(icoords) as LinearRing;
                         holes[j] = hole;
                     }
                 }
 
-                LinearRing shell = (LinearRing)HS_JTS.JTSgf.CreateLinearRing(coords);
-                Polygon inputPolygon = (Polygon)HS_JTS.JTSgf.CreatePolygon(shell, holes);
+                LinearRing shell = (LinearRing)JTSgf.CreateLinearRing(coords);
+
+
+                Polygon inputPolygon = (Polygon)JTSgf.CreatePolygon(shell, holes);
                 int[] ears = this.triangulate(inputPolygon, optimize);
                 int[] E = extractEdgesTri(ears);
                 List<HS_Point> Points = new List<HS_Point>();
@@ -449,11 +450,11 @@ namespace Hsy.Geo
                 for (int i = 0; i < this.shellCoords.Count - 1; ++i)
                 {
                     point = new HS_Point();
-                    context.unmapPoint2D(((Coordinate)this.shellCoords[i]).X, ((Coordinate)this.shellCoords[i]).Y, point);
+                    context.unmapPoint2D(this.shellCoords[i].X, this.shellCoords[i].Y, point);
 
                     Points.Add(point);
                 }
-                Console.WriteLine("Ear:  "+ears[0]);
+                //Console.WriteLine("Ear:  "+ears[0]);
                 return new HS_Triangulation2DWithPoints(ears, E, Points);
             }
 
@@ -470,7 +471,7 @@ namespace Hsy.Geo
 
                 context.mapPoint3D(points[polygon[0]], point);
                 coords[polygon.Length] = new Coordinate(point.xd, point.yd, 0.0D);
-                Polygon inputPolygon = (Polygon)HS_JTS.JTSgf.CreatePolygon(coords);
+                Polygon inputPolygon = (Polygon)JTSgf.CreatePolygon(coords);
 
                 int[] ears = this.triangulate(inputPolygon, optimize);
 
@@ -485,7 +486,7 @@ namespace Hsy.Geo
                 for (int i = 0; i < this.shellCoords.Count - 1; ++i)
                 {
                     point = new HS_Point();
-                    context.unmapPoint2D(((Coordinate)this.shellCoords[i]).X, ((Coordinate)this.shellCoords[i]).Y, point);
+                    context.unmapPoint2D(this.shellCoords[i].X, this.shellCoords[i].Y, point);
                     Points.Add(point);
                 }
 
@@ -499,18 +500,18 @@ namespace Hsy.Geo
 
                 for (int i = 0; i < polygon.Length; ++i)
                 {
-                    context.mapPoint3D((HS_Coord)points[polygon[i]], point);
-                    coords[i] = new Coordinate(point.xd, point.yd, (double)polygon[i]);
+                    context.mapPoint3D(points[polygon[i]], point);
+                    coords[i] = new Coordinate(point.xd, point.yd, polygon[i]);
                 }
 
-                context.mapPoint3D((HS_Coord)points[polygon[0]], point);
-                coords[polygon.Length] = new Coordinate(point.xd, point.yd, (double)polygon[0]);
-                Polygon inputPolygon = HS_JTS.JTSgf.CreatePolygon(coords) as Polygon;
+                context.mapPoint3D(points[polygon[0]], point);
+                coords[polygon.Length] = new Coordinate(point.xd, point.yd, polygon[0]);
+                Polygon inputPolygon = JTSgf.CreatePolygon(coords) as Polygon;
                 int[] ears = this.triangulate(inputPolygon, optimize);
 
                 for (int i = 0; i < ears.Length; ++i)
                 {
-                    ears[i] = (int)((Coordinate)this.shellCoords[ears[i]]).Z;
+                    ears[i] = (int)(this.shellCoords[ears[i]].Z);
                 }
 
                 int[] E = extractEdgesTri(ears);
@@ -545,25 +546,18 @@ namespace Hsy.Geo
                 } while (GE != face.GetHalfedge());
 
                 coords[i] = new Coordinate(coordViewer.xd(GE.GetStart()), coordViewer.yd(GE.GetStart()), 0.0D);
-                LinearRing shell = HS_JTS.JTSgf.CreateLinearRing(coords) as LinearRing;
-                Polygon inputPolygon = HS_JTS.JTSgf.CreatePolygon(shell) as Polygon;
+                LinearRing shell = JTSgf.CreateLinearRing(coords) as LinearRing;
+                Polygon inputPolygon = JTSgf.CreatePolygon(shell) as Polygon;
                 int[] ears = this.triangulate(inputPolygon, optimize);
                 List<HS_Point> tripoints = new List<HS_Point>();
 
                 for (int j = 0; j < this.shellCoords.Count - 1; ++j)
                 {
-                    tripoints.Add(new HS_Point(((Coordinate)this.shellCoords[j]).X, ((Coordinate)this.shellCoords[j]).Y));
+                    tripoints.Add(new HS_Point(this.shellCoords[j].X, this.shellCoords[j].Y));
                 }
 
                 int[] intmap = new int[tripoints.Count];
                 i = 0;
-
-                //int found;
-                //for (Iterator var16 = tripoints.iterator(); var16.hasNext(); intmap[i++] = found)
-                //{
-                //    HS_Coord point = (HS_Coord)var16.next();
-                //    found = pointmap.getNearestNeighbor(point).value;
-                //}
                 foreach (HS_Coord point in tripoints)
                 {
                     int found = pointmap.getNearestNeighbor(point).value;
@@ -590,27 +584,28 @@ namespace Hsy.Geo
                 }
                 else
                 {
-                    coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.zx: HS_Swizzle.xy;
+                    coordViewer = Math.Abs(normal.yd) > Math.Abs(normal.zd) ? HS_Swizzle.zx : HS_Swizzle.xy;
                 }
 
                 HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger<HS_Point>();
 
+                HS_Coord c;
                 for (int j = 0; j <= polygon.getNumberOfShellPoints(); ++j)
                 {
-                    HS_Coord c = polygon.GetPoint(j);
+                    c = polygon.GetPoint(j);
                     coords[j] = new Coordinate(coordViewer.xd(c), coordViewer.yd(c), 0.0D);
                     pointmap.add(new HS_Point(coordViewer.xd(c), coordViewer.yd(c)), j);
                     ++j;
                 }
 
-                LinearRing shell = HS_JTS.JTSgf.CreateLinearRing(coords) as LinearRing;
-                Polygon inputPolygon = HS_JTS.JTSgf.CreatePolygon(shell) as Polygon;
+                LinearRing shell =JTSgf.CreateLinearRing(coords) as LinearRing;
+                Polygon inputPolygon = JTSgf.CreatePolygon(shell) as Polygon;
                 int[] ears = this.triangulate(inputPolygon, optimize);
                 List<HS_Point> tripoints = new List<HS_Point>();
 
                 for (int j = 0; j < this.shellCoords.Count - 1; ++j)
                 {
-                    tripoints.Add(new HS_Point(((Coordinate)this.shellCoords[j]).X, ((Coordinate)this.shellCoords[j]).Y));
+                    tripoints.Add(new HS_Point(this.shellCoords[j].X,this.shellCoords[j].Y));
                 }
 
                 int[] intmap = new int[tripoints.Count];
@@ -647,25 +642,25 @@ namespace Hsy.Geo
                 for (int i = 0; i < ears.Length; i += 3)
                 {
                     int v0 = ears[i];
-                    i = ears[i + 1];
+                    int v1 = ears[i + 1];
                     int v2 = ears[i + 2];
-                    long index = getIndex(v0, i, f);
-                    //map.put(index, new int[] { v0, i });
-                    map.Add(index, new int[] { v0, i });
-                    index = getIndex(i, v2, f);
-                    map.Add(index, new int[] { i, v2 });
-                    //map.put(index, new int[] { i, v2 });
-                    index = getIndex(v2, v0, f);
-                    map.Add(index, new int[] { v2, v0 });
-                    //map.put(index, new int[] { v2, v0 });
+                    long index = getIndex(v0, v1, f);
+                    //map.Add(index, new int[] { v0, i });
+                    map.Add(i, new int[] { v0, v1 });
+                    index = getIndex(v1, v2, f);
+                    map.Add(i + 1, new int[] { v1, v2 });
+                    //map.Add(index, new int[] { i, v2 });
+                    //index = getIndex(v2, v0, f);
+                    map.Add(i + 2, new int[] { v2, v0 });
+                    //map.Add(index, new int[] { v2, v0 });
                 }
 
                 int[] edges = new int[2 * map.Count];
                 //Collection<int[]> values = map.values();
 
-                var values =map.Values;
+                var values = map.Values;
 
-                int j= 0;
+                int j = 0;
 
                 //for (Iterator var12 = values.iterator(); var12.hasNext(); ++i)
                 //{
@@ -685,18 +680,19 @@ namespace Hsy.Geo
 
             private static long getIndex(int i, int j, int f)
             {
-                return (long)(i > j ? j + i * f : i + j * f);
+                return i > j ? j + i * f : i + j * f;
             }
 
             private int[] triangulate(Polygon inputPolygon, bool improve)
             {
-                List<HS_JTS.PolygonTriangulatorJTS.IndexedTriangle> earList = new List<IndexedTriangle>();
+                List<IndexedTriangle> earList = new List<IndexedTriangle>();
                 this.createshell(inputPolygon);
                 Geometry test = (Geometry)inputPolygon.Buffer(0.0D);
+
                 int N = this.shellCoords.Count - 1;
                 this.shellCoordAvailable = new bool[N];
                 //Arrays.fill(this.shellCoordAvailable, true);
-                for(int i = 0; i < this.shellCoordAvailable.Length; i++)
+                for (int i = 0; i < this.shellCoordAvailable.Length; i++)
                 {
                     this.shellCoordAvailable[i] = true;
                 }
@@ -710,31 +706,34 @@ namespace Hsy.Geo
 
                 do
                 {
-                    for (found = false; CGAlgorithms.ComputeOrientation((Coordinate)this.shellCoords[k0], (Coordinate)this.shellCoords[k1], (Coordinate)this.shellCoords[k2]) == 0; k2 = this.nextshellCoord(k2 + 1))
+                    found = false;
+                    while (CGAlgorithms.ComputeOrientation(shellCoords[k0],
+                            shellCoords[k1], shellCoords[k2]) == 0)
                     {
                         k0 = k1;
-                        if (k1 == firstK)
+                        if (k0 == firstK)
                         {
                             finished = true;
                             break;
                         }
-
                         k1 = k2;
+                        k2 = nextshellCoord(k2 + 1);
                     }
 
                     if (!finished && this.isValidEdge(k0, k2))
                     {
-                        LineString ls = (LineString)HS_JTS.JTSgf.CreateLineString(new Coordinate[] { (Coordinate)this.shellCoords[k0], (Coordinate)this.shellCoords[k2] });
+                        LineString ls = (LineString)JTSgf.CreateLineString(new Coordinate[] {this.shellCoords[k0],this.shellCoords[k2] });
                         if (test.Covers(ls))
                         {
-                            Polygon earPoly = (Polygon)HS_JTS.JTSgf.CreatePolygon(HS_JTS.JTSgf.CreateLinearRing(new Coordinate[] { (Coordinate)this.shellCoords[k0], (Coordinate)this.shellCoords[k1], (Coordinate)this.shellCoords[k2], (Coordinate)this.shellCoords[k0] }), (LinearRing[])null);
+                            Polygon earPoly = (Polygon)JTSgf.CreatePolygon(JTSgf.CreateLinearRing(new Coordinate[] {this.shellCoords[k0], this.shellCoords[k1],this.shellCoords[k2], this.shellCoords[k0] }), (LinearRing[])null);
                             if (test.Covers(earPoly))
                             {
                                 found = true;
-                                HS_JTS.PolygonTriangulatorJTS.IndexedTriangle ear = new HS_JTS.PolygonTriangulatorJTS.IndexedTriangle(k0, k1, k2);
+                                IndexedTriangle ear = new IndexedTriangle(k0, k1, k2);
                                 earList.Add(ear);
                                 this.shellCoordAvailable[k1] = false;
                                 --N;
+                                Console.WriteLine("Check nums:  " + N);
                                 k0 = this.nextshellCoord(0);
                                 k1 = this.nextshellCoord(k0 + 1);
                                 k2 = this.nextshellCoord(k1 + 1);
@@ -750,7 +749,9 @@ namespace Hsy.Geo
                     if (!finished && !found)
                     {
                         k0 = k1;
-                        if (k1 == firstK)
+                        Console.WriteLine("k0: " + shellCoords[k0]);
+                        Console.WriteLine("FirstK: " + shellCoords[firstK]);
+                        if (k0 == firstK)
                         {
                             finished = true;
                         }
@@ -768,11 +769,11 @@ namespace Hsy.Geo
                 }
 
                 int[] tris = new int[3 * earList.Count];
-                Console.WriteLine("test Tri:  " + earList[0]);
+                //Console.WriteLine("test Tri:  " + earList[0]);
                 for (int i = 0; i < earList.Count; ++i)
                 {
-                    int[] tri = ((HS_JTS.PolygonTriangulatorJTS.IndexedTriangle)earList[i]).getVertices();
-                    Console.WriteLine("test Tri:  "+tri[1]);
+                    int[] tri = earList[i].getVertices();
+                    //Console.WriteLine("test Tri:  "+tri[1]);
                     tris[3 * i] = tri[0];
                     tris[3 * i + 1] = tri[1];
                     tris[3 * i + 2] = tri[2];
@@ -783,10 +784,10 @@ namespace Hsy.Geo
 
             protected HS_Polygon makeSimplePolygon(HS_Polygon polygon)
             {
-                Polygon poly = HS_JTS.toJTSPolygon2D(polygon);
+                Polygon poly = toJTSPolygon2D(polygon);
                 this.createshell(poly);
                 Coordinate[] coords = new Coordinate[this.shellCoords.Count];
-                return HS_JTS.CreatePolygonFromJTSPolygon2D((Polygon)HS_JTS.JTSgf.CreatePolygon((Coordinate[])this.shellCoords.ToArray<Coordinate>()));
+                return CreatePolygonFromJTSPolygon2D((Polygon)JTSgf.CreatePolygon(this.shellCoords.ToArray<Coordinate>()));
             }
 
             protected void createshell(Polygon inputPolygon)
@@ -806,18 +807,22 @@ namespace Hsy.Geo
 
             private bool isValidEdge(int index0, int index1)
             {
-                Coordinate[] line = new Coordinate[] { (Coordinate)this.shellCoords[index0], (Coordinate)this.shellCoords[index1] };
-
-                for (int index = this.nextshellCoord(index0 + 1); index != index0; index = this.nextshellCoord(index + 1))
+                Coordinate[] line = new Coordinate[] { this.shellCoords[index0], this.shellCoords[index1] };
+                int index = this.nextshellCoord(index0 + 1);
+                while (index != index0)
                 {
                     if (index != index1)
                     {
-                        Coordinate c = (Coordinate)this.shellCoords[index];
-                        if (!c.Equals2D(line[0]) && !c.Equals2D(line[1]) && CGAlgorithms.IsOnLine(c, line))
+                        Coordinate c =this.shellCoords[index];
+                        if (!(c.Equals2D(line[0]) || c.Equals2D(line[1])))
                         {
-                            return false;
+                            if (CGAlgorithms.IsOnLine(c, line))
+                            {
+                                return false;
+                            }
                         }
                     }
+                    index = nextshellCoord(index + 1);
                 }
 
                 return true;
@@ -825,9 +830,11 @@ namespace Hsy.Geo
 
             private int nextshellCoord(int pos)
             {
-                int pnew;
-                for (pnew = pos % this.shellCoordAvailable.Length; !this.shellCoordAvailable[pnew]; pnew = (pnew + 1) % this.shellCoordAvailable.Length)
+                int pnew = pos % this.shellCoordAvailable.Length;
+                while (!this.shellCoordAvailable[pnew])
                 {
+                    pnew = (pnew + 1) % this.shellCoordAvailable.Length;
+
                 }
 
                 return pnew;
@@ -835,7 +842,7 @@ namespace Hsy.Geo
 
             private void doImprove(List<HS_JTS.PolygonTriangulatorJTS.IndexedTriangle> earList)
             {
-                HS_JTS.PolygonTriangulatorJTS.EdgeFlipper ef = new HS_JTS.PolygonTriangulatorJTS.EdgeFlipper(this.shellCoords);
+                EdgeFlipper ef = new EdgeFlipper(this.shellCoords);
 
                 bool changed;
                 do
@@ -844,11 +851,11 @@ namespace Hsy.Geo
 
                     for (int i = 0; i < earList.Count - 1 && !changed; ++i)
                     {
-                        HS_JTS.PolygonTriangulatorJTS.IndexedTriangle ear0 = (HS_JTS.PolygonTriangulatorJTS.IndexedTriangle)earList[i];
+                        IndexedTriangle ear0 = earList[i];
 
                         for (int j = i + 1; j < earList.Count && !changed; ++j)
                         {
-                            HS_JTS.PolygonTriangulatorJTS.IndexedTriangle ear1 = (HS_JTS.PolygonTriangulatorJTS.IndexedTriangle)earList[j];
+                            IndexedTriangle ear1 = earList[j];
                             int[] sharedVertices = ear0.getSharedVertices(ear1);
                             if (sharedVertices != null && sharedVertices.Length == 2 && ef.flip(ear0, ear1, sharedVertices))
                             {
@@ -863,22 +870,22 @@ namespace Hsy.Geo
             private static List<Geometry> getOrderedHoles(Polygon poly)
             {
                 List<Geometry> holes = new List<Geometry>();
-                List<HS_JTS.PolygonTriangulatorJTS.IndexedEnvelope> bounds = new List<IndexedEnvelope>();
+                List<IndexedEnvelope> bounds = new List<IndexedEnvelope>();
                 if (poly.NumInteriorRings > 0)
                 {
-                    int i;
-                    for (i = 0; i < poly.NumInteriorRings; ++i)
+
+                    for (int i = 0; i < poly.NumInteriorRings; ++i)
                     {
                         bounds.Add(new IndexedEnvelope(i, poly.GetInteriorRingN(i).EnvelopeInternal));
                     }
 
                     //Collections.sort(bounds, new IndexedEnvelopeComparator((HS_JTS.PolygonTriangulatorJTS.IndexedEnvelopeComparator)null));
-                    bounds.Sort();
+                    bounds.Sort(new IndexedEnvelopeComparator());
 
 
-                    for (i = 0; i < bounds.Count; ++i)
+                    for (int i = 0; i < bounds.Count; ++i)
                     {
-                        holes.Add(poly.GetInteriorRingN(((HS_JTS.PolygonTriangulatorJTS.IndexedEnvelope)bounds[i]).index) as LineString);
+                        holes.Add(poly.GetInteriorRingN(bounds[i].index) as LineString);
                     }
                 }
 
@@ -893,11 +900,11 @@ namespace Hsy.Geo
                 int holeVertexIndex = getLowestVertex(hole);
                 Coordinate[] holeCoords = hole.Coordinates;
                 Coordinate ch = holeCoords[holeVertexIndex];
-                List<HS_JTS.PolygonTriangulatorJTS.IndexedDouble> distanceList = new List<IndexedDouble>();
+                List<IndexedDouble> distanceList = new List<IndexedDouble>();
 
                 for (int i = Ns - 1; i >= 0; --i)
                 {
-                    Coordinate cs = (Coordinate)this.shellCoords[i];
+                    Coordinate cs = this.shellCoords[i];
                     double d2 = (ch.X - cs.X) * (ch.X - cs.X) + (ch.Y - cs.Y) * (ch.Y - cs.Y);
                     if (d2 < minD2)
                     {
@@ -908,34 +915,32 @@ namespace Hsy.Geo
                     distanceList.Add(new IndexedDouble(i, d2));
                 }
 
-                LineString join = (LineString)HS_JTS.JTSgf.CreateLineString(new Coordinate[] { ch, (Coordinate)this.shellCoords[shellVertexIndex] });
+                LineString join = (LineString)JTSgf.CreateLineString(new Coordinate[] { ch, this.shellCoords[shellVertexIndex] });
                 if (inputPolygon.Covers(join))
                 {
                     this.doJoinHole(shellVertexIndex, holeCoords, holeVertexIndex);
+                    return;
                 }
-                else
+                //System.Collections.sort(distanceList, new IndexedDoubleComparator((HS_JTS.PolygonTriangulatorJTS.IndexedDoubleComparator)null));
+                distanceList.Sort(new IndexedDoubleComparator());
+                for (int i = 1; i < distanceList.Count; ++i)
                 {
-
-                    //System.Collections.sort(distanceList, new IndexedDoubleComparator((HS_JTS.PolygonTriangulatorJTS.IndexedDoubleComparator)null));
-                    distanceList.Sort(new IndexedDoubleComparator());
-                    for (int i = 1; i < distanceList.Count; ++i)
+                    join = JTSgf.CreateLineString(new Coordinate[] { ch, this.shellCoords[distanceList[i].index] }) as LineString;
+                    if (inputPolygon.Covers(join))
                     {
-                        join = HS_JTS.JTSgf.CreateLineString(new Coordinate[] { ch, (Coordinate)this.shellCoords[((HS_JTS.PolygonTriangulatorJTS.IndexedDouble)distanceList[i]).index] }) as LineString;
-                        if (inputPolygon.Covers(join))
-                        {
-                            shellVertexIndex = ((HS_JTS.PolygonTriangulatorJTS.IndexedDouble)distanceList[i]).index;
-                            this.doJoinHole(shellVertexIndex, holeCoords, holeVertexIndex);
-                            return;
-                        }
+                        shellVertexIndex = distanceList[i].index;
+                        this.doJoinHole(shellVertexIndex, holeCoords, holeVertexIndex);
+                        return;
                     }
-
                 }
+
+
             }
 
             private void doJoinHole(int shellVertexIndex, Coordinate[] holeCoords, int holeVertexIndex)
             {
                 List<Coordinate> newCoords = new List<Coordinate>();
-                newCoords.Add(new Coordinate((Coordinate)this.shellCoords[shellVertexIndex]));
+                newCoords.Add(new Coordinate(this.shellCoords[shellVertexIndex]));
                 int N = holeCoords.Length - 1;
                 int i = holeVertexIndex;
 
@@ -1046,11 +1051,11 @@ namespace Hsy.Geo
 
             private class IndexedDoubleComparator : IComparer<IndexedDouble>
             {
-                public IndexedDoubleComparator ()
+                public IndexedDoubleComparator()
                 {
                 }
 
-                public int Compare(HS_JTS.PolygonTriangulatorJTS.IndexedDouble o1, HS_JTS.PolygonTriangulatorJTS.IndexedDouble o2)
+                public int Compare(IndexedDouble o1, IndexedDouble o2)
                 {
                     double delta = o1.value - o2.value;
                     if (Math.Abs(delta) < HS_Epsilon.EPSILON)
@@ -1069,7 +1074,7 @@ namespace Hsy.Geo
                 }
             }
 
-            private class IndexedEnvelope
+            public class IndexedEnvelope
             {
                 public int index;
                 public Envelope envelope;
@@ -1081,23 +1086,43 @@ namespace Hsy.Geo
                 }
             }
 
-            private class IndexedEnvelopeComparator : IComparable<IndexedEnvelope>
+            public class IndexedEnvelopeComparator : IComparer<IndexedEnvelope>
             {
-                IndexedEnvelopeComparator(IndexedEnvelopeComparator i)
+                public IndexedEnvelopeComparator()
                 {
                 }
 
-                public int CompareTo(IndexedEnvelope other)
-                {
-                    throw new NotImplementedException();
-                }
+                //public int Compare(IndexedEnvelope x, IndexedEnvelope y)
+                //{
+                //    throw new NotImplementedException();
+                //}
 
-                int compare(HS_JTS.PolygonTriangulatorJTS.IndexedEnvelope o1, HS_JTS.PolygonTriangulatorJTS.IndexedEnvelope o2)
+                //public int CompareTo(IndexedEnvelope other)
+                //{
+                //    throw new NotImplementedException();
+                //}
+
+                //int Compare(IndexedEnvelope x, IndexedEnvelope y)
+                //{
+                //    double delta = x.envelope.MinY - y.envelope.MinY;
+                //    if (Math.Abs(delta) < HS_Epsilon.EPSILON)
+                //    {
+                //        delta = x.envelope.MinX - y.envelope.MinX;
+                //        if (Math.Abs(delta) < HS_Epsilon.EPSILON)
+                //        {
+                //            return 0;
+                //        }
+                //    }
+
+                //    return delta > 0.0D ? 1 : -1;
+                //}
+
+                public int Compare(IndexedEnvelope x, IndexedEnvelope y)
                 {
-                    double delta = o1.envelope.MinY - o2.envelope.MinY;
+                    double delta = x.envelope.MinY - y.envelope.MinY;
                     if (Math.Abs(delta) < HS_Epsilon.EPSILON)
                     {
-                        delta = o1.envelope.MinX - o2.envelope.MinX;
+                        delta = x.envelope.MinX - y.envelope.MinX;
                         if (Math.Abs(delta) < HS_Epsilon.EPSILON)
                         {
                             return 0;
@@ -1106,6 +1131,16 @@ namespace Hsy.Geo
 
                     return delta > 0.0D ? 1 : -1;
                 }
+
+                //int IComparer<IndexedEnvelope>.Compare(IndexedEnvelope x, IndexedEnvelope y)
+                //{
+                //    throw new NotImplementedException();
+                //}
+
+                //int IComparer<IndexedEnvelope>.Compare(IndexedEnvelope x, IndexedEnvelope y)
+                //{
+                //    throw new NotImplementedException();
+                //}
             }
 
             private class IndexedTriangle

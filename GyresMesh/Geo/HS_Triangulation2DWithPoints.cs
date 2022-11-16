@@ -26,7 +26,7 @@ namespace Hsy.Geo
             this._points = P.ToList<HS_Coord>();
 
         }
-        public HS_Triangulation2DWithPoints(int[] Tr, int[] e, List<HS_Point> P)
+        public HS_Triangulation2DWithPoints(int[] Tr, int[] e, List<HS_Point> P) : base(Tr, e)
         {
             this._points = P.ToList<HS_Coord>();
         }

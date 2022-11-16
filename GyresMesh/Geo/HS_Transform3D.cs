@@ -29,8 +29,8 @@ namespace Hsy.Geo
 
         public HS_Transform3D(HS_Coord sourceOrigin,HS_Coord sourceDirection,HS_Coord targetOrigin,HS_Coord targetDirection)
         {
-            T = new HS_Matrix44();
-            invT = new HS_Matrix44();
+            T = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+            invT = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
             addTranslate(-1, sourceOrigin);
             HS_Vector v1 = geometryFactory.createNormalizedVector(sourceDirection);
             HS_Vector v2 = geometryFactory.createNormalizedVector(targetDirection);
@@ -54,8 +54,8 @@ namespace Hsy.Geo
 
         public HS_Transform3D(HS_Coord sourceDirection,HS_Coord targetDirection)
         {
-            T = new HS_Matrix44();
-            invT = new HS_Matrix44();
+            T = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+            invT = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
             HS_Vector v1 = geometryFactory.createNormalizedVector(sourceDirection);
             HS_Vector v2 = geometryFactory.createNormalizedVector(targetDirection);
             HS_Vector axis = v1.cross(v2);
@@ -86,8 +86,8 @@ namespace Hsy.Geo
 
         public HS_Transform3D addTranslate(HS_Coord v)
         {
-            T = new HS_Matrix44(1, 0, 0,  v.xd, 0, 1, 0,  v.yd, 0, 0, 1,  v.zd, 0, 0, 0, 1) * T;
-            invT = invT * new HS_Matrix44(1, 0, 0, - v.xd, 0, 1, 0, - v.yd, 0, 0, 1, - v.zd, 0, 0, 0, 1);
+            T = new HS_Matrix44(1, 0, 0, v.xd, 0, 1, 0, v.yd, 0, 0, 1, v.zd, 0, 0, 0, 1) * T;
+            invT = invT * new HS_Matrix44(1, 0, 0, -v.xd, 0, 1, 0, -v.yd, 0, 0, 1, -v.zd, 0, 0, 0, 1);
             return this;
         }
 
@@ -150,11 +150,15 @@ namespace Hsy.Geo
 
         public void applyInvAsPointInto(HS_Coord p,HS_MutableCoord result)
         {
+            Console.WriteLine("prev: "+p.xd + " " +p.yd+ " " +p.zd);
+            Console.WriteLine(invT.m21 +" " + invT.m22 +" " + invT.m23+" "  + invT.m24);
             _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd + invT.m14;
             _yt= invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd + invT.m24;
             _zt=invT.m31* p.xd + invT.m32 * p.yd + invT.m33 * p.zd + invT.m34;
             double wp= invT.m41 * p.xd + invT.m42 * p.yd + invT.m43 * p.zd + invT.m44;
+            Console.WriteLine("wp: "+wp);
             wp = 1.0D / wp;
+            Console.WriteLine("post: " + _xt + " " + _yt + " " + _zt);
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
 
@@ -204,10 +208,21 @@ namespace Hsy.Geo
             while (!current.isWorld())
             {
                 addFromCSToParent(current);
+
                 current = current.getParent();
             }
             return this;
         }
+
+        public HS_Transform3D addFromWorldToCS(HS_CoordinateSystem CS)
+        {
+            HS_Transform3D tmp = new HS_Transform3D();
+            tmp.addFromCSToWorld(CS);
+            T = tmp.invT * T;
+            invT = invT * tmp.T;
+            return this;
+        }
+
 
         public HS_Transform3D addFromParentToCS(HS_CoordinateSystem CS)
         {
@@ -245,7 +260,7 @@ namespace Hsy.Geo
 
                 double xx = ex2.dot(ex1);
                 double xy = ex2.dot(ey1);
-                double xz = ex2.dot(ey1);
+                double xz = ex2.dot(ez1);
                 double yx = ey2.dot(ex1);
                 double yy = ey2.dot(ey1);
                 double yz = ey2.dot(ez1);
@@ -253,10 +268,12 @@ namespace Hsy.Geo
                 double zy = ez2.dot(ey1);
                 double zz = ez2.dot(ez1);
 
-                HS_Matrix44 tmp = new HS_Matrix44(xx, xy, xz, 0.0D, yx, yy, yz, 0.0D, zx, zy, zz, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
-                HS_Matrix44 invtmp = new HS_Matrix44(xx, yx, zx, 0.0D,xy,yy,zy,0.0D, xz, yz, zz, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
-                this.T = tmp * this.T;
-                this.invT = this.invT * invtmp;
+                HS_Matrix44 tmp = new HS_Matrix44(xx, xy, xz, 0, yx, yy, yz, 0, zx, zy, zz, 0, 0, 0, 0, 1);
+                HS_Matrix44 invtmp = new HS_Matrix44(xx, yx, zx, 0, xy, yy, zy, 0, xz, yz, zz, 0, 0, 0, 0, 1);
+                //this.T = tmp * this.T;
+                //this.invT = this.invT * invtmp;
+                this.T = tmp;
+                this.invT = invtmp;
                 this.addTranslate(o1 - o2);
                 return this;
             }

@@ -113,13 +113,12 @@ namespace Hsy.Geo
         }
         public HS_Vector addMulSelf(double f, HS_Coord p)
         {
-            Set(xd + f * p.xd, yd + f * p.yd, zd + f * p.zd);
-            return this;
+            return new HS_Vector(this.xd + f * p.xd, this.yd + f * p.yd, this.zd + f * p.zd);
         }
         public HS_Vector addMul(double f, HS_Coord p)
         {
             
-            return new HS_Vector(xd + f * p.xd, yd + f * p.yd, zd + f * p.zd);
+            return new HS_Vector(this.xd + f * p.xd, this.yd + f * p.yd, this.zd + f * p.zd);
         }
 
         public HS_Vector div(double v)
@@ -177,7 +176,37 @@ namespace Hsy.Geo
         }
         public double dot(HS_Coord v)
         {
-            return this.xd * v.xd + this.yd * v.yd + this.zd * v.zd;
+            double k0 = this.xd * v.xd;
+            double k1 = this.yd* v.yd;
+            double k2 = this.zd* v.zd;
+            double exp0 = HS_Math.getExp(k0);
+            double exp1 = HS_Math.getExp(k1);
+            double exp2 = HS_Math.getExp(k2);
+            if (exp0 < exp1)
+            {
+                if (exp0 < exp2)
+                {
+                    return k1 + k2 + k0;
+                }
+                else
+                {
+                    return k0 + k1 + k2;
+                }
+            }
+            else
+            {
+                if (exp1 < exp2)
+                {
+                    return k0 + k2 + k1;
+                }
+                else
+                {
+                    return k0 + k1 + k2;
+                }
+            }
+
+
+            //return this.xd * v.xd + this.yd * v.yd + this.zd * v.zd;
         }
         public double dot(double vx, double vy, double vz)
         {

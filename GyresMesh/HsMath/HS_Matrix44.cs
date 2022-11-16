@@ -224,67 +224,163 @@ namespace Hsy.HsMath
         public HS_Matrix44 inverse()
         {
             HS_Matrix44 result = new HS_Matrix44();
-            double a = this.m11, b = this.m21, c = this.m31, d = this.m41;
-            double e = this.m12, f = this.m22, g = this.m32, h = this.m42;
-            double  i = this.m13, j = this.m23, k = this.m33, l = this.m43;
-            double  m = this.m14, n = this.m24, o = this.m34, p = this.m44;
+            //double a = this.m11, b = this.m21, c = this.m31, d = this.m41;
+            //double e = this.m12, f = this.m22, g = this.m32, h = this.m42;
+            //double  i = this.m13, j = this.m23, k = this.m33, l = this.m43;
+            //double  m = this.m14, n = this.m24, o = this.m34, p = this.m44;
 
-            double kp_lo = k * p - l * o;
-            double jp_ln = j * p - l * n;
-            double jo_kn = j * o - k * n;
-            double ip_lm = i * p - l * m;
-            double io_km = i * o - k * m;
-            double in_jm = i * n - j * m;
+            //double kp_lo = k * p - l * o;
+            //double jp_ln = j * p - l * n;
+            //double jo_kn = j * o - k * n;
+            //double ip_lm = i * p - l * m;
+            //double io_km = i * o - k * m;
+            //double in_jm = i * n - j * m;
 
-            double a11 = +(f * kp_lo - g * jp_ln + h * jo_kn);
-            double a12 = -(e * kp_lo - g * ip_lm + h * io_km);
-            double a13 = +(e * jp_ln - f * ip_lm + h * in_jm);
-            double a14 = -(e * jo_kn - f * io_km + g * in_jm);
+            //double a11 = +(f * kp_lo - g * jp_ln + h * jo_kn);
+            //double a12 = -(e * kp_lo - g * ip_lm + h * io_km);
+            //double a13 = +(e * jp_ln - f * ip_lm + h * in_jm);
+            //double a14 = -(e * jo_kn - f * io_km + g * in_jm);
 
-            double det = a * a11 + b * a12 + c * a13 + d * a14;
+            //double det = a * a11 + b * a12 + c * a13 + d * a14;
 
-            if (Math.Abs(det) < HS_Epsilon.EPSILON)
+            //if (Math.Abs(det) < HS_Epsilon.EPSILON)
+            //{
+            //    throw new InvalidOperationException("Matrix is singular and cannot be inverted.");
+            //}
+            //double invDet = 1.0D / det;
+
+            //result.m11 = a11 * invDet;
+            //result.m12 = a12 * invDet;
+            //result.m13 = a13 * invDet;
+            //result.m14 = a14 * invDet;
+
+
+            //result.m21 = -(b * kp_lo - c * jp_ln + d * jo_kn) * invDet;
+            //result.m22 = +(a * kp_lo - c * ip_lm + d * io_km) * invDet;
+            //result.m23 = -(a * jp_ln - b * ip_lm + d * in_jm) * invDet;
+            //result.m24 = +(a * jo_kn - b * io_km + c * in_jm) * invDet;
+
+
+            //double gp_ho = g * p - h * o;
+            //double fp_hn = f * p - h * n;
+            //double fo_gn = f * o - g * n;
+            //double ep_hm = e * p - h * m;
+            //double eo_gm = e * o - g * m;
+            //double en_fm = e * n - f * m;
+
+            //result.m31 = +(b * gp_ho - c * fp_hn + d * fo_gn) * invDet;
+            //result.m32 = -(a * gp_ho - c * ep_hm + d * eo_gm) * invDet;
+            //result.m33 = +(a * fp_hn - b * ep_hm + d * en_fm) * invDet;
+            //result.m34 = -(a * fo_gn - b * eo_gm + c * en_fm) * invDet;
+
+            //double gl_hk = g * l - h * k;
+            //double fl_hj = f * l - h * j;
+            //double fk_gj = f * k - g * j;
+            //double el_hi = e * l - h * i;
+            //double ek_gi = e * k - g * i;
+            //double ej_fi = e * j - f * i;
+
+            //result.m41 = -(b * gl_hk - c * fl_hj + d * fk_gj) * invDet;
+            //result.m42 = +(a * gl_hk - c * el_hi + d * ek_gi) * invDet;
+            //result.m43 = -(a * fl_hj - b * el_hi + d * ej_fi) * invDet;
+            //result.m44 = +(a * fk_gj - b * ek_gi + c * ej_fi) * invDet;
+
+            double[][] m = new double[][] { new double[]{ m11, m12, m13, m14 }, new double[]{ m21, m22, m23, m24 }, new double[]{ m31, m32, m33, m34 },
+                new double[]{ m41, m12, m43, m44 } };
+            int[] indxc = new int[4];
+            int[] indxr = new int[4];
+            int[] ipiv = new int[4];
+            double[][] minv = new double[4][];
+
+            for (int i = 0; i < 4; i++)
             {
-                throw new InvalidOperationException("Matrix is singular and cannot be inverted.");
+                minv[i] = new double[4];
+                for (int j = 0; j < 4; j++)
+                {
+                    minv[i][j] = m[i][j];
+                }
             }
-            double invDet = 1.0D / det;
-
-            result.m11 = a11 * invDet;
-            result.m12 = a12 * invDet;
-            result.m13 = a13 * invDet;
-            result.m14 = a14 * invDet;
-
-
-            result.m21 = -(b * kp_lo - c * jp_ln + d * jo_kn) * invDet;
-            result.m22 = +(a * kp_lo - c * ip_lm + d * io_km) * invDet;
-            result.m23 = -(a * jp_ln - b * ip_lm + d * in_jm) * invDet;
-            result.m24 = +(a * jo_kn - b * io_km + c * in_jm) * invDet;
-
-
-            double gp_ho = g * p - h * o;
-            double fp_hn = f * p - h * n;
-            double fo_gn = f * o - g * n;
-            double ep_hm = e * p - h * m;
-            double eo_gm = e * o - g * m;
-            double en_fm = e * n - f * m;
-
-            result.m31 = +(b * gp_ho - c * fp_hn + d * fo_gn) * invDet;
-            result.m32 = -(a * gp_ho - c * ep_hm + d * eo_gm) * invDet;
-            result.m33 = +(a * fp_hn - b * ep_hm + d * en_fm) * invDet;
-            result.m34 = -(a * fo_gn - b * eo_gm + c * en_fm) * invDet;
-
-            double gl_hk = g * l - h * k;
-            double fl_hj = f * l - h * j;
-            double fk_gj = f * k - g * j;
-            double el_hi = e * l - h * i;
-            double ek_gi = e * k - g * i;
-            double ej_fi = e * j - f * i;
-
-            result.m41 = -(b * gl_hk - c * fl_hj + d * fk_gj) * invDet;
-            result.m42 = +(a * gl_hk - c * el_hi + d * ek_gi) * invDet;
-            result.m43 = -(a * fl_hj - b * el_hi + d * ej_fi) * invDet;
-            result.m44 = +(a * fk_gj - b * ek_gi + c * ej_fi) * invDet;
-
+            for (int i = 0; i < 4; i++)
+            {
+                int irow = -1, icol = -1;
+                double big = 0.0D;
+                // Choose pivot
+                for (int j = 0; j < 4; j++)
+                {
+                    if (ipiv[j] != 1)
+                    {
+                        for (int k = 0; k < 4; k++)
+                        {
+                            if (ipiv[k] == 0)
+                            {
+                                if (HS_Math.fastAbs(minv[j][k]) >= big)
+                                {
+                                    big = HS_Math.fastAbs(minv[j][k]);
+                                    irow = j;
+                                    icol = k;
+                                }
+                            }
+                            else if (ipiv[k] > 1)
+                            {
+                                return null;
+                            }
+                        }
+                    }
+                }
+                ++ipiv[icol];
+                // Swap rows _irow_ and _icol_ for pivot
+                double temp;
+                if (irow != icol)
+                {
+                    for (int k = 0; k < 4; ++k)
+                    {
+                        temp = minv[irow][k];
+                        minv[irow][k] = minv[icol][k];
+                        minv[icol][k] = temp;
+                    }
+                }
+                indxr[i] = irow;
+                indxc[i] = icol;
+                if (minv[icol][icol] == 0.0D)
+                {
+                    return null;
+                }
+                // Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
+                double pivinv = 1.0 / minv[icol][icol];
+                minv[icol][icol] = 1.0;
+                for (int j = 0; j < 4; j++)
+                {
+                    minv[icol][j] *= pivinv;
+                }
+                // Subtract this row from others to zero out their columns
+                for (int j = 0; j < 4; j++)
+                {
+                    if (j != icol)
+                    {
+                        double save = minv[j][icol];
+                        minv[j][icol] = 0;
+                        for (int k = 0; k < 4; k++)
+                        {
+                            minv[j][k] -= minv[icol][k] * save;
+                        }
+                    }
+                }
+            }
+            double tmp;
+            // Swap columns to reflect permutation
+            for (int j = 3; j >= 0; j--)
+            {
+                if (indxr[j] != indxc[j])
+                {
+                    for (int k = 0; k < 4; k++)
+                    {
+                        tmp = minv[k][indxr[j]];
+                        minv[k][indxr[j]] = minv[k][indxc[j]];
+                        minv[k][indxc[j]] = tmp;
+                    }
+                }
+            }
+            result = new HS_Matrix44(minv);
             return result;
         }
 

@@ -40,12 +40,17 @@ namespace Hsy.Geo
         }
         public HS_CoordinateSystem(HS_Plane P)
         {
-            new HS_CoordinateSystem(P.getOrigin(), P.getU(), P.getV(), P.getW());
+            this._origin = new HS_Point(P.getOrigin());
+            this._X = new HS_Vector(P.getU());
+            this._Y = new HS_Vector(P.getV());
+            this._Z = new HS_Vector(P.getW());
+            this._parent = WORLD();
+            this._isWorld = this._parent == null;
         }
 
         public HS_CoordinateSystem(bool world)
         {
-            this._origin = new HS_Point();
+            this._origin = new HS_Point(0,0,0);
             this._X = new HS_Vector(HS_Vector.xaxis);
             this._Y = new HS_Vector(HS_Vector.yaxis);
             this._Z = new HS_Vector(HS_Vector.zaxis);
@@ -54,7 +59,7 @@ namespace Hsy.Geo
         }
         public HS_CoordinateSystem()
         {
-            this._origin = new HS_Point();
+            this._origin = new HS_Point(0,0,0);
             this._X = new HS_Vector(HS_Vector.xaxis);
             this._Y = new HS_Vector(HS_Vector.yaxis);
             this._Z = new HS_Vector(HS_Vector.zaxis);
@@ -64,7 +69,7 @@ namespace Hsy.Geo
 
         public HS_CoordinateSystem(HS_CoordinateSystem parent)
         {
-            this._origin = new HS_Point();
+            this._origin = new HS_Point(0,0,0);
             this._X = new HS_Vector(HS_Vector.xaxis);
             this._Y = new HS_Vector(HS_Vector.yaxis);
             this._Z = new HS_Vector(HS_Vector.zaxis);
@@ -133,8 +138,10 @@ namespace Hsy.Geo
         public HS_Transform3D getTransformToWorld()
         {
             HS_Transform3D result = new HS_Transform3D();
-            Console.WriteLine("this x:  " + this._X);
+            //Console.WriteLine("this x:  " + this._X);
+            //result.addFromWorldToCS(this);
             result.addFromCSToWorld(this);
+
             return result;
         }
 

@@ -30,7 +30,7 @@ namespace Hsy.Geo
          *
          */
         public static int XYrev = 5;
-        public int mode;
+        private int mode;
         public HS_OrthoProject()
         {
             new HS_OrthoProject(XY);
@@ -77,19 +77,17 @@ namespace Hsy.Geo
         }
         public void mapPoint3D(HS_Coord p,  HS_MutableCoord result)
         {
-
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(p.yd, p.zd, 0);
             if (mode == XZ) result.Set(p.zd, p.xd, 0);
             if (mode == XYrev) result.Set(p.yd, p.xd, 0);
             if (mode == YZrev) result.Set(p.zd, p.yd, 0);
             if (mode == XZrev) result.Set(p.xd, p.zd, 0);
-            Console.WriteLine("result: " +result);
+
         }
 
         public void mapPoint3D(double x, double y, double z, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(x, y, 0);
             if (mode == YZ) result.Set(y, z, 0);
             if (mode == XZ) result.Set(z, x, 0);
@@ -124,7 +122,6 @@ namespace Hsy.Geo
 
         public void mapVector3D(HS_Coord p, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(p.yd, p.zd, 0);
             if (mode == XZ) result.Set(p.zd, p.xd, 0);
@@ -135,7 +132,6 @@ namespace Hsy.Geo
 
         public void mapVector3D(double x, double y, double z, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(x, y, 0);
             if (mode == YZ) result.Set(y, z, 0);
             if (mode == XZ) result.Set(z, x, 0);
@@ -170,7 +166,6 @@ namespace Hsy.Geo
 
         public void unmapPoint2D(HS_Coord p, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(0, p.xd, p.yd);
             if (mode == XZ) result.Set(p.yd, 0, p.xd);
@@ -182,7 +177,6 @@ namespace Hsy.Geo
 
         public void unmapPoint2D(double x, double y,  HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(x,y, 0);
             if (mode == YZ) result.Set(0, x, y);
             if (mode == XZ) result.Set(y, 0, x);
@@ -217,7 +211,6 @@ namespace Hsy.Geo
 
         public void unmapPoint3D(HS_Coord p, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(0, p.xd, p.yd);
             if (mode == XZ) result.Set(p.yd, 0, p.xd);
@@ -229,7 +222,6 @@ namespace Hsy.Geo
 
         public void unmapPoint3D(double x, double y, double z, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(x, y, z);
             if (mode == YZ) result.Set(z, x, y);
             if (mode == XZ) result.Set(y, z, x);
@@ -264,7 +256,7 @@ namespace Hsy.Geo
 
         public void unmapVector2D(HS_Coord p, HS_MutableCoord result)
         {
-            result = new HS_Point();
+
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(0, p.xd, p.yd);
             if (mode == XZ) result.Set(p.yd, 0, p.xd);
@@ -275,7 +267,6 @@ namespace Hsy.Geo
 
         public void unmapVector2D(double x, double y, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(x, y, 0);
             if (mode == YZ) result.Set(0, x, y);
             if (mode == XZ) result.Set(y, 0, x);
@@ -310,7 +301,6 @@ namespace Hsy.Geo
 
         public void unmapVector3D(HS_Coord p, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(0, p.xd, p.yd);
             if (mode == XZ) result.Set(p.yd, 0, p.xd);
@@ -321,7 +311,6 @@ namespace Hsy.Geo
 
         public void unmapVector3D(double x, double y, double z, HS_MutableCoord result)
         {
-            result = new HS_Point();
             if (mode == XY) result.Set(x, y, z);
             if (mode == YZ) result.Set(z, x, y);
             if (mode == XZ) result.Set(y, z, x);
