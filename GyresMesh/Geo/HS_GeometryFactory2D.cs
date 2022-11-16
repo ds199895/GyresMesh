@@ -54,16 +54,16 @@ namespace Hsy.Geo
 			return new HS_Polygon(points);
         }
 
-		public HS_Polygon createPolygonWithHoles(List<HS_Coord>points,List<HS_Coord>[]innerpoints)
+		public HS_Polygon createPolygonWithHoles<T,K>(List<T>points,List<K>[]innerpoints)where T:HS_Coord where K:HS_Coord
         {
-			return new HS_Polygon(points, innerpoints);
+			return new HS_Polygon().Create(points, innerpoints);
         }
-		public HS_Polygon createPolygonWithHoles(HS_Coord[] points, HS_Coord[][] innerpoints)
-		{
-			return new HS_Polygon(points, innerpoints);
-		}
+        public HS_Polygon createPolygonWithHoles(HS_Coord[] points, HS_Coord[][] innerpoints)
+        {
+            return new HS_Polygon(points, innerpoints);
+        }
 
-		public HS_CoordinateSystem WORLD()
+        public HS_CoordinateSystem WORLD()
         {
 			return HS_CoordinateSystem.WORLD();
         }

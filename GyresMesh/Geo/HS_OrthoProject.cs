@@ -30,7 +30,7 @@ namespace Hsy.Geo
          *
          */
         public static int XYrev = 5;
-        private int mode;
+        public int mode;
         public HS_OrthoProject()
         {
             new HS_OrthoProject(XY);
@@ -77,14 +77,14 @@ namespace Hsy.Geo
         }
         public void mapPoint3D(HS_Coord p,  HS_MutableCoord result)
         {
-            result = new HS_Point();
+
             if (mode == XY) result.Set(p.xd, p.yd, 0);
             if (mode == YZ) result.Set(p.yd, p.zd, 0);
             if (mode == XZ) result.Set(p.zd, p.xd, 0);
             if (mode == XYrev) result.Set(p.yd, p.xd, 0);
             if (mode == YZrev) result.Set(p.zd, p.yd, 0);
             if (mode == XZrev) result.Set(p.xd, p.zd, 0);
-
+            Console.WriteLine("result: " +result);
         }
 
         public void mapPoint3D(double x, double y, double z, HS_MutableCoord result)

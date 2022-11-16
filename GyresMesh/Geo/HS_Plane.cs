@@ -13,7 +13,7 @@ namespace Hsy.Geo
         public static HS_Plane XZ { get; }
         public static HS_Plane YZ { get; }
         private HS_Vector n;
-        private HS_Vector u, v;
+        private HS_Vector u,v,w;
         private HS_Point origin;
         public HS_Plane(HS_Coord p1,HS_Coord p2,HS_Coord p3)
         {
@@ -28,14 +28,14 @@ namespace Hsy.Geo
         {
             origin = new HS_Point(ox, oy, oz);
             n = new HS_Vector(nx, ny, nz);
-            n.united();
+            n=n.united();
             setAxes();
         }
         public HS_Plane(HS_Coord o,HS_Coord n)
         {
             origin = new HS_Point(o);
-            this.n = new HS_Vector(n);
-            this.n.united();
+            this.n = new HS_Vector(n).united();
+            //this.n=this.n.united();
             setAxes();
         }
 
@@ -43,14 +43,14 @@ namespace Hsy.Geo
         {
             origin = new HS_Point(o);
             this.n = new HS_Vector(n);
-            this.n.united();
+            this.n=this.n.united();
             setAxes();
         }
 
         public HS_Plane(HS_Coord n,double d)
         {
             this.n = new HS_Vector(n);
-            this.n.united();
+            this.n=this.n.united();
             if (HS_Math.fastAbs(n.xd) > HS_Math.fastAbs(n.yd))
             {
                 if (HS_Math.fastAbs(n.xd) > HS_Math.fastAbs(n.zd))
@@ -130,7 +130,7 @@ namespace Hsy.Geo
         }
         public HS_Vector getW()
         {
-            return this.w.copy();
+            return getNormal();
         }
 
         public void setAxes()

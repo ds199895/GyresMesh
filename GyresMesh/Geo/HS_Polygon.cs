@@ -102,20 +102,20 @@ namespace Hsy.Geo
             }
             calculateDirections();
         }
-        public HS_Polygon(FastList<HS_Coord> points)
-        {
-            numberOfPoints = points.Count;
-            numberOfShellPoints = points.Count;
-            this.points = new List<HS_Point>();
-            foreach (HS_Coord p in points)
-            {
-                this.points.Add(new HS_Point(p));
+        //public HS_Polygon(FastList<HS_Coord> points)
+        //{
+        //    numberOfPoints = points.Count;
+        //    numberOfShellPoints = points.Count;
+        //    this.points = new List<HS_Point>();
+        //    foreach (HS_Coord p in points)
+        //    {
+        //        this.points.Add(new HS_Point(p));
 
-            }
-            numberOfContours = 1;
-            numberOfPointsPerContour = new int[] { numberOfPoints };
+        //    }
+        //    numberOfContours = 1;
+        //    numberOfPointsPerContour = new int[] { numberOfPoints };
             
-        }
+        //}
         public HS_Polygon(HS_Coord[] points)
         {
             numberOfPoints = points.Length;
@@ -554,13 +554,14 @@ namespace Hsy.Geo
                 normal += new HS_Vector((points[i].yd - points[ni].yd) * (points[i].zd + points[ni].zd), (points[i].zd - points[ni].zd) * (points[i].xd + points[ni].xd), (points[i].xd - points[ni].xd) * (points[i].yd + points[ni].yd));
 
             }
-            normal.united();
+            normal=normal.united();
             return normal;
         }
 
         public HS_Plane GetPlane(double d)
         {
             HS_Vector normal = GetNormal();
+            Console.WriteLine("normal: " + normal);
             if (normal.len2() < 0.5)
             {
                 return null;
@@ -587,8 +588,9 @@ namespace Hsy.Geo
 
         public HS_Polygon toPolygon2DOrtho()
         {
-            FastList<HS_Point> shellpoints = new FastList<HS_Point>();
+            List<HS_Point> shellpoints = new List<HS_Point>();
             HS_Plane P = GetPlane(0);
+            Console.WriteLine("plane: " + P.getNormal());
             HS_OrthoProject OP = new HS_OrthoProject(P);
             for(int i = 0; i < numberOfShellPoints; i++)
             {
@@ -610,14 +612,20 @@ namespace Hsy.Geo
                     for (int j = 0; j < numberOfPointsPerContour[i + 1]; j++)
                     {
                         HS_Point p2D = new HS_Point();
+                        Console.WriteLine("mode: " + OP.mode);
+                        Console.WriteLine("pre: " + points[1]);
                         OP.mapPoint3D(points[index++], p2D);
+                        Console.WriteLine(p2D);
                         holepoints[i].Add(p2D);
                     }
                 }
                 return new HS_Polygon().Create(shellpoints, holepoints);
             }
         }
-
+        public int[] getTriangles()
+        {
+            return this.getTriangles(OPTIMIZE_DEFAULT);
+        }
         public int[] getTriangles(bool optimize)
         {
             if (triangles == null)

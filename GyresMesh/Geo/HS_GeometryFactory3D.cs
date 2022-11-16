@@ -26,14 +26,10 @@ namespace Hsy.Geo
         {
 
         }
-        public static HS_GeometryFactory3D instance()
-        {
-            return new HS_GeometryFactory3D();
-        }
-        public HS_Polygon CreateSimplePolygon(List<HS_Coord> points)
+        public HS_Polygon CreateSimplePolygon<T>(List<T> points)where T:HS_Coord
         {
             
-            return new HS_Polygon(points);
+            return new HS_Polygon().Create(points);
         }
 
         public HS_Point Origin()

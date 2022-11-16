@@ -81,6 +81,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GyresMesh\GyresMesh.csproj">
       <Project>{c2ad1d86-4a2a-4dd6-8feb-611ad66a0605}</Project>
       <Name>GyresMesh</Name>

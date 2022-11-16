@@ -21,17 +21,17 @@ namespace Hsy.Geo
 
         public HS_Triangulation2D(int[] T, int[] E)
         {
-            triangles = T;
-            edges = E;
+            this.triangles = T;
+            this.edges = E;
         }
 
         public HS_Triangulation2D(int[] T)
         {
-            triangles = T;
+            this.triangles= T;
             if (triangles.Length == 0)
             {
-                edges = new int[0];
-                neighbors = new int[0][];
+                this.edges = new int[0];
+                this.neighbors = new int[0][];
             }
             else
             {

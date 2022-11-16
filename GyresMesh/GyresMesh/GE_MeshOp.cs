@@ -14,6 +14,29 @@ namespace Hsy.GyresMesh
         {
 
         }
+        public static HS_Coord getFaceCenter(GE_Face f)
+        {
+            if (f.GetHalfedge() == null)
+            {
+                return null;
+            }
+            else
+            {
+                GE_Halfedge he = f.GetHalfedge();
+                HS_Point center = new HS_Point();
+                int c = 0;
+                do
+                {
+                    center = (HS_Point)(center + he.GetStart());
+                    c++;
+                    he = he.GetNextInFace();
+                } while (he != f.GetHalfedge());
+                center = (HS_Point)(center / c);
+                return center;
+
+
+            }
+        }
 
         public static HS_Coord getFaceNormal(GE_Face face)
         {
@@ -36,7 +59,42 @@ namespace Hsy.GyresMesh
                 return _normal;
             }
         }
+        public static GE_Mesh ReverseFaces(GE_Mesh mesh)
+        {
+            mesh.clearUsedElements();
+            GE_Halfedge[] prevHe = new GE_Halfedge[mesh.GetNumberOfHalfedges()];
+            int i = 0;
+            GE_HalfedgeEnumerator heEtr = mesh.heEtr();
+            GE_Halfedge he;
+            while (heEtr.MoveNext())
+            {
+                he = (GE_Halfedge)heEtr.Current;
+                prevHe[i] = he.GetPrevInFace();
+                i++;
 
+            }
+            i = 0;
+            heEtr = mesh.heEtr();
+            while (heEtr.MoveNext())
+            {
+                he = (GE_Halfedge)heEtr.Current;
+                mesh.SetNext(he, prevHe[i]);
+                i++;
+            }
+
+            GE_EdgeEnumerator eEtr = mesh.eEtr();
+            while (eEtr.MoveNext())
+            {
+                GE_Halfedge he1 = eEtr.Current;
+                GE_Halfedge he2 = he1.Pair();
+                GE_Vertex tmp = he1.GetStart();
+                mesh.SetVertex(he1, he2.GetStart());
+                mesh.SetVertex(he2, tmp);
+                mesh.SetHalfedge(he1.GetStart(), he1);
+                mesh.SetHalfedge(he2.GetStart(), he2);
+            }
+            return mesh;
+        }
         public static void cycleHalfedges(GE_Mesh mesh, List<GE_Halfedge> halfedges)
         {
             orderHalfedges(mesh, halfedges, true);
@@ -130,29 +188,38 @@ namespace Hsy.GyresMesh
         {
             Dictionary<long, VertexInfo> vertexLists = new Dictionary<long, VertexInfo>();
             List<GE_Halfedge> unpairedHalfedges = mesh.getUnpairedHalfedges();
-            GE_Vertex v;
+            //GE_Vertex v;
             VertexInfo vi;
-            foreach (GE_Halfedge he in unpairedHalfedges)
+            var var7 = unpairedHalfedges.GetEnumerator();
+            GE_Halfedge he;
+            while (var7.MoveNext())
             {
-                v = he.GetStart();
-                vi = vertexLists[v.GetKey()];
-                if (vi == null)
-                {
+                vi = new VertexInfo();
+                he = (GE_Halfedge)var7.Current;
+                GE_Vertex v = he.GetStart();
+                if(!vertexLists.Keys.Contains(v.GetKey())){
                     vi = new VertexInfo();
                     vertexLists.Add(v.GetKey(), vi);
+                }
+                else
+                {
+                    vi = vertexLists[v.GetKey()];
                 }
                 vi.Out.Add(he);
                 v = he.GetNextInFace().GetStart();
-                vi = vertexLists[v.GetKey()];
-                if (vi == null)
+                if (!vertexLists.Keys.Contains(v.GetKey()))
                 {
                     vi = new VertexInfo();
                     vertexLists.Add(v.GetKey(), vi);
                 }
+                else
+                {
+                    vi = vertexLists[v.GetKey()];
+                }
                 vi.In.Add(he);
-
             }
             GE_Halfedge he1;
+
             GE_Halfedge he2;
             var vitr = vertexLists.GetEnumerator();
             VertexInfo vInfo;
@@ -214,14 +281,15 @@ namespace Hsy.GyresMesh
                         cleanedVertices.Add(he.GetStart());
                         mesh.SetHalfedge(he.GetStart(), he);
                     }
-                    if (!cleanedHalfedges.Contains(he)){
+                    if (!cleanedHalfedges.Contains(he))
+                    {
                         cleanedHalfedges.Add(he);
                     }
                     he = he.GetNextInFace();
                 } while (he != f.GetHalfedge());
             }
             int n = cleanedHalfedges.Count;
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 he = cleanedHalfedges[i];
                 if (!cleanedHalfedges.Contains(he.Pair()))
@@ -231,13 +299,22 @@ namespace Hsy.GyresMesh
                 }
             }
             List<GE_Vertex> removev = new List<GE_Vertex>();
-            foreach(GE_Vertex v in mesh.GetVertices())
+            var var10 = mesh.GetVertices().GetEnumerator();
+            while (var10.MoveNext())
             {
+                GE_Vertex v = var10.Current;
                 if (!cleanedVertices.Contains(v))
                 {
                     removev.Add(v);
                 }
             }
+            //foreach(GE_Vertex v in mesh.GetVertices())
+            //{
+            //    if (!cleanedVertices.Contains(v))
+            //    {
+            //        removev.Add(v);
+            //    }
+            //}
             mesh.removeVertices(removev);
             GE_HalfedgeEnumerator heEtr = mesh.heEtr();
             List<GE_Halfedge> remove = new List<GE_Halfedge>();
@@ -249,7 +326,8 @@ namespace Hsy.GyresMesh
                     remove.Add(he);
                 }
             }
-            mesh.remove
+            mesh.removeHalfedges(remove);
+            return mesh;
         }
 
 

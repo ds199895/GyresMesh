@@ -260,8 +260,8 @@ namespace Hsy.Geo
             if (l != 0.0D)
             {
                 vn.xd= this.xd /l;
-                vn.xd=this.yd /l;
-                vn.xd=this.zd /l;
+                vn.yd=this.yd /l;
+                vn.zd=this.zd /l;
             }
 
             return vn;

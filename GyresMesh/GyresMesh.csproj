@@ -3,6 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <LangVersion>8.0</LangVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hsy</RootNamespace>
     <AssemblyName>GyresMesh</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
@@ -37,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <HintPath>..\packages\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.5.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoAPI.Core.1.7.5\lib\net45\GeoAPI.dll</HintPath>
@@ -80,6 +81,7 @@
     <Compile Include="Geo\HS_GeometryFactory3D.cs" />
     <Compile Include="Geo\HS_KDTree.cs" />
     <Compile Include="Geo\HS_KDTreeInteger.cs" />
+    <Compile Include="GyresMesh\GE_EdgeEnumerator.cs" />
     <Compile Include="GyresMesh\GE_FaceEnumerator.cs" />
     <Compile Include="GyresMesh\GE_HalfedgeEnumerator.cs" />
     <Compile Include="GyresMesh\GE_VertexEnumerator.cs" />
@@ -95,7 +97,7 @@
     <Compile Include="Geo\HS_Line.cs" />
     <Compile Include="Geo\HS_Map.cs" />
     <Compile Include="Geo\HS_Plane.cs" />
-    <Compile Include="Geo\HS_Triangulate2D.cs" />
+    <Compile Include="Geo\HS_Triangulation2D.cs" />
     <Compile Include="Geo\Triangulator.cs" />
     <Compile Include="HsMath\HS_Epsilon.cs" />
     <Compile Include="Geo\HS_Geometry.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Geo\HS_GeometryOp2D.cs" />
     <Compile Include="Geo\HS_GeometryOp3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Render\GE_Render.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GyresMeshGH\" />

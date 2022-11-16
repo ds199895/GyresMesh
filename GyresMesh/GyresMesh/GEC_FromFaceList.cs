@@ -57,13 +57,45 @@ namespace Hsy.GyresMesh
             vertices = vs;
             return this;
         }
+        public GEC_FromFaceList setVertices<T>(List<T> vs)where T:HS_Coord
+        {
+            int n = vs.Count;
+            var Etr = vs.GetEnumerator();
+            this.vertices = new HS_Coord[n];
+            for(int i = 0; Etr.MoveNext(); i++)
+            {
+                this.vertices[i] = (HS_Coord)Etr.Current;
+            }
+            return this;
+        }
+
         public GEC_FromFaceList setFaces(int[][] fs)
         {
             faces = fs;
             return this;
         }
 
-
+        public GEC_FromFaceList setFaces(List<int[]> fs)
+        {
+            this.faces = new int[fs.Count][];
+            int i = 0;
+            for(var var4 = fs.GetEnumerator(); var4.MoveNext(); i++)
+            {
+                int[] indices = (int[])var4.Current;
+                this.faces[i] = indices;
+            }
+            return this;
+        }
+        public GEC_FromFaceList setDuplicate(bool b)
+        {
+            this.duplicate = b;
+            return this;
+        }
+        public GEC_FromFaceList setCheckNormals(bool b)
+        {
+            this.normalcheck = b;
+            return this;
+        }
         //protected boolean getCheckDuplicateVertices()
         //{
         //    return parameters.get("duplicate", true);
@@ -88,7 +120,7 @@ namespace Hsy.GyresMesh
             _faceList = faces;
         }
 
-        protected override GE_Mesh createBase()
+        protected internal override GE_Mesh createBase()
         {
             GE_Mesh mesh = new GE_Mesh();
             if (faces != null && vertices != null)
@@ -370,7 +402,35 @@ namespace Hsy.GyresMesh
                     faceid++;
                 }
                 GE_MeshOp.pairHalfedges(mesh);
-                if()
+                if (this.cleanunused)
+                {
+                    mesh.cleanUnusedElementsByface();
+                    GE_MeshOp.capHalfedges(mesh);
+                }
+                if (this.manifoldcheck)
+                {
+
+                }
+                if (this.normalcheck)
+                {
+                    GE_FaceEnumerator fEtr = mesh.fEtr();
+                    GE_Face left = null;
+                    Object fcleft = new HS_Point(1.7976931348623157E308D, 1.7976931348623157E308D, 1.7976931348623157E308D);
+                    while (fEtr.MoveNext())
+                    {
+                        GE_Face f = fEtr.Current;
+                        if (GE_MeshOp.getFaceCenter(f).xd < ((HS_Coord)fcleft).xd)
+                        {
+                            left = f;
+                            fcleft = GE_MeshOp.getFaceCenter(f);
+                        }
+                    }
+                    HS_Coord leftn = GE_MeshOp.getFaceNormal(left);
+                    if (leftn.xd > 0.0D)
+                    {
+                        GE_MeshOp.ReverseFaces(mesh);
+                    }
+                }
 
             }
             return mesh;

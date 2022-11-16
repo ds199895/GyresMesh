@@ -200,9 +200,11 @@ namespace Hsy.Geo
 
         public HS_Transform3D addFromCSToWorld(HS_CoordinateSystem CS)
         {
-            for (HS_CoordinateSystem current= CS; !current.isWorld(); current = current.getParent())
+            HS_CoordinateSystem current = CS;
+            while (!current.isWorld())
             {
-                this.addFromCSToParent(current);
+                addFromCSToParent(current);
+                current = current.getParent();
             }
             return this;
         }

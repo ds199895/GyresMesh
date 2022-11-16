@@ -54,7 +54,12 @@ namespace Hsy.Geo
         }
         public HS_CoordinateSystem()
         {
-            new HS_CoordinateSystem(false);
+            this._origin = new HS_Point();
+            this._X = new HS_Vector(HS_Vector.xaxis);
+            this._Y = new HS_Vector(HS_Vector.yaxis);
+            this._Z = new HS_Vector(HS_Vector.zaxis);
+            this._isWorld = false;
+            this._parent =WORLD();
         }
 
         public HS_CoordinateSystem(HS_CoordinateSystem parent)
@@ -128,6 +133,7 @@ namespace Hsy.Geo
         public HS_Transform3D getTransformToWorld()
         {
             HS_Transform3D result = new HS_Transform3D();
+            Console.WriteLine("this x:  " + this._X);
             result.addFromCSToWorld(this);
             return result;
         }

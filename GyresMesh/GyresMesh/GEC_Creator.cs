@@ -36,11 +36,12 @@ namespace Hsy.GyresMesh
          *
          * @return HE_Mesh
          */
-        protected abstract GE_Mesh createBase();
+        protected internal abstract GE_Mesh createBase();
 
-        //public GE_Mesh create()
-        //{
-
-        //}
+        public GE_Mesh create()
+        {
+            GE_Mesh based = this.createBase();
+            return based;
+        }
     }
 }

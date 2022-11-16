@@ -8,14 +8,14 @@ namespace Hsy.GyresMesh
 {
     public abstract class GE_MeshObject : GE_Object
     {
-        private bool used;
-        private bool visible;
+        private bool used=false;
+        private bool visible=true;
         private int color;
 
         public GE_MeshObject()
         { 
             used = false;
-            visible = false;
+            visible = true;
             color = -1;
         }
 

@@ -369,6 +369,7 @@ namespace Hsy.Geo
                 }
 
                 HS_Plane P = polygon.GetPlane(0.0D);
+                Console.WriteLine("pl: " + P.getNormal());
                 HS_Triangulation2DWithPoints triangulation = this.triangulatePolygon2D(pts,hpts, optimize, (new HS_GeometryFactory3D()).createEmbeddedPlane(P));
                 HS_KDTreeInteger<HS_Point> pointmap = new HS_KDTreeInteger<HS_Point>();
 
@@ -452,7 +453,7 @@ namespace Hsy.Geo
 
                     Points.Add(point);
                 }
-
+                Console.WriteLine("Ear:  "+ears[0]);
                 return new HS_Triangulation2DWithPoints(ears, E, Points);
             }
 
@@ -700,7 +701,7 @@ namespace Hsy.Geo
                     this.shellCoordAvailable[i] = true;
                 }
 
-                bool finisGEd = false;
+                bool finished = false;
                 bool found = false;
                 int k0 = 0;
                 int k1 = 1;
@@ -714,14 +715,14 @@ namespace Hsy.Geo
                         k0 = k1;
                         if (k1 == firstK)
                         {
-                            finisGEd = true;
+                            finished = true;
                             break;
                         }
 
                         k1 = k2;
                     }
 
-                    if (!finisGEd && this.isValidEdge(k0, k2))
+                    if (!finished && this.isValidEdge(k0, k2))
                     {
                         LineString ls = (LineString)HS_JTS.JTSgf.CreateLineString(new Coordinate[] { (Coordinate)this.shellCoords[k0], (Coordinate)this.shellCoords[k2] });
                         if (test.Covers(ls))
@@ -740,18 +741,18 @@ namespace Hsy.Geo
                                 firstK = k0;
                                 if (N < 3)
                                 {
-                                    finisGEd = true;
+                                    finished = true;
                                 }
                             }
                         }
                     }
 
-                    if (!finisGEd && !found)
+                    if (!finished && !found)
                     {
                         k0 = k1;
                         if (k1 == firstK)
                         {
-                            finisGEd = true;
+                            finished = true;
                         }
                         else
                         {
@@ -759,7 +760,7 @@ namespace Hsy.Geo
                             k2 = this.nextshellCoord(k2 + 1);
                         }
                     }
-                } while (!finisGEd);
+                } while (!finished);
 
                 if (improve)
                 {
@@ -767,10 +768,11 @@ namespace Hsy.Geo
                 }
 
                 int[] tris = new int[3 * earList.Count];
-
+                Console.WriteLine("test Tri:  " + earList[0]);
                 for (int i = 0; i < earList.Count; ++i)
                 {
                     int[] tri = ((HS_JTS.PolygonTriangulatorJTS.IndexedTriangle)earList[i]).getVertices();
+                    Console.WriteLine("test Tri:  "+tri[1]);
                     tris[3 * i] = tri[0];
                     tris[3 * i + 1] = tri[1];
                     tris[3 * i + 2] = tri[2];
