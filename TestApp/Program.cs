@@ -161,21 +161,10 @@ namespace TestApp
             //    polys.Add(poly);
             //}
             List<HS_Point> hole = new List<HS_Point>();
-            //hole.Add(new HS_Point(-50, 50, 0));
-            //hole.Add(new HS_Point(50, 50, 0));
-            //hole.Add(new HS_Point(100, 250, 0));
-
-            //hole.Add(new HS_Point(50, 50, 0));
-            //hole.Add(new HS_Point(-50, 50, 0));
-            //hole.Add(new HS_Point(100, 250, 0));
-
-            hole.Add(new HS_Point(200, 350, 350));
-            hole.Add(new HS_Point(150, 350, 350));
-            hole.Add(new HS_Point(200, 400, 400));
-
-
-
-            List<HS_Point>[] holes = new List<HS_Point>[] { hole };
+            hole.Add(new HS_Point(100, 250, 0));
+            hole.Add(new HS_Point(50, 50, 0));
+            hole.Add(new HS_Point(-50, 50, 0));
+            List<HS_Point>[]holes=new List<HS_Point>[]{ hole };
             //HS_Polygon poly = HS_GeometryFactory.instance().createPolygonWithHoles(vertices, holes);
             List<HS_Vector> vec = vertices.ToList();
             //vec.Reverse();
