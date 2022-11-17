@@ -16,7 +16,7 @@ using Hsy.Render;
 
 namespace TestApp
 {
-    class Program:IApp
+    class Program : IApp
     {
         static void Main(string[] args)
         {
@@ -25,7 +25,7 @@ namespace TestApp
         List<GE_Vertex> vers = new List<GE_Vertex>();
         List<GE_Halfedge> hes = new List<GE_Halfedge>();
         List<GE_Halfedge> heps = new List<GE_Halfedge>();
-        List<HS_Coord>ps= new List<HS_Coord>();
+        List<HS_Coord> ps = new List<HS_Coord>();
 
         GE_Face face = new GE_Face();
         //GE_Mesh mesh = new GE_Mesh();
@@ -33,6 +33,7 @@ namespace TestApp
         Polygon JtsPoly;
         CamController cam;
         HS_Vector[] vertices = new HS_Vector[9];
+        List<HS_Vector> vecs = new List<HS_Vector>();
         int[] triangles;
         List<HS_Polygon> polys = new List<HS_Polygon>();
         GE_Mesh mesh;
@@ -54,6 +55,15 @@ namespace TestApp
             this.vertices[6] = new HS_Vector(0, -500);
             this.vertices[7] = new HS_Vector(-600, 0);
             this.vertices[8] = new HS_Vector(-200, 100);
+
+
+            vecs.Add(new HS_Vector(0, 0, 0));
+            vecs.Add(new HS_Vector(500, 0, 0));
+            vecs.Add(new HS_Vector(500, 500, 500));
+            vecs.Add(new HS_Vector(300, 300, 300));
+            vecs.Add(new HS_Vector(200, 600, 600));
+            vecs.Add(new HS_Vector(100, 300, 300));
+            vecs.Add(new HS_Vector(0, 500, 500));
             //for (int i = 0; i < vertices.Length; i++)
             //{
             //    Print("first: "+vertices[i]);
@@ -156,12 +166,16 @@ namespace TestApp
             hole.Add(new HS_Point(-50, 50, 0));
             List<HS_Point>[]holes=new List<HS_Point>[]{ hole };
             //HS_Polygon poly = HS_GeometryFactory.instance().createPolygonWithHoles(vertices, holes);
-            HS_Polygon poly = new HS_Polygon().Create(vertices, holes);
+            List<HS_Vector> vec = vertices.ToList();
+            //vec.Reverse();
+            //vecs.Reverse();
+            //HS_Polygon poly = new HS_Polygon().Create(vec, hole);
+            HS_Polygon poly = new HS_Polygon().Create(vecs, hole);
             polys.Add(poly);
             GEC_FromPolygons gecp = new GEC_FromPolygons();
             gecp.setPolygons(polys);
             mesh = new GE_Mesh(gecp);
-            foreach(GE_Vertex v in mesh.GetVertices())
+            foreach (GE_Vertex v in mesh.GetVertices())
             {
                 Print(v);
             }
@@ -176,10 +190,10 @@ namespace TestApp
         {
             Background(255);
             Fill(0);
-            cam.DrawSystem(this,200);
+            cam.DrawSystem(this, 200);
             Stroke(255, 0, 0);
             //render.drawEdges(mesh);
-            foreach(GE_Face f in mesh.GetFaces())
+            foreach (GE_Face f in mesh.GetFaces())
             {
                 render.drawFace(f);
             }
@@ -231,14 +245,14 @@ namespace TestApp
 
         }
 
-        public void DrawPolygonTriangles(HS_Vector[] vertices,int[] triangles)
+        public void DrawPolygonTriangles(HS_Vector[] vertices, int[] triangles)
         {
-            
+
             for (int i = 0; i < triangles.Length; i += 3)
             {
                 int a = triangles[i];
-                int b = triangles[i+1];
-                int c = triangles[i+2];
+                int b = triangles[i + 1];
+                int c = triangles[i + 2];
                 HS_Vector va = vertices[a];
                 HS_Vector vb = vertices[b];
                 HS_Vector vc = vertices[c];
@@ -253,7 +267,7 @@ namespace TestApp
                 //Line(vc.xf, vc.yf, vc.zf, va.xf, va.yf, va.zf);
                 EndShape();
             }
-            
+
         }
     }
 }
