@@ -644,10 +644,10 @@ namespace Hsy.Geo
                     int v0 = ears[i];
                     int v1 = ears[i + 1];
                     int v2 = ears[i + 2];
-                    long index = getIndex(v0, v1, f);
+                    //long index = getIndex(v0, v1, f);
                     //map.Add(index, new int[] { v0, i });
                     map.Add(i, new int[] { v0, v1 });
-                    index = getIndex(v1, v2, f);
+                    //index = getIndex(v1, v2, f);
                     map.Add(i + 1, new int[] { v1, v2 });
                     //map.Add(index, new int[] { i, v2 });
                     //index = getIndex(v2, v0, f);
@@ -733,7 +733,7 @@ namespace Hsy.Geo
                                 earList.Add(ear);
                                 this.shellCoordAvailable[k1] = false;
                                 --N;
-                                Console.WriteLine("Check nums:  " + N);
+                                //Console.WriteLine("Check nums:  " + N);
                                 k0 = this.nextshellCoord(0);
                                 k1 = this.nextshellCoord(k0 + 1);
                                 k2 = this.nextshellCoord(k1 + 1);
@@ -749,8 +749,8 @@ namespace Hsy.Geo
                     if (!finished && !found)
                     {
                         k0 = k1;
-                        Console.WriteLine("k0: " + shellCoords[k0]);
-                        Console.WriteLine("FirstK: " + shellCoords[firstK]);
+                        //Console.WriteLine("k0: " + shellCoords[k0]);
+                        //Console.WriteLine("FirstK: " + shellCoords[firstK]);
                         if (k0 == firstK)
                         {
                             finished = true;

@@ -167,15 +167,15 @@ namespace Hsy.Geo
 
         public void applyInvAsPointInto(HS_Coord p,HS_MutableCoord result)
         {
-            Console.WriteLine("prev: "+p.xd + " " +p.yd+ " " +p.zd);
-            Console.WriteLine(invT.m21 +" " + invT.m22 +" " + invT.m23+" "  + invT.m24);
+            //Console.WriteLine("prev: "+p.xd + " " +p.yd+ " " +p.zd);
+            //Console.WriteLine(invT.m21 +" " + invT.m22 +" " + invT.m23+" "  + invT.m24);
             _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd + invT.m14;
             _yt= invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd + invT.m24;
             _zt=invT.m31* p.xd + invT.m32 * p.yd + invT.m33 * p.zd + invT.m34;
             double wp= invT.m41 * p.xd + invT.m42 * p.yd + invT.m43 * p.zd + invT.m44;
-            Console.WriteLine("wp: "+wp);
+            //Console.WriteLine("wp: "+wp);
             wp = 1.0D / wp;
-            Console.WriteLine("post: " + _xt + " " + _yt + " " + _zt);
+            //Console.WriteLine("post: " + _xt + " " + _yt + " " + _zt);
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
 

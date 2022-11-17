@@ -203,7 +203,7 @@ namespace Hsy.Geo
 
         public HS_PlanarMap(HS_Plane P) : base(P.getOrigin(), P.getU(), P.getV(), P.getW(), new HS_CoordinateSystem())
         {
-            Console.WriteLine("map:  " + P.getU()+ " " + P.getV()+" "+P.getW());
+            //Console.WriteLine("map:  " + P.getU()+ " " + P.getV()+" "+P.getW());
             mode = PLANE;
             T2D3D = getTransformToWorld();
         }

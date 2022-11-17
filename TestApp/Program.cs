@@ -164,11 +164,12 @@ namespace TestApp
             //hole.Add(new HS_Point(-50, 50, 0));
             //hole.Add(new HS_Point(50, 50, 0));
             //hole.Add(new HS_Point(100, 250, 0));
+
             //hole.Add(new HS_Point(50, 50, 0));
             //hole.Add(new HS_Point(-50, 50, 0));
             //hole.Add(new HS_Point(100, 250, 0));
-            hole.Add(new HS_Point(200, 350, 350));
 
+            hole.Add(new HS_Point(200, 350, 350));
             hole.Add(new HS_Point(150, 350, 350));
             hole.Add(new HS_Point(200, 400, 400));
 
@@ -197,9 +198,9 @@ namespace TestApp
         public override void Draw()
         {
             Background(255);
-            Fill(0);
+            Fill(240);
             cam.DrawSystem(this, 200);
-            Stroke(255, 0, 0);
+            Stroke(0);
             //render.drawEdges(mesh);
             foreach (GE_Face f in mesh.GetFaces())
             {

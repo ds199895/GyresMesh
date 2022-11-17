@@ -201,16 +201,16 @@ namespace Hsy.Render
             double averageLength = calAverageEdgeLength(mesh);
             //为实现在屏幕上的大小总为2mm
             double target = 2;
-            r = (distance / 274) * target;
+            r = (distance / 254) * target;
 
             //调控防止顶点显示与mesh显示比例过大或过小
             if (distance > averageLength * 8)
             {
-                r = averageLength * 8 / 274 * target;
+                r = averageLength * 8 /254 * target;
             }
-            else if (distance < averageLength / 2)
+            else if (distance < averageLength*1.5D)
             {
-                r = averageLength / 2 / 274 * target;
+                r = averageLength*1.5D /254 * target;
             }
             //            r=1000/coefficient;
             //        }else if(distance>10000) {
