@@ -279,6 +279,23 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(T[] points,List<K>innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
+            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
+            HS_Vector sn = sv1.cross(sv2).united();
+            Console.WriteLine("shell normal:  " + sn);
+            List<K> cs = innerpoints;
+
+            HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
+            HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
+            HS_Vector hn = v1.cross(v2).united();
+            Console.WriteLine("hole normal:  " + hn);
+            if ((hn + sn).len() != 0)
+            {
+                Console.WriteLine("reverse!");
+                innerpoints = new List<K>(cs);
+                innerpoints.Reverse();
+            }
+
             numberOfShellPoints = points.Length;
             numberOfPoints = points.Length + innerpoints.Count;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -303,6 +320,7 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(List<T>points, K[] innerpoints) where T : HS_Coord where K : HS_Coord
         {
+
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count + innerpoints.Length;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -327,6 +345,22 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(List<T> points, List<K> innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
+            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
+            HS_Vector sn = sv1.cross(sv2).united();
+            Console.WriteLine("shell normal:  " + sn);
+            List<K> cs = innerpoints;
+
+            HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
+            HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
+            HS_Vector hn = v1.cross(v2).united();
+            Console.WriteLine("hole normal: " + hn);
+            if ((hn + sn).len() != 0)
+            {
+                innerpoints = new List<K>(cs);
+                innerpoints.Reverse();
+            }
+
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count + innerpoints.Count;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -353,6 +387,26 @@ namespace Hsy.Geo
         //many holes
         public HS_Polygon Create<T,K>(List<T> points, List<K>[] innerpoints)where T:HS_Coord where K:HS_Coord
         {
+            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
+            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
+            HS_Vector sn = sv1.cross(sv2).united();
+            Console.WriteLine("shell normal:  " + sn);
+            for (int j = 0; j < innerpoints.Length; j++)
+            {
+                List<K> cs = innerpoints[j];
+
+                HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
+                HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
+                HS_Vector hn = v1.cross(v2).united();
+                Console.WriteLine("hole normal: " + hn);
+                if ((hn + sn).len() != 0)
+                {
+                    innerpoints[j] = new List<K>(cs);
+                    innerpoints[j].Reverse();
+                }
+            }
+
+
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -384,6 +438,25 @@ namespace Hsy.Geo
 
         public HS_Polygon Create<T, K>(List<T> points, K[][] innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
+            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
+            HS_Vector sn = sv1.cross(sv2).united();
+            Console.WriteLine("shell normal:  " + sn);
+            
+            for (int j = 0; j < innerpoints.Length; j++)
+            {
+                K[] cs = innerpoints[j];
+
+                HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
+                HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
+                HS_Vector hn = v1.cross(v2).united();
+                if ((hn + sn).len() != 0)
+                {
+                    List<K> vs = cs.ToList();
+                    vs.Reverse();
+                    innerpoints[j] = vs.ToArray();
+                }
+            }
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -446,6 +519,27 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(T[] points, List<K>[] innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
+            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
+            HS_Vector sn = sv1.cross(sv2).united();
+            Console.WriteLine("shell normal:  " + sn);
+            for (int j = 0; j < innerpoints.Length; j++)
+            {
+                List<K> cs = innerpoints[j];
+
+                HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
+                HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
+                HS_Vector hn = v1.cross(v2).united();
+                Console.WriteLine("hole normal: " + hn);
+                if ((hn + sn).len() != 0)
+                {
+                    innerpoints[j] = new List<K>(cs);
+                    innerpoints[j].Reverse();
+                }
+            }
+
+
+
             numberOfShellPoints = points.Length;
             numberOfPoints = points.Length;
             List<HS_Coord> tmp = new List<HS_Coord>();

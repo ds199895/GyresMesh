@@ -135,20 +135,20 @@ namespace Hsy.Geo
 
         public void setAxes()
         {
-            double x = HS_Math.fastAbs(n.xd);
-            double y = HS_Math.fastAbs(n.yd);
+            double x = HS_Math.fastAbs(this.n.xd);
+            double y = HS_Math.fastAbs(this.n.yd);
             if (x >= y)
             {
-                u = new HS_Vector(n.zd, 0, -n.xd);
+                this.u = new HS_Vector(this.n.zd, 0, -this.n.xd);
 
             }
             else
             {
-                v = new HS_Vector(0, n.zd, -n.yd);
+                this.u = new HS_Vector(0, this.n.zd, -this.n.yd);
 
             }
-            u.united();
-            v = n.cross(u);
+            this.u=u.united();
+            this.v = this.n.cross(this.u);
 
         }
     }
