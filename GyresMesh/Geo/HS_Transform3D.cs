@@ -98,6 +98,14 @@ namespace Hsy.Geo
             return this;
         }
 
+        public HS_Transform3D addRotateAboutAxis( double angle,  HS_Coord p,  HS_Coord axis)
+        {
+            addTranslate(-1, p);
+            addRotateAboutOrigin(angle, axis);
+            addTranslate(p);
+            return this;
+        }
+
         public HS_Transform3D addRotateAboutOrigin(double angle,HS_Coord axis)
         {
             HS_Vector a = new HS_Vector(axis);
@@ -147,6 +155,15 @@ namespace Hsy.Geo
             wp = 1.0D / wp;
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
+
+        public void applyAsVectorSelf( HS_MutableCoord p)
+        {
+             double x = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd;
+             double y = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
+             double z = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd;
+            p.Set(x, y, z);
+        }
+
 
         public void applyInvAsPointInto(HS_Coord p,HS_MutableCoord result)
         {
@@ -270,10 +287,8 @@ namespace Hsy.Geo
 
                 HS_Matrix44 tmp = new HS_Matrix44(xx, xy, xz, 0, yx, yy, yz, 0, zx, zy, zz, 0, 0, 0, 0, 1);
                 HS_Matrix44 invtmp = new HS_Matrix44(xx, yx, zx, 0, xy, yy, zy, 0, xz, yz, zz, 0, 0, 0, 0, 1);
-                //this.T = tmp * this.T;
-                //this.invT = this.invT * invtmp;
-                this.T = tmp;
-                this.invT = invtmp;
+                this.T = tmp * this.T;
+                this.invT = this.invT * invtmp;
                 this.addTranslate(o1 - o2);
                 return this;
             }

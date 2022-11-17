@@ -14,8 +14,8 @@ namespace Hsy.Geo
     {
         public static  HS_Vector origin = new HS_Vector(0.0D, 0.0D, 0.0D);
         public static  HS_Vector xaxis = new HS_Vector(1.0D, 0.0D, 0.0D);
-        public static  HS_Vector zaxis = new HS_Vector(0.0D, 1.0D, 0.0D);
-        public static  HS_Vector yaxis = new HS_Vector(0.0D, 0.0D, 1.0D);
+        public static  HS_Vector yaxis = new HS_Vector(0.0D, 1.0D, 0.0D);
+        public static  HS_Vector zaxis = new HS_Vector(0.0D, 0.0D, 1.0D);
         internal double _xd;
         internal double _yd;
         internal double _zd;
@@ -106,7 +106,10 @@ namespace Hsy.Geo
         {
             return new HS_Vector(this.xd - v.xd, this.yd- v.yd, this.zd -v.zd);
         }
-
+        public static HS_Vector sub(HS_Coord v1,HS_Coord v2)
+        {
+            return new HS_Vector(v1.xd - v2.xd, v1.yd - v2.yd, v1.zd - v2.zd);
+        }
         public HS_Vector mul(double v)
         {
             return new HS_Vector(this.xd * v, this.yd *v, this.zd *v) ;
@@ -558,7 +561,15 @@ namespace Hsy.Geo
             this.yd = Sin * xt + Cos * this.yd;
             return this;
         }
-
+        public HS_Vector rotateAboutAxis( double angle,  HS_Coord p,
+          HS_Coord a)
+        {
+             HS_Vector result = new HS_Vector(this);
+             HS_Transform3D raa = new HS_Transform3D();
+            raa.addRotateAboutAxis(angle, p, a);
+            raa.applyAsVectorSelf(result);
+            return result;
+        }
         public HS_Vector rot(HS_Vector center, HS_Vector axis, double angle)
         {
             return center == this ? this : this.sub(center).rot(axis, angle).add(center);

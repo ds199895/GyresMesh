@@ -186,11 +186,35 @@ namespace Hsy.GyresMesh
             }
             return null;
         }
-
+        public HS_Coord getHalfedgeDirection()
+        {
+            return GE_MeshOp.getHalfedgeTangent(this);
+        }
         public double GetLength()
         {
             return HS_GeometryOp.GetDistance3D(this.GetStart(), this.GetEnd());
         }
+        public bool IsOuterBoundary()
+        {
+            if (_face == null)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool IsInnerBoundary()
+        {
+            if (_face == null || _pair == null)
+            {
+                return false;
+            }
+            if (_pair._face == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public bool isEdge()
         {
             if (_pair == null)
@@ -227,7 +251,16 @@ namespace Hsy.GyresMesh
         override
         public String ToString()
         {
-            return "GE_Halfedge key: " + GetKey() + ", paired with halfedge "
+            string face = null;
+            if (_face == null)
+            {
+                face = "null";
+            }
+            else
+            {
+                face = _face.GetKey().ToString();
+            }
+            return "GE_Halfedge key: " + GetKey() +" in Face "+face+ ", paired with halfedge "
                 + Pair().GetKey() + " next halfedge "
                  + GetNextInFace().GetKey()+ " previous halfedge "
                  + GetPrevInFace().GetKey() + ". Vertex: " +GetStart().GetKey()

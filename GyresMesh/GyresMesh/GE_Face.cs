@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hsy.Geo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -98,8 +99,15 @@ namespace Hsy.GyresMesh
 
         }
 
+        public HS_Coord getFaceNormal()
+        {
+            return GE_MeshOp.getFaceNormal(this);
+        }
 
-
+        public HS_Coord getFaceCenter()
+        {
+            return GE_MeshOp.getFaceCenter(this);
+        }
         public void SetHalfedge(GE_Halfedge he)
         {
             _halfedge = he;

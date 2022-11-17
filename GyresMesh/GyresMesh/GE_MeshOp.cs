@@ -14,6 +14,18 @@ namespace Hsy.GyresMesh
         {
 
         }
+
+        public static HS_Coord getHalfedgeTangent(GE_Halfedge he)
+        {
+            if (he.Pair() != null && he.GetStart() != null&& he.Pair().GetStart() != null)
+            {
+                HS_Vector v = HS_Vector
+                        .sub(he.Pair().GetStart(), he.GetStart());
+                v.unit();
+                return v;
+            }
+            return null;
+        }
         public static HS_Coord getFaceCenter(GE_Face f)
         {
             if (f.GetHalfedge() == null)

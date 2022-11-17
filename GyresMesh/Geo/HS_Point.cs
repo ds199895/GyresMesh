@@ -36,7 +36,15 @@ namespace Hsy.Geo
             return new HS_Point(this.xd, this.yd, this.zd);
         }
 
+        public new HS_Point add(HS_Coord p)
+        {
+            return new HS_Point(xd + p.xd, yd + p.yd, zd + p.zd);
+        }
 
+        public new HS_Point mul(double f)
+        {
+            return new HS_Point(xd * f, yd * f, zd * f);
+        }
         //public void Set(HS_Coord c)
         //{
         //    this.x = c.X();
