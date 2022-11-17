@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.Geo
 {
-    public class HS_Polygon :HS_Polyline
+    public class HS_Polygon : HS_Polyline
     {
         static bool USE_JTS = true;
         static bool OPTIMIZE_DEFAULT = true;
@@ -27,7 +27,7 @@ namespace Hsy.Geo
         /**
          *
          */
-        private static  HS_GeometryFactory gf	= new HS_GeometryFactory();
+        private static HS_GeometryFactory gf = new HS_GeometryFactory();
 
         public HS_Polygon(List<HS_Coord> points)
         {
@@ -114,7 +114,7 @@ namespace Hsy.Geo
         //    }
         //    numberOfContours = 1;
         //    numberOfPointsPerContour = new int[] { numberOfPoints };
-            
+
         //}
         public HS_Polygon(HS_Coord[] points)
         {
@@ -221,7 +221,7 @@ namespace Hsy.Geo
             calculateDirections();
         }
         //simple
-        public HS_Polygon Create<T>(List<T>points)where T:HS_Coord
+        public HS_Polygon Create<T>(List<T> points) where T : HS_Coord
         {
             this.numberOfPoints = points.Count;
             this.numberOfShellPoints = points.Count;
@@ -253,8 +253,19 @@ namespace Hsy.Geo
 
 
         //one hole
-        public HS_Polygon Create<T,K>(T[] points, K[] innerpoints)where T:HS_Coord where K:HS_Coord
+        public HS_Polygon Create<T, K>(T[] points, K[] innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
+
+            HS_Vector hn = GetOrientation(innerpoints);
+            //Console.WriteLine("hole normal: " + hn);
+            if ((hn + sn).len() != 0)
+            {
+                Array.Reverse(innerpoints);
+            }
+
+
             numberOfShellPoints = points.Length;
             numberOfPoints = points.Length + innerpoints.Length;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -277,22 +288,15 @@ namespace Hsy.Geo
                 innerpoints.Length };
             return this;
         }
-        public HS_Polygon Create<T, K>(T[] points,List<K>innerpoints) where T : HS_Coord where K : HS_Coord
+        public HS_Polygon Create<T, K>(T[] points, List<K> innerpoints) where T : HS_Coord where K : HS_Coord
         {
-            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
-            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
-            HS_Vector sn = sv1.cross(sv2).united();
-            Console.WriteLine("shell normal:  " + sn);
-            List<K> cs = innerpoints;
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
 
-            HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
-            HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
-            HS_Vector hn = v1.cross(v2).united();
-            Console.WriteLine("hole normal:  " + hn);
+            HS_Vector hn = GetOrientation(innerpoints);
+            //Console.WriteLine("hole normal: " + hn);
             if ((hn + sn).len() != 0)
             {
-                Console.WriteLine("reverse!");
-                innerpoints = new List<K>(cs);
                 innerpoints.Reverse();
             }
 
@@ -318,8 +322,17 @@ namespace Hsy.Geo
                 innerpoints.Count };
             return this;
         }
-        public HS_Polygon Create<T, K>(List<T>points, K[] innerpoints) where T : HS_Coord where K : HS_Coord
+        public HS_Polygon Create<T, K>(List<T> points, K[] innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
+
+            HS_Vector hn = GetOrientation(innerpoints);
+            //Console.WriteLine("hole normal: " + hn);
+            if ((hn + sn).len() != 0)
+            {
+                Array.Reverse(innerpoints);
+            }
 
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count + innerpoints.Length;
@@ -345,6 +358,16 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(List<T> points, List<K> innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
+
+            HS_Vector hn = GetOrientation(innerpoints);
+            //Console.WriteLine("hole normal: " + hn);
+            if ((hn + sn).len() != 0)
+            {
+                innerpoints.Reverse();
+            }
+
             numberOfShellPoints = points.Count;
             numberOfPoints = points.Count + innerpoints.Count;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -369,23 +392,18 @@ namespace Hsy.Geo
         }
 
         //many holes
-        public HS_Polygon Create<T,K>(List<T> points, List<K>[] innerpoints)where T:HS_Coord where K:HS_Coord
+        public HS_Polygon Create<T, K>(List<T> points, List<K>[] innerpoints) where T : HS_Coord where K : HS_Coord
         {
-            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
-            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
-            HS_Vector sn = sv1.cross(sv2).united();
-            Console.WriteLine("shell normal:  " + sn);
+
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
             for (int j = 0; j < innerpoints.Length; j++)
             {
-                List<K> cs = innerpoints[j];
 
-                HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
-                HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
-                HS_Vector hn = v1.cross(v2).united();
-                Console.WriteLine("hole normal: " + hn);
+                HS_Vector hn = GetOrientation(innerpoints[j]);
+                //Console.WriteLine("hole normal: " + hn);
                 if ((hn + sn).len() != 0)
                 {
-                    innerpoints[j] = new List<K>(cs);
                     innerpoints[j].Reverse();
                 }
             }
@@ -422,23 +440,16 @@ namespace Hsy.Geo
 
         public HS_Polygon Create<T, K>(List<T> points, K[][] innerpoints) where T : HS_Coord where K : HS_Coord
         {
-            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
-            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
-            HS_Vector sn = sv1.cross(sv2).united();
-            Console.WriteLine("shell normal:  " + sn);
-            
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
             for (int j = 0; j < innerpoints.Length; j++)
             {
-                K[] cs = innerpoints[j];
 
-                HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
-                HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
-                HS_Vector hn = v1.cross(v2).united();
+                HS_Vector hn = GetOrientation(innerpoints[j]);
+                //Console.WriteLine("hole normal: " + hn);
                 if ((hn + sn).len() != 0)
                 {
-                    List<K> vs = cs.ToList();
-                    vs.Reverse();
-                    innerpoints[j] = vs.ToArray();
+                    Array.Reverse(innerpoints[j]);
                 }
             }
             numberOfShellPoints = points.Count;
@@ -452,7 +463,7 @@ namespace Hsy.Geo
             numberOfPointsPerContour = new int[innerpoints.Length + 1];
             numberOfPointsPerContour[0] = numberOfShellPoints;
             int i = 1;
-            foreach (K[]hole in innerpoints)
+            foreach (K[] hole in innerpoints)
             {
                 foreach (HS_Coord p in hole)
                 {
@@ -473,6 +484,18 @@ namespace Hsy.Geo
 
         public HS_Polygon Create<T, K>(T[] points, K[][] innerpoints) where T : HS_Coord where K : HS_Coord
         {
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
+            for (int j = 0; j < innerpoints.Length; j++)
+            {
+
+                HS_Vector hn = GetOrientation(innerpoints[j]);
+                //Console.WriteLine("hole normal: " + hn);
+                if ((hn + sn).len() != 0)
+                {
+                    Array.Reverse(innerpoints[j]);
+                }
+            }
             numberOfShellPoints = points.Length;
             numberOfPoints = points.Length;
             List<HS_Coord> tmp = new List<HS_Coord>();
@@ -503,21 +526,15 @@ namespace Hsy.Geo
         }
         public HS_Polygon Create<T, K>(T[] points, List<K>[] innerpoints) where T : HS_Coord where K : HS_Coord
         {
-            HS_Vector sv1 = new HS_Vector(points[0], points[1]);
-            HS_Vector sv2 = new HS_Vector(points[1], points[2]);
-            HS_Vector sn = sv1.cross(sv2).united();
-            Console.WriteLine("shell normal:  " + sn);
+            HS_Vector sn = resetOrientation(points);
+            //Console.WriteLine("shell normal:  " + sn);
             for (int j = 0; j < innerpoints.Length; j++)
             {
-                List<K> cs = innerpoints[j];
 
-                HS_Vector v1 = new HS_Vector(cs[0], cs[1]);
-                HS_Vector v2 = new HS_Vector(cs[1], cs[2]);
-                HS_Vector hn = v1.cross(v2).united();
-                Console.WriteLine("hole normal: " + hn);
+                HS_Vector hn = GetOrientation(innerpoints[j]);
+                //Console.WriteLine("hole normal: " + hn);
                 if ((hn + sn).len() != 0)
                 {
-                    innerpoints[j] = new List<K>(cs);
                     innerpoints[j].Reverse();
                 }
             }
@@ -552,6 +569,77 @@ namespace Hsy.Geo
             calculateDirections();
             return this;
         }
+
+        public HS_Vector resetOrientation<T>(List<T> points) where T : HS_Coord
+        {
+            HS_Vector snormal = GetOrientation(points);
+            HS_OrthoProject o = new HS_OrthoProject(snormal);
+            Console.WriteLine("sv: " + snormal);
+            Console.WriteLine("mode: " + o.mode);
+            if (o.mode > 2)
+            {
+
+                points.Reverse();
+                return snormal * (-1);
+            }
+            else
+            {
+                return snormal;
+            }
+
+            Console.WriteLine("first : " + points[0]);
+
+            
+        }
+
+        public HS_Vector resetOrientation<T>(T[] points) where T : HS_Coord
+        {
+
+            HS_Vector snormal = GetOrientation(points);
+            HS_OrthoProject o = new HS_OrthoProject(snormal);
+            Console.WriteLine("sv: " + snormal);
+            Console.WriteLine("mode: " + o.mode);
+            if (o.mode > 2)
+            {
+                Array.Reverse(points);
+                return snormal * (-1);
+            }
+            else
+            {
+                return snormal;
+            }
+
+        }
+        public HS_Vector GetOrientation<T>(List<T> points) where T : HS_Coord
+        {
+            HS_Vector normal = gf.createVector();
+            int ni;
+            int nsp = points.Count;
+            for (int i = 0; i < nsp; i++)
+            {
+                ni = (i + 1) % nsp;
+                normal += new HS_Vector((points[i].yd - points[ni].yd) * (points[i].zd + points[ni].zd), (points[i].zd - points[ni].zd) * (points[i].xd + points[ni].xd), (points[i].xd - points[ni].xd) * (points[i].yd + points[ni].yd));
+
+            }
+            normal = normal.united();
+            return normal;
+        }
+        public HS_Vector GetOrientation<T>(T[] points) where T : HS_Coord
+        {
+            HS_Vector normal = gf.createVector();
+            int ni;
+            int nsp = points.Length;
+            for (int i = 0; i < nsp; i++)
+            {
+                ni = (i + 1) % nsp;
+                normal += new HS_Vector((points[i].yd - points[ni].yd) * (points[i].zd + points[ni].zd), (points[i].zd - points[ni].zd) * (points[i].xd + points[ni].xd), (points[i].xd - points[ni].xd) * (points[i].yd + points[ni].yd));
+
+            }
+            normal = normal.united();
+            return normal;
+        }
+
+
         private void calculateDirections()
         {
             directions = new List<HS_Vector>();
@@ -563,7 +651,7 @@ namespace Hsy.Geo
                 for (int i = 0; i < n; i++)
                 {
                     int inN = offset + (i + 1) % n;
-                    HS_Vector v = new HS_Vector(points[offset + i],points[inN]);
+                    HS_Vector v = new HS_Vector(points[offset + i], points[inN]);
                     incLengths[offset + i] = i == 0 ? v.GetLength()
                             : incLengths[offset + i - 1] + v.GetLength();
                     v.unit();
@@ -574,9 +662,9 @@ namespace Hsy.Geo
         }
 
         public int getNumberOfPoints()
-            {
-                return points.Count;
-            }
+        {
+            return points.Count;
+        }
 
         /**
          *
@@ -626,13 +714,13 @@ namespace Hsy.Geo
             HS_Vector normal = gf.createVector();
             int ni;
             int nsp = getNumberOfShellPoints();
-            for(int i = 0; i < nsp; i++)
+            for (int i = 0; i < nsp; i++)
             {
-                ni = (i + 1)% nsp;
+                ni = (i + 1) % nsp;
                 normal += new HS_Vector((points[i].yd - points[ni].yd) * (points[i].zd + points[ni].zd), (points[i].zd - points[ni].zd) * (points[i].xd + points[ni].xd), (points[i].xd - points[ni].xd) * (points[i].yd + points[ni].yd));
 
             }
-            normal=normal.united();
+            normal = normal.united();
             return normal;
         }
 
@@ -651,13 +739,13 @@ namespace Hsy.Geo
         {
             int nsp = getNumberOfShellPoints();
             HS_Point center = new HS_Point();
-            for(int i=0; i < nsp; i++)
+            for (int i = 0; i < nsp; i++)
             {
-                center = (HS_Point)(center +points[i]);
+                center = (HS_Point)(center + points[i]);
 
             }
             center = (HS_Point)(center / nsp);
-            return center; 
+            return center;
         }
         public bool isSimple()
         {
@@ -670,7 +758,7 @@ namespace Hsy.Geo
             HS_Plane P = GetPlane(0);
             //Console.WriteLine("plane: " + P.getNormal());
             HS_OrthoProject OP = new HS_OrthoProject(P);
-            for(int i = 0; i < numberOfShellPoints; i++)
+            for (int i = 0; i < numberOfShellPoints; i++)
             {
                 HS_Point p2D = new HS_Point();
                 OP.mapPoint3D(points[i], p2D);
@@ -723,7 +811,8 @@ namespace Hsy.Geo
                 else if (numberOfShellPoints == 4 && numberOfContours == 1)
                 {
                     return HS_JTS.PolygonTriangulatorJTS.triangulateQuad(points[0], points[1], points[2], points[3]);
-                }else
+                }
+                else
                 {
                     if (USE_JTS)
                     {

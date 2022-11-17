@@ -30,7 +30,7 @@ namespace Hsy.Geo
          *
          */
         public static int XYrev = 5;
-        private int mode;
+        public int mode;
         public HS_OrthoProject()
         {
             new HS_OrthoProject(XY);

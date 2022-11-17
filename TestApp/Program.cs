@@ -178,8 +178,10 @@ namespace TestApp
             List<HS_Point>[] holes = new List<HS_Point>[] { hole };
             //HS_Polygon poly = HS_GeometryFactory.instance().createPolygonWithHoles(vertices, holes);
             List<HS_Vector> vec = vertices.ToList();
-            vec.Reverse();
-            HS_Polygon poly = new HS_Polygon().Create(vecs, hole);
+            //vec.Reverse();
+            //vecs.Reverse();
+            //HS_Polygon poly = new HS_Polygon().Create(vecs, holes);
+            HS_Polygon poly = new HS_Polygon().Create(vecs);
             polys.Add(poly);
             GEC_FromPolygons gecp = new GEC_FromPolygons();
             gecp.setPolygons(polys);
