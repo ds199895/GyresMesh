@@ -138,7 +138,7 @@ namespace Hsy.GyresMesh
         public void SetPair(GE_Halfedge he)
         {
             this._pair = he;
-            he._pair = this;
+            //he._pair = this;
         }
         public void SetUVW(HS_Coord uvw)
         {

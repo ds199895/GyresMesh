@@ -168,7 +168,7 @@ namespace Hsy.GyresMesh
                 mesh.SetVertex(he2, he1.GetNextInFace().GetStart());
                 mesh.SetPair(he1, he2);
                 newHalfedges[i] = he2;
-                mesh.addDerivedElement(he2);
+                //mesh.addDerivedElement(he2);
 
             }
             for (int i = 0; i < nuh; i++)

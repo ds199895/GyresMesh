@@ -39,7 +39,7 @@
   <ItemGroup>
     <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.5.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoAPI.Core.1.7.5\lib\net45\GeoAPI.dll</HintPath>
@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

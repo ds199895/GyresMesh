@@ -133,6 +133,13 @@ namespace Hsy.Render
             displayHalfEdges(mesh);
             displayHeVertices(mesh);
         }
+        public void disPlayHeMeshWithDegree(GE_Mesh mesh,Camera cam)
+        {
+            disPlayHeMeshWithDegree(mesh, (cam.Position - cam.target).Length);
+            //        displayHeFaces(mesh,color6);
+
+        }
+
         public void disPlayHeMeshWithDegree(GE_Mesh mesh, double distance)
         {
             displayHeFacesWithDegree(mesh);
@@ -161,7 +168,7 @@ namespace Hsy.Render
             //        Color color7=Color.FromRgb(230, 220, 240);
             //        Color colormore=Color.FromRgb(245, 235, 253);
 
-            for (GE_Face f:mesh.GetFaces())
+            foreach (GE_Face f in mesh.GetFaces())
             {
                 if (f.GetFaceDegree() == 5)
                 {
@@ -218,7 +225,7 @@ namespace Hsy.Render
             Color color6 = Color.FromRgb(205, 237, 159);
             Color color7 = Color.FromRgb(95, 178, 199);
             Color colormore = Color.FromRgb(166, 149, 223);
-            for (GE_Vertex v:mesh.GetVertices())
+            foreach (GE_Vertex v in mesh.GetVertices())
             {
                 home.PushMatrix();
                 if (v.GetVertexDegree() == 5)
@@ -252,7 +259,7 @@ namespace Hsy.Render
             home.PushStyle();
             Color color = Color.FromRgb(205, 237, 159);
 
-            for (GE_Vertex v:mesh.GetVertices())
+            foreach (GE_Vertex v in mesh.GetVertices())
             {
                 home.PushMatrix();
 

@@ -3,8 +3,7 @@ using Hsy.HsMath;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using static Hsy.Geo.HS_KDTreeInteger<Hsy.Geo.HS_Coord>;
 
 namespace Hsy.GyresMesh

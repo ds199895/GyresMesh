@@ -208,15 +208,16 @@ namespace TestApp
             //PushMatrix();
 
             //PopMatrix();
-            foreach (GE_Vertex v in mesh.GetVertices())
-            {
-                PushStyle();
-                Fill(0);
+            //foreach (GE_Vertex v in mesh.GetVertices())
+            //{
+            //    PushStyle();
+            //    Fill(0);
 
-                render.drawPoint(v);
+            //    render.drawPoint(v);
 
-                PopStyle();
-            }
+            //    PopStyle();
+            //}
+            render.disPlayHeMeshWithDegree(mesh, cam.CurrentView);
             //DrawPolygonTriangles(vertices, triangles);
             //BeginShape(OpenTK.Graphics.OpenGL.PrimitiveType.TriangleFan);
             ////foreach (GE_Halfedge he in mesh.GetHalfedges())

@@ -74,8 +74,19 @@ namespace Hsy.GyresMesh
         }
         private void replaceHalfedges(GE_Mesh mesh)
         {
-            this._halfedges.Clear();
-            this.addHalfedges(mesh._halfedges);
+            clearHalfedges();
+            GE_HalfedgeEnumerator heEtr = mesh.heEtr();
+            while (heEtr.MoveNext())
+            {
+                this.Add(heEtr.Current);
+            }
+        }
+
+        public void clearHalfedges()
+        {
+            this._halfedges = new List<GE_Halfedge>();
+            this.edges = new List<GE_Halfedge>();
+            this.unpairedHalfedges = new List<GE_Halfedge>();
         }
 
         //public void clearVertices()
@@ -137,9 +148,11 @@ namespace Hsy.GyresMesh
 
         public void addHalfedges<T>(List<T>halfedges)where T:GE_Halfedge
         {
-            foreach(GE_Halfedge halfedge in halfedges)
+            var var3 = halfedges.GetEnumerator();
+            while (var3.MoveNext())
             {
-                Add(halfedge);
+                GE_Halfedge he = (GE_Halfedge)var3.Current;
+                this.Add(he);
             }
         }
         public void addVertices<T>(List<T>vertices)where T:GE_Vertex
@@ -182,9 +195,15 @@ namespace Hsy.GyresMesh
         {
             f.SetHalfedge(he);
         }
-        public void SetPair(GE_Halfedge he, GE_Halfedge pair)
+        public void SetPair(GE_Halfedge he1, GE_Halfedge he2)
         {
-            he.SetPair(pair);
+            this.removeNoSelectionCheck(he1);
+            this.removeNoSelectionCheck(he2);
+
+            he1.SetPair(he2);
+            he2.SetPair(he1);
+            this.addDerivedElement(he1, he2);
+            this.addDerivedElement(he2, he1);
         }
         public void ClearPair(GE_Halfedge he)
         {
@@ -318,7 +337,11 @@ namespace Hsy.GyresMesh
         }
         public List<GE_Halfedge> GetHalfedges()
         {
-            return this._halfedges;
+            List<GE_Halfedge> hes = new List<GE_Halfedge>();
+            hes.AddRange(_halfedges);
+            hes.AddRange(edges);
+            hes.AddRange(unpairedHalfedges);
+            return hes;
         }
         public int GetNumberOfVertices()
         {
@@ -333,7 +356,7 @@ namespace Hsy.GyresMesh
 
         public int GetNumberOfHalfedges()
         {
-            return _halfedges.Count;
+            return _halfedges.Count+edges.Count+unpairedHalfedges.Count;
         }
 
         public List<GE_Halfedge> getUnpairedHalfedges()

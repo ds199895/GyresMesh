@@ -35,7 +35,7 @@
   <ItemGroup>
     <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Flowing.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.5.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoAPI.Core.1.7.5\lib\net45\GeoAPI.dll</HintPath>
@@ -43,12 +43,13 @@
     <Reference Include="GeoAPI.CoordinateSystems, Version=1.7.5.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoAPI.CoordinateSystems.1.7.5\lib\net45\GeoAPI.CoordinateSystems.dll</HintPath>
     </Reference>
-    <Reference Include="LibTessDotNet, Version=1.1.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LibTessDotNet, Version=1.1.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LibTessDotNet.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="LibTessDotNet.Double">
-      <HintPath>..\packages\LibTessDotNet.Double.dll</HintPath>
+    <Reference Include="LibTessDotNet.Double, Version=1.1.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.dll</HintPath>
@@ -60,7 +61,7 @@
       <HintPath>..\packages\NetTopologySuite.CoordinateSystems.1.15.3\lib\net45\NetTopologySuite.CoordinateSystems.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
