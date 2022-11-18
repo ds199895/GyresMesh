@@ -22,12 +22,43 @@ namespace Hsy.Geo
         internal float _xf;
         internal float _yf;
         internal float _zf;
-        public float xf { get { return (float)this._xd; } set => this._xf = (float)(this._xd = value); }
-        public float yf { get { return (float)this._yd; } set => this._yf = (float)(this._yd = value); }
-        public float zf { get { return (float)this._zd; } set => this._zf = (float)(this._zd = value); }
-        public double xd { get { return this._xd; } set {  this._xd = value; } }
-        public double yd { get { return this._yd; } set => this._yd = value; }
-        public double zd { get { return this._zd; } set => this._zd = value; }
+        public float xf { 
+            get 
+            { 
+                return this._xf; } 
+            set 
+            {
+                this._xf = value;
+                this._xd = value;
+            }
+            }
+        public float yf
+        {
+            get
+            {
+                return this._yf;
+            }
+            set
+            {
+                this._yf = value;
+                this._yd =value;
+            }
+        }
+        public float zf
+        {
+            get
+            {
+                return this._zf;
+            }
+            set
+            {
+                this._zf = value;
+                this._zd = value;
+            }
+        }
+        public double xd { get { return this._xd; } set {  this._xd = value; this._xf =(float)value; } }
+        public double yd { get { return this._yd; } set { this._yd = value; this._yf = (float)value; } }
+        public double zd { get { return this._zd; } set { this._zd = value; this._zf = (float)value; } }
         public HS_Vector()
         {
             this.xd = 0.0D;
@@ -66,7 +97,12 @@ namespace Hsy.Geo
             this.yf = y;
             this.zf = z;
         }
-
+        public HS_Vector(double[] x)
+        {
+            this.xd = x[0];
+            this.yd = x[1];
+            this.zd = x[2];
+        }
         public HS_Vector add(double x, double y, double z)
         {
             this.xd += x;
@@ -297,6 +333,10 @@ namespace Hsy.Geo
             }
 
             return vn;
+        }
+        public static double getDistance3D(HS_Coord p1, HS_Coord p2)
+        {
+            return HS_CoordOp3D.getDistance3D(p1, p2);
         }
 
         public double dist(HS_Vector v)
@@ -809,47 +849,47 @@ namespace Hsy.Geo
 
         public void SetX(float x)
         {
-            this.xf = x;
+            this._xf = x;
         }
 
         public void SetY(float y)
         {
-            this.yf = y;
+            this._yf = y;
         }
 
         public void SetZ(float z)
         {
-            this.zf = z;
+            this._zf = z;
         }
         public void SetX(double x)
         {
-            this.xd = x;
+            this._xd = x;
         }
 
         public void SetY(double y)
         {
-            this.yd = y;
+            this._yd = y;
         }
 
         public void SetZ(double z)
         {
-            this.zd = z;
+            this._zd = z;
         }
 
 
 
         public void Set(HS_Coord z)
         {
-            this.xd = z.xd;
-            this.yd = z.yd;
-            this.zd=z.zd;
+            this._xd = z.xd;
+            this._yd = z.yd;
+            this._zd=z.zd;
         }
 
         public void Set(double x,double y,double z)
         {
-            this.xd = x;
-            this.yd = y;
-            this.zd = z;
+            this._xd = x;
+            this._yd = y;
+            this._zd = z;
         }
         public int CompareTo(HS_Coord p)
         {
@@ -886,13 +926,13 @@ namespace Hsy.Geo
             switch (i){
 
                 case 0:
-                    return this.xd;
+                    return this._xd;
                     break;
                 case 1:
-                    return this.yd;
+                    return this._yd;
                     break;
                 case 2:
-                    return this.zd;
+                    return this._zd;
                     break;
             }
             return double.NaN;

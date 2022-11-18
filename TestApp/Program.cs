@@ -180,8 +180,8 @@ namespace TestApp
             List<HS_Vector> vec = vertices.ToList();
             //vec.Reverse();
             //vecs.Reverse();
-            //HS_Polygon poly = new HS_Polygon().Create(vecs, holes);
-            HS_Polygon poly = new HS_Polygon().Create(vecs);
+            HS_Polygon poly = new HS_Polygon().Create(vecs, holes);
+            //HS_Polygon poly = new HS_Polygon().Create(vecs);
             polys.Add(poly);
             GEC_FromPolygons gecp = new GEC_FromPolygons();
             gecp.setPolygons(polys);
@@ -220,7 +220,7 @@ namespace TestApp
 
             //    PopStyle();
             //}
-            render.disPlayHeMeshWithDegree(mesh, cam.CurrentView);
+            render.displayHeMeshWithDegree(mesh, cam.CurrentView);
             //DrawPolygonTriangles(vertices, triangles);
             //BeginShape(OpenTK.Graphics.OpenGL.PrimitiveType.TriangleFan);
             ////foreach (GE_Halfedge he in mesh.GetHalfedges())

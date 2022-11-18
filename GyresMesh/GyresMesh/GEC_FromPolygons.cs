@@ -105,10 +105,5 @@ namespace Hsy.GyresMesh
                 return new GE_Mesh();
             }
         }
-
-        public override List<GE_Face> GetFaces()
-        {
-            return _faces;
-        }
     }
 }

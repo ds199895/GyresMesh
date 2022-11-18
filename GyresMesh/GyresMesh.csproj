@@ -37,9 +37,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+    <Reference Include="Flowing">
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.5.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoAPI.Core.1.7.5\lib\net45\GeoAPI.dll</HintPath>
@@ -59,9 +58,8 @@
     <Reference Include="NetTopologySuite.CoordinateSystems, Version=1.15.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.CoordinateSystems.1.15.3\lib\net45\NetTopologySuite.CoordinateSystems.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -83,6 +81,8 @@
     <Compile Include="Geo\HS_GeometryFactory3D.cs" />
     <Compile Include="Geo\HS_KDTree.cs" />
     <Compile Include="Geo\HS_KDTreeInteger.cs" />
+    <Compile Include="Geo\HS_Triangle.cs" />
+    <Compile Include="GyresMesh\GEC_FromTriangles.cs" />
     <Compile Include="GyresMesh\GE_EdgeEnumerator.cs" />
     <Compile Include="GyresMesh\GE_FaceEnumerator.cs" />
     <Compile Include="GyresMesh\GE_HalfedgeEnumerator.cs" />

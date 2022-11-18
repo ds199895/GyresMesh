@@ -128,19 +128,19 @@ namespace Hsy.Render
             range[1] = maxLength;
             return range;
         }
-        public void disPlayHeMesh(GE_Mesh mesh)
+        public void displayHeMesh(GE_Mesh mesh)
         {
             displayHalfEdges(mesh);
             displayHeVertices(mesh);
         }
-        public void disPlayHeMeshWithDegree(GE_Mesh mesh,Camera cam)
+        public void displayHeMeshWithDegree(GE_Mesh mesh,Camera cam)
         {
-            disPlayHeMeshWithDegree(mesh, (cam.Position - cam.target).Length);
+            displayHeMeshWithDegree(mesh, (cam.Position - cam.target).Length);
             //        displayHeFaces(mesh,color6);
 
         }
 
-        public void disPlayHeMeshWithDegree(GE_Mesh mesh, double distance)
+        public void displayHeMeshWithDegree(GE_Mesh mesh, double distance)
         {
             displayHeFacesWithDegree(mesh);
             displayHalfEdges(mesh);
@@ -270,7 +270,6 @@ namespace Hsy.Render
         }
         public void displaySingleHeVertex(GE_Vertex v, Color color, double r)
         {
-
             home.PushStyle();
             home.Fill(color.R,color.G,color.B);
             home.NoStroke();

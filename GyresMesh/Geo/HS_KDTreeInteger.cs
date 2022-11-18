@@ -10,7 +10,7 @@ namespace Hsy.Geo
     public class HS_KDTreeInteger<T> where T : HS_Coord
     {
         public int _dim;
-        public int _maximumBinSize;
+        public readonly int _maximumBinSize;
         private HS_KDNodeInteger<T> root;
 
         public HS_KDTreeInteger()
@@ -174,7 +174,7 @@ namespace Hsy.Geo
 
 
         }
-        public class HS_KDNodeInteger<T> where T : HS_Coord
+       class HS_KDNodeInteger<T> where T : HS_Coord
         {
             private HS_AABB _limits;
             private HS_KDNodeInteger<T> _negative, _positive;
@@ -319,14 +319,21 @@ namespace Hsy.Geo
 
             public int add(HS_KDEntryInteger<T> entry)
             {
-                if (this._isLeaf)
+                if (_isLeaf)
                 {
-                    return this.addInLeaf(entry);
+                    return addInLeaf(entry);
                 }
                 else
                 {
-                    this.extendBounds(entry.coord);
-                    return entry.coord.getd(this._discriminator) > this._sliceValue ? this._positive.add(entry) : this._negative.add(entry);
+                    extendBounds(entry.coord);
+                    if (entry.coord.getd(_discriminator) > _sliceValue)
+                    {
+                        return _positive.add(entry);
+                    }
+                    else
+                    {
+                        return _negative.add(entry);
+                    }
                 }
             }
 

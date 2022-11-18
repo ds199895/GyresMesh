@@ -10,7 +10,7 @@ namespace Hsy.GyresMesh
 {
     public abstract class GEC_Creator
     {
-        private List<GE_Face> _faces;
+
         public IApp home;
         /** Center. */
         protected HS_Point center;
@@ -28,9 +28,14 @@ namespace Hsy.GyresMesh
         protected bool manifoldCheck;
         protected double scale;
 
-
-        public abstract List<GE_Face> GetFaces();
-
+        public GEC_Creator()
+        {
+            center = new HS_Point();
+            zaxis = new HS_Vector(HS_Vector.zaxis);
+            Z = new HS_Vector(HS_Vector.zaxis);
+            scale = 1.0;
+            toModelview = false;
+        }
         /**
          * Creates the base.
          *

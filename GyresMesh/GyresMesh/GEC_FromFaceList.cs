@@ -109,11 +109,6 @@ namespace Hsy.GyresMesh
         //    return parameters.get("usevertexinfo", false);
         //}
 
-        public override List<GE_Face> GetFaces()
-        {
-            return _faceList;
-        }
-
         public void SetFaces(List<GE_Face> faces)
         {
             _faceList = faces;

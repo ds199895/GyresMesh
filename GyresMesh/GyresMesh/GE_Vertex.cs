@@ -13,18 +13,12 @@ namespace Hsy.GyresMesh
     {
         private HS_Point pos;
         private GE_Halfedge _halfedge;
-        private double _xd;
-        private double _yd;
-        private double _zd;
-        private float _xf;
-        private float _yf;
-        private float _zf;
-        public float xf { get { return (float)this.pos.xf; } set => this.pos.xf = (float)(this.pos.xd = value); }
-        public float yf { get { return (float)this.pos.yf; } set => this.pos.yf = (float)(this.pos.yd = value); }
-        public float zf { get { return (float)this.pos.zf; } set => this.pos.zf = (float)(this.pos.zd = value); }
-        public double xd { get { return this.pos.xd; } set => this.pos.xd = value; }
-        public double yd { get { return this.pos.yd; } set => this.pos.yd = value; }
-        public double zd { get { return this.pos.zd; } set => this.pos.zd = value; }
+        public float xf { get { return this.pos._xf; } set { this.pos._xf = value; this.pos._xd = value; } }
+        public float yf { get { return this.pos._yf; } set { this.pos._yf = value; this.pos._yd = value; } }
+        public float zf { get { return this.pos._zf; } set { this.pos._zf = value; this.pos._zd = value; } }
+        public double xd { get { return this.pos._xd; } set { this.pos._xd = value; this.pos._xf = (float)value; } }
+        public double yd { get { return this.pos._yd; } set { this.pos._yd = value; this.pos._yf = (float)value; } }
+        public double zd { get { return this.pos._zd; } set { this.pos._zd = value; this.pos._zf = (float)value; } }
         public GE_Vertex()
         {
             pos = new HS_Point();
@@ -217,17 +211,17 @@ namespace Hsy.GyresMesh
 
         public void SetX(float x)
         {
-            pos.xf = x;
+            pos._xf = x;
         }
 
         public void SetY(float y)
         {
-            pos.yf = y;
+            pos._yf = y;
         }
 
         public void SetZ(float z)
         {
-            pos.zf = z;
+            pos._zf = z;
         }
 
         override
@@ -246,15 +240,15 @@ namespace Hsy.GyresMesh
                 return false;
             }
             GE_Vertex v = (GE_Vertex)o;
-            if (!HS_Epsilon.isEqual(this.xd, v.xd))
+            if (!HS_Epsilon.isEqual(this.pos._xd, v.xd))
             {
                 return false;
             }
-            if (!HS_Epsilon.isEqual(this.yd, v.yd))
+            if (!HS_Epsilon.isEqual(this.pos._yd, v.yd))
             {
                 return false;
             }
-            if (!HS_Epsilon.isEqual(this.zd, v.zd))
+            if (!HS_Epsilon.isEqual(this.pos._zd, v.zd))
             {
                 return false;
             }

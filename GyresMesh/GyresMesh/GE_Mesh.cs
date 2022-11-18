@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,7 +50,7 @@ namespace Hsy.GyresMesh
             this.setNoCopy(creator.create());
             this.triangles = null;
         }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void setNoCopy(GE_Mesh target)
         {
             this.replaceVertices(target);
@@ -101,17 +102,6 @@ namespace Hsy.GyresMesh
         //    }
 
         //}
-        public void Create(GEC_Creator creator)
-        {
-            this._vertices = new List<GE_Vertex>();
-            this._halfedges = new List<GE_Halfedge>();
-            this._faces = creator.GetFaces();
-            foreach (GE_Face f in _faces)
-            {
-                this._vertices.AddRange(f.GetFaceVertices());
-                this._halfedges.AddRange(f.GetFaceHalfedges());
-            }
-        }
 
         public void Set(GE_Mesh mesh)
         {

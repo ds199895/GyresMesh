@@ -19,8 +19,7 @@ namespace Hsy.GyresMesh
         {
             if (he.Pair() != null && he.GetStart() != null&& he.Pair().GetStart() != null)
             {
-                HS_Vector v = HS_Vector
-                        .sub(he.Pair().GetStart(), he.GetStart());
+                HS_Vector v = HS_Vector.sub(he.Pair().GetStart(), he.GetStart());
                 v.unit();
                 return v;
             }

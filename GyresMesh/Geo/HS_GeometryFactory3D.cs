@@ -130,7 +130,10 @@ namespace Hsy.Geo
         {
             return new HS_Plane(origin, normal);
         }
-
+        public HS_Point createPoint()
+        {
+            return new HS_Point(0,0, 0);
+        }
         public HS_Point createPoint(double _x,double _y,double _z)
         {
             return new HS_Point(_x, _y, _z);
@@ -162,6 +165,17 @@ namespace Hsy.Geo
             vec = vec.united();
             return vec;
         }
+        public HS_Point createMidpoint(params HS_Coord[] p)
+        {
+            HS_Point m = createPoint();
+            foreach(HS_Coord point in p)
+            {
+                m += point;
+            }
+            m /= p.Length;
+            return m;
+        }
+
         public HS_Map2D createEmbeddedPlane(HS_Plane P)
         {
             return new HS_PlanarMap(P);
