@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{9D4E9F72-E13A-4A18-B46F-A1914F712BA4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{0C7A2F34-E0C5-4342-AA55-C0C3F39FEF96}"
 EndProject
 Global
@@ -24,10 +22,6 @@ Global
 		{C2AD1D86-4A2A-4DD6-8FEB-611AD66A0605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2AD1D86-4A2A-4DD6-8FEB-611AD66A0605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2AD1D86-4A2A-4DD6-8FEB-611AD66A0605}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D4E9F72-E13A-4A18-B46F-A1914F712BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D4E9F72-E13A-4A18-B46F-A1914F712BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D4E9F72-E13A-4A18-B46F-A1914F712BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D4E9F72-E13A-4A18-B46F-A1914F712BA4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C7A2F34-E0C5-4342-AA55-C0C3F39FEF96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C7A2F34-E0C5-4342-AA55-C0C3F39FEF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C7A2F34-E0C5-4342-AA55-C0C3F39FEF96}.Release|Any CPU.ActiveCfg = Release|Any CPU

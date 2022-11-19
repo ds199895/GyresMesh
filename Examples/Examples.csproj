@@ -32,21 +32,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Examples.FromTriangles</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="LibTessDotNet">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
     </Reference>
     <Reference Include="LibTessDotNet.Double">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Creator\FromTriangles.cs" />
+    <Compile Include="Creator\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

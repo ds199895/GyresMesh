@@ -438,6 +438,25 @@ namespace Hsy.Geo
 			return _max[i] - _min[i];
 		}
 
+		public double[] getLimits()
+		{
+			if (isNull())
+			{
+				return null;
+			}
+			double[] result = new double[6];
+			for(int i = 0; i < 3; i++)
+            {
+				result[i] = _min[i];
+            }
+			for(int i = 3; i < 6; i++)
+            {
+				result[i] = _max[i - 3];
+            }
+			return result;
+		}
+
+
 		/**
 		 *
 		 *

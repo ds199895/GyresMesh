@@ -19,7 +19,14 @@ namespace Hsy.Render
         {
             this.home= home;
         }
-
+        public void drawAABB(HS_AABB AABB)
+        {
+            home.PushMatrix();
+            translate(AABB.getCenter());
+            home.Cube((float)AABB.getWidth(), (float)AABB.getHeight(),
+                    (float)AABB.getDepth());
+            home.PopMatrix();
+        }
         public void drawPolygonEdges(HS_Polygon P)
         {
             int[] npc = P.GetNumberOfPointsPerContour();
@@ -312,6 +319,10 @@ namespace Hsy.Render
             line(ps.xf, ps.yf, ps.zf, pe.xf, pe.yf, pe.zf);
             line(pe.xf, pe.yf, pe.zf, p_arrow.xf, p_arrow.yf, p_arrow.zf);
             home.PopStyle();
+        }
+        public void translate(HS_Coord p)
+        {
+            home.Translate(p.xf, p.yf, p.zf);
         }
         public void vertex(HS_Coord p)
         {
