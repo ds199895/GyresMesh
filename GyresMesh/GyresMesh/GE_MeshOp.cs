@@ -14,7 +14,39 @@ namespace Hsy.GyresMesh
         {
 
         }
+        public static HS_AABB getAABB(GE_Mesh mesh)
+        {
+            double[] result = getLimits(mesh);
+            HS_Point min = gf.createPoint(result[0], result[1], result[2]);
+            HS_Point max = gf.createPoint(result[3], result[4], result[5]);
+            return new HS_AABB(min, max);
+        }
+        public static double[] getLimits(GE_Mesh mesh)
+        {
+            double[] result = new double[6];
 
+            for (int i = 0; i < 3; i++)
+            {
+                result[i] = double.PositiveInfinity;
+            }
+            for (int i = 3; i < 6; i++)
+            {
+                result[i] = double.NegativeInfinity;
+            }
+
+            GE_Vertex v;
+            for(int i = 0; i < mesh.GetNumberOfVertices(); i++)
+            {
+                v = mesh.GetVertices()[i];
+                result[0] = Math.Min(result[0], v.xd);
+                result[1] = Math.Min(result[1], v.yd);
+                result[2] = Math.Min(result[2], v.zd);
+                result[3] = Math.Max(result[3], v.xd);
+                result[4] = Math.Max(result[4], v.yd);
+                result[5] = Math.Max(result[5], v.zd);
+            }
+            return result;
+        }
         public static HS_Coord getHalfedgeTangent(GE_Halfedge he)
         {
             if (he.Pair() != null && he.GetStart() != null&& he.Pair().GetStart() != null)

@@ -82,7 +82,7 @@ namespace Hsy.Geo
 		 *
 		 * @param points
 		 */
-		public HS_AABB(List<HS_Coord>points)
+		public HS_AABB(List<HS_Coord> points)
 		{
 			if (points == null)
 			{
@@ -1126,13 +1126,13 @@ namespace Hsy.Geo
 		 * @see java.lang.Object#toString()
 		 */
 
-	public String toString()
+		public String toString()
 		{
 			String str = "HS_AABB [";
 			int i = 0;
 			for (i = 0; i < 3 - 1; i++)
 			{
-				str+= _min[i] + ":" + _max[i] + ", ";
+				str += _min[i] + ":" + _max[i] + ", ";
 			}
 			str += _min[i] + ":" + _max[i] + "]";
 			return str;
@@ -1228,7 +1228,14 @@ namespace Hsy.Geo
 			}
 			return points;
 		}
-
+		public double getDiagonalLength3()
+        {
+			return Math.Sqrt(getWidth() * getWidth() + getHeight() * getHeight() + getDepth() * getDepth());
+        }
+		public double getDiagonalLength2()
+		{
+			return Math.Sqrt(getWidth() * getWidth() + getHeight() * getHeight());
+		}
 		/**
 		 *
 		 *
@@ -1846,7 +1853,7 @@ namespace Hsy.Geo
 		 * @see java.lang.Object#hashCode()
 		 */
 
-	public int hashCode()
+		public int hashCode()
 		{
 			int result = 17;
 			for (int i = 0; i < 3; i++)
@@ -1878,7 +1885,7 @@ namespace Hsy.Geo
 			for (int i = 0; i < 3; i++)
 			{
 				_min[i] = double.PositiveInfinity;
-				
+
 				_max[i] = double.NegativeInfinity;
 			}
 		}

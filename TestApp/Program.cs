@@ -204,10 +204,10 @@ namespace TestApp
             cam.DrawSystem(this, 200);
             Stroke(0);
             //render.drawEdges(mesh);
-            foreach (GE_Face f in mesh.GetFaces())
-            {
-                render.drawFace(f);
-            }
+            //foreach (GE_Face f in mesh.GetFaces())
+            //{
+            //    render.drawFace(f);
+            //}
             //PushMatrix();
 
             //PopMatrix();

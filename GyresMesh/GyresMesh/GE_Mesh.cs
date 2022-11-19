@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hsy.Geo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,11 +10,6 @@ namespace Hsy.GyresMesh
 {
     public class GE_Mesh : GE_MeshObject
     {
-        public static void helloWorld()
-        {
-            System.Diagnostics.Debug.Print("Hello world!");
-        }
-
         private List<GE_Halfedge> _halfedges;
         private List<GE_Vertex> _vertices;
         private List<GE_Face> _faces;
@@ -89,7 +85,10 @@ namespace Hsy.GyresMesh
             this.edges = new List<GE_Halfedge>();
             this.unpairedHalfedges = new List<GE_Halfedge>();
         }
-
+        public HS_AABB getAABB()
+        {
+            return GE_MeshOp.getAABB(this);
+        }
         //public void clearVertices()
         //{
         //    this._vertices = new List<GE_Vertex>();

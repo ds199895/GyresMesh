@@ -33,24 +33,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+    <Reference Include="Flowing">
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
-    <Reference Include="LibTessDotNet, Version=1.1.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
+    <Reference Include="LibTessDotNet">
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
     </Reference>
     <Reference Include="LibTessDotNet.Double">
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

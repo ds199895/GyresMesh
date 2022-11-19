@@ -2,6 +2,7 @@
 using Hsy.Geo;
 using Hsy.GyresMesh;
 using Hsy.Render;
+using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,10 @@ namespace TestApp
         GE_Mesh mesh;
         public override void SetUp()
         {
-            Size(1000, 1200);
+            Size(800, 600);
             cam = new CamController(this);
             render = new GE_Render(this);
-            int count = 100;
+            int count = 30;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
 
@@ -79,6 +80,72 @@ namespace TestApp
             foreach (GE_Face f in mesh.GetFaces())
             {
                 render.drawFace(f);
+            }
+        }
+
+        public override void KeyReleased()
+        {
+            if (key == "T")
+            {
+                cam.Top();
+            }
+            if (key == "P")
+            {
+                cam.Perspective();
+            }
+            if (key == "Z")
+            {
+                cam.CurrentView.SetPerspective(!cam.CurrentView.perspective);
+            }
+            if (key == "F")
+            {
+                HS_AABB aabb = mesh.getAABB();
+                HS_Point cen = aabb.getCenter();
+                double dis = 0;
+                
+                if (cam.CurrentView.perspective)
+                {
+                    //dis = cam.CurrentView.near* 2*aabb.getDiagonalLength2()*aabb.getDepth()/aabb.getDiagonalLength3()/ this.window.Height;
+
+                    dis = cam.CurrentView.near*2 * aabb.getDiagonalLength3() * Sin(2 * Asin((float)(aabb.getDepth() / aabb.getDiagonalLength3()))) / 2 / this.window.Height;
+                    //Vector3 newPos = new Vector3(mesh.getAABB().getCenter().xf, mesh.getAABB().getCenter().yf, (float)dis);
+                    //Print(newPos);
+                    Vector3 normal = new Vector3((float)-aabb.getWidth(), (float)-aabb.getHeight(), (float)aabb.getDepth()).Normalized();
+                    cam.CurrentView.Position = new Vector3(cen.xf, cen.yf, cen.zf)+(float)dis*normal;
+                    cam.CurrentView.target = new Vector3(cen.xf, cen.yf, cen.zf);
+                    cam.CurrentView.Up = new Vector3(0, 0, 1);
+                }
+                else
+                {
+                    Print("ok");
+                    if (!cam.CurrentView.is2D)
+                    {
+                        Print("2D");
+                        //cam = new CamController(this, dis);
+
+                        //Vector3 newPos = new Vector3(cen.xf,cen.yf, (float)dis);
+                        //Print(newPos);
+                        dis = cam.CurrentView.near* aabb.getDiagonalLength3() * Sin(2*Asin((float)(aabb.getDepth()/aabb.getDiagonalLength3())))/2/ this.window.Height;
+                        cam.CurrentView.Position = new Vector3(cen.xf - (float)dis, cen.yf -(float)dis, (float)dis);
+                        cam.CurrentView.target = new Vector3(cen.xf, cen.yf, cen.zf);
+                        cam.CurrentView.Up = new Vector3(0, 0, 1);
+                        //cam.CurrentView.Update(this);
+                        //cam.CurrentView.SetPerspective(false);
+                        Print("pos: " + cam.CurrentView.Position);
+                        Print("target: " + cam.CurrentView.target);
+                    }
+                    else
+                    {
+                        dis = max((float)(cam.CurrentView.near/2 * aabb.getWidth() / (this.window.Width - 50)), (float)(cam.CurrentView.near/2*aabb.getHeight() / (this.window.Height - 50)));
+                        Vector3 newPos = new Vector3(mesh.getAABB().getCenter().xf, mesh.getAABB().getCenter().yf, (float)dis);
+
+
+                        Print(newPos);
+                        cam.CurrentView.Position=newPos;
+                        cam.CurrentView.target=new Vector3(newPos.X, newPos.Y, 0);
+                        cam.CurrentView.Up = new Vector3(0, 1, 0);
+                    }
+                }
             }
         }
     }
