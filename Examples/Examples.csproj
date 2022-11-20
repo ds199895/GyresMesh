@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Examples.FromTriangles</StartupObject>
+    <StartupObject>Examples.Creator.TestRead</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">
@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Creator\FromTriangles.cs" />
     <Compile Include="Creator\Program.cs" />
+    <Compile Include="Creator\TestRead.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
