@@ -10,7 +10,7 @@ namespace Hsy.IO
     public class I3dmImporter
     {
         private FileStream InputStream;
-
+        private int version;
         public I3dmImporter(FileStream var1)
         {
             this.InputStream = var1;
@@ -23,25 +23,26 @@ namespace Hsy.IO
             byte[] var4 = new byte[8];
             this.InputStream.Read(var3, 0, 24);
             this.InputStream.Read(var4, 0, 8);
-            int version = 0;
+            //int version = 0;
             try
             {
                 String var5 = Encoding.Default.GetString(var4);
                 Console.WriteLine(var5);
-                String[] var6 = var5.Split('s');
-                var5 = var6[var6.Length - 1];
+                String[] var6 = var5.Split('0');
+                var5 = var6[0];
 
                 if (var5.Equals("X"))
                 {
-                    version = 2;
+                    this.version = 2;
                 }
                 else
                 {
-                    version = int.Parse(var5);
+                    //Console.WriteLine("3DM FILE VERSION = " + var5.ToCharArray()[0].ToString());
+                    this.version = int.Parse(var5);
 
                 }
 
-                Console.WriteLine("3DM FILE VERSION = " + version);
+                Console.WriteLine("3DM FILE VERSION = " + this.version);
             }
             catch (FormatException var7)
             {
@@ -58,7 +59,7 @@ namespace Hsy.IO
                 do
                 {
                     var2++;
-                    Console.WriteLine(10+" chunk #" + var2);
+                    Console.WriteLine(10 + " chunk #" + var2);
                     try
                     {
                         var1 = readChunk(this.InputStream);
@@ -78,6 +79,7 @@ namespace Hsy.IO
                                     this.readObjectTable(var1);
                                     break;
                                 case 1706537:
+                                    Console.WriteLine(var1.content);
                                     readChunkTable(var1);
                                     break;
                             }
@@ -101,12 +103,12 @@ namespace Hsy.IO
         }
         public void readObjectTable(Chunk var1)
         {
-            Console.WriteLine(10+ " Rhino3dmImporter.readObjectTable");
+            Console.WriteLine(10 + " Rhino3dmImporter.readObjectTable");
             Chunk[] var2 = readChunkTable(var1);
             if (var2 != null)
             {
                 //List<> var3 = new ArrayList();
-                Console.WriteLine(10+ "num of rhino objects : " + var2.Length);
+                Console.WriteLine(10 + "num of rhino objects : " + var2.Length);
                 int var4 = 0;
                 Chunk[] var5 = var2;
                 int var6 = var2.Length;
@@ -118,7 +120,7 @@ namespace Hsy.IO
                     {
                         StringBuilder var10001 = new StringBuilder();
                         ++var4;
-                        Console.WriteLine(1+ var10001.Append(var4).Append("/").Append(var2.Length).ToString());
+                        Console.WriteLine(1 + var10001.Append(var4).Append("/").Append(var2.Length).ToString());
                     }
 
                     //RhinoObject var9 = this.readRhinoObject(var8);
@@ -136,12 +138,12 @@ namespace Hsy.IO
             }
         }
 
-        public static Chunk[] readChunkTable(Chunk var0)
+        public Chunk[] readChunkTable(Chunk var0)
         {
             return readChunkTable(var0, -1);
         }
 
-        public static Chunk[] readChunkTable(Chunk var0, int var1)
+        public  Chunk[] readChunkTable(Chunk var0, int var1)
         {
             if (var0 == null)
             {
@@ -155,8 +157,8 @@ namespace Hsy.IO
             }
             else
             {
-                
-                MemoryStream var2 =new MemoryStream(var0.content);
+
+                MemoryStream var2 = new MemoryStream(var0.content);
                 Chunk var3 = null;
                 List<Chunk> var4 = new List<Chunk>();
                 int var5 = 1;
@@ -207,12 +209,27 @@ namespace Hsy.IO
             }
         }
 
-        public static Chunk readChunk(MemoryStream var0)
+        public Chunk readChunk(MemoryStream var0)
         {
-            int var1 = readInt32(var0);
+
+            var var_temp = readInt32(var0);
+            int var1;
+            if (this.version > 4)
+            {
+                var1 = readInt32(var0);
+            }
+            else
+            {
+                var1 = var_temp;
+            }
+
             int var2 = readInt32(var0);
             Console.WriteLine("header:  " + var1);
             Console.WriteLine("length:  " + var2);
+            if (var1 == 1)
+            {
+                var2 += 4;
+            }
             if (!isShortChunk(var1) && var2 != 0)
             {
                 if (var2 < 0)
@@ -240,7 +257,17 @@ namespace Hsy.IO
         public Chunk readChunk(FileStream var0)
         {
             Console.WriteLine("***********************Read   chunk*************");
-            int var1 = readInt32(var0);
+
+            var var_temp = readInt32(var0);
+            int var1;
+            if (this.version > 4 && var_temp != 1)
+            {
+                var1 = readInt32(var0);
+            }
+            else
+            {
+                var1 = var_temp;
+            }
             int var2 = readInt32(var0);
             Console.WriteLine("header:  " + var1);
             Console.WriteLine("length:  " + var2);
@@ -274,13 +301,15 @@ namespace Hsy.IO
 
         public void readStartSection(Chunk var1)
         {
-            Console.WriteLine(10+" Rhino3dmImporter.readStartSection");
+            Console.WriteLine(10 + " Rhino3dmImporter.readStartSection");
 
             int var2;
+            Console.WriteLine(var1.content.Length);
             for (var2 = var1.content.Length; var2 > 0 && (var1.content[var2 - 1] == 0 || var1.content[var2 - 1] == 26); --var2)
             {
             }
             char[] chars = Encoding.Default.GetChars(var1.content);
+            Console.WriteLine(chars.Length);
             String var3 = new String(chars);
             Console.WriteLine(var3);
             //this.file.startSection = new StartSection(var3);
@@ -296,10 +325,10 @@ namespace Hsy.IO
             return readInt32(read(var0, 4));
         }
 
-        public static int readInt32(FileStream var0) 
+        public static int readInt32(FileStream var0)
         {
-        return readInt32(read(var0, 4));
-    }
+            return readInt32(read(var0, 4));
+        }
         public static int readInt32(byte[] var0)
         {
             return var0[3] << 24 | (var0[2] & 255) << 16 | (var0[1] & 255) << 8 | var0[0] & 255;
@@ -319,7 +348,7 @@ namespace Hsy.IO
                     {
                         byte[] var5 = new byte[var3];
                         //System.arraycopy(var2, 0, var5, 0, var3);
-                        Array.Copy(var2, 0, var5, 0,var3);
+                        Array.Copy(var2, 0, var5, 0, var3);
                         throw new Exception("unexpected end of stream : len=" + var1 + ", ptr=" + var3 + ", res=" + var6);
                         //printAsciiOrHex(var5, IOut.err);
                         throw new IOException();

@@ -31,7 +31,7 @@ namespace Examples.Creator
             //}
             //FileStream fs = new FileStream("E://test.3dm", FileMode.Open, FileAccess.Read);
             //FileStream fs = new FileStream("E://0917_VERSION4.3dm", FileMode.Open, FileAccess.Read);
-            FileStream fs = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream("E://0917v4.3dm", FileMode.Open, FileAccess.Read);
             im = new I3dmImporter(fs);
             im.read();
 

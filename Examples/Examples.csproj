@@ -37,19 +37,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="LibTessDotNet">
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.dll</HintPath>
     </Reference>
     <Reference Include="LibTessDotNet.Double">
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\LibTessDotNet.Double.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
