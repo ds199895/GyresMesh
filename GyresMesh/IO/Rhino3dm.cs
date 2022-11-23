@@ -69,7 +69,7 @@ namespace Hsy.IO
             public virtual void read(Rhino3dmFile var1, byte[] var2)
             {
 
-                
+
                 this.read(var1, new MemoryStream(var2));
             }
 
@@ -108,7 +108,7 @@ namespace Hsy.IO
             //        if (var1 != null && var1.layers != null && this.attributes.layerIndex >= 0 && this.attributes.layerIndex < var1.layers.Length)
             //        {
             //            var3 = var1.layers[this.attributes.layerIndex].ilayer;
-            //            var3.add(var2);
+            //            var3.Add(var2);
             //            Console.WriteLine(10, "layer name : " + var3.name());
             //            if (!var3.isVisible())
             //            {
@@ -140,7 +140,7 @@ namespace Hsy.IO
 
         public class ObjectAttributes : RhinoObject
         {
-            public static readonly String uuid = "A828C015-09F5-477c-8665-F0482F5D6996";
+            public new static readonly String uuid = "A828C015-09F5-477c-8665-F0482F5D6996";
             public static readonly UUID obsoletePageSpaceObjectId = new UUID(-1682229271, (short)8497, (short)20408, IntArrToByteArr(new int[] { -71, -58, 85, 36, -123, -101, -104, -72 }));
             public UUID objectUUID;
             public String name;
@@ -167,7 +167,7 @@ namespace Hsy.IO
             public List<int> group;
             //public List<DisplayMaterialRef> dmref;
 
-            public UUID getClassUUID()
+            public new UUID getClassUUID()
             {
                 return new UUID("A828C015-09F5-477c-8665-F0482F5D6996");
             }
@@ -390,7 +390,7 @@ namespace Hsy.IO
             //                for(int var8 = 0; var8<var7; ++var8) {
             //    DisplayMaterialRef var9 = new DisplayMaterialRef();
             //    var9.read(var1, var2);
-            //    this.dmref.add(var9);
+            //    this.dmref.Add(var9);
             //}
 
             //var10 = I3dmImporter.readByte(var2);
@@ -460,7 +460,7 @@ namespace Hsy.IO
             //                        {
             //                            DisplayMaterialRef var9 = new DisplayMaterialRef();
             //                            var9.read(var1, var2);
-            //                            this.dmref.add(var9);
+            //                            this.dmref.Add(var9);
             //                        }
 
             //                        if (var5 >= 4)
@@ -490,7 +490,7 @@ namespace Hsy.IO
             //                                        }
             //                                        else
             //                                        {
-            //                                            this.dmref.add(var10);
+            //                                            this.dmref.Add(var10);
             //                                        }
             //                                    }
 
@@ -558,7 +558,7 @@ namespace Hsy.IO
             //            if (this.plotWeightMm > 0.0D) {
             //        var4 = 8;
             //        Rhino3dmExporter.writeByte(var2, var4, var3);
-            //        Rhino3dmExporter.writeDouble(var2, this.plotWeightMm, var3);
+            //        Rhino3dmExporter.writedouble(var2, this.plotWeightMm, var3);
             //    }
 
             //            if (this.objectDecoration != 0) {
@@ -615,7 +615,7 @@ namespace Hsy.IO
             //        Rhino3dmExporter.writeByte(var2, this.linetypeSource, var3);
             //    }
 
-            //            if (this.group != null && this.group.size() > 0) {
+            //            if (this.group != null && this.group.Count > 0) {
             //        var4 = 18;
             //        Rhino3dmExporter.writeByte(var2, var4, var3);
             //        Rhino3dmExporter.writeArrayInt(var2, this.group, var3);
@@ -633,7 +633,7 @@ namespace Hsy.IO
             //        Rhino3dmExporter.writeUUID(var2, this.viewportId, var3);
             //    }
 
-            //            if (this.dmref != null && this.dmref.size() > 0) {
+            //            if (this.dmref != null && this.dmref.Count > 0) {
             //        var4 = 21;
             //        Rhino3dmExporter.writeByte(var2, var4, var3);
             //        Rhino3dmExporter.writeArrayDisplayMaterialRef(var1, var2, this.dmref, var3);
@@ -663,8 +663,8 @@ namespace Hsy.IO
             //        Rhino3dmExporter.writeInt16(var2, var4, var3);
             //        byte var9 = 0;
             //        Rhino3dmExporter.writeInt16(var2, var9, var3);
-            //        Rhino3dmExporter.writeDouble(var2, 0.0D, var3);
-            //        Rhino3dmExporter.writeDouble(var2, 1.0D, var3);
+            //        Rhino3dmExporter.writedouble(var2, 0.0D, var3);
+            //        Rhino3dmExporter.writedouble(var2, 1.0D, var3);
             //        Rhino3dmExporter.writeInt32(var2, this.wireDensity, var3);
             //        Rhino3dmExporter.writeByte(var2, this.mode, var3);
             //        Rhino3dmExporter.writeByte(var2, this.colorSource, var3);
@@ -679,7 +679,7 @@ namespace Hsy.IO
             //        Rhino3dmExporter.writeByte(var2, this.plotColorSource, var3);
             //        Rhino3dmExporter.writeColor(var2, this.plotColor, var3);
             //        Rhino3dmExporter.writeByte(var2, this.plotWeightSource, var3);
-            //        Rhino3dmExporter.writeDouble(var2, this.plotWeightMm, var3);
+            //        Rhino3dmExporter.writedouble(var2, this.plotWeightMm, var3);
             //        Rhino3dmExporter.writeInt32(var2, this.linetypeIndex, var3);
             //        byte var5 = 0;
             //        switch (this.activeSpace)
@@ -698,7 +698,7 @@ namespace Hsy.IO
             //        int var6 = 0;
             //        if (this.dmref != null)
             //        {
-            //            var6 = this.dmref.size();
+            //            var6 = this.dmref.Count;
             //        }
 
             //        bool var7 = this.activeSpace == 2 && this.viewportId != null && this.viewportId != UUID.nilValue;
@@ -756,8 +756,8 @@ namespace Hsy.IO
                 put("850324A7-050E-11d4-BFFA-0010830122F0", typeof(Rhino3dm.UserData));
                 //put("ABAF5873-4145-11d4-800F-0010830122F0", typeof(Rhino3dm.Annotation));
                 //put("8D820224-BC6C-46b4-9066-BF39CC13AEFB", typeof(Rhino3dm.Annotation2));
-                //put("4ED7D4D7-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.Curve));
-                //put("4ED7D4E1-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.Surface));
+                put("4ED7D4D7-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.Curve));
+                put("4ED7D4E1-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.Surface));
                 //put("5DE6B20D-486B-11d4-8014-0010830122F0", typeof(Rhino3dm.LinearDimension));
                 //put("5DE6B20E-486B-11d4-8014-0010830122F0", typeof(Rhino3dm.RadialDimension));
                 //put("5DE6B20F-486B-11d4-8014-0010830122F0", typeof(Rhino3dm.AngularDimension));
@@ -780,57 +780,61 @@ namespace Hsy.IO
                 //put("390465EB-3721-11d4-800B-0010830122F0", typeof(Rhino3dm.WindowsBitmap));
                 //put("772E6FC1-B17B-4fc4-8F54-5FDA511D76D2", typeof(Rhino3dm.EmbeddedBitmap));
                 //put("203AFC17-BCC9-44fb-A07B-7F5C31BD5ED9", typeof(Rhino3dm.WindowsBitmapEx));
-                //put("60B5DBC0-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepVertex));
-                //put("60B5DBC1-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepEdge));
-                //put("60B5DBC2-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepTrim));
-                //put("60B5DBC3-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepLoop));
-                //put("60B5DBC4-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepFace));
-                //put("60B5DBC5-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.Brep));
+                put("60B5DBC0-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepVertex));
+                put("60B5DBC1-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepEdge));
+                put("60B5DBC2-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepTrim));
+                put("60B5DBC3-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepLoop));
+                put("60B5DBC4-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.BrepFace));
+                put("60B5DBC5-E660-11d3-BFE4-0010830122F0", typeof(Rhino3dm.Brep));
                 //put("7FE23D63-E536-43f1-98E2-C807A2625AFF", typeof(Rhino3dm.BrepRegionTopologyUserData));
                 //put("30930370-0D5B-4ee4-8083-BD635C7398A4", typeof(Rhino3dm.BrepFaceSide));
                 //put("CA7A0092-7EE6-4f99-B9D2-E1D6AA798AA1", typeof(Rhino3dm.BrepRegion));
-                //put("4ED7D4D8-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.CurveOnSurface));
+                put("4ED7D4D8-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.CurveOnSurface));
                 //put("C8C66EFA-B3CB-4e00-9440-2AD66203379E", typeof(Rhino3dm.DetailView));
                 //put("513FDE53-7284-4065-8601-06CEA8B28D6F", typeof(Rhino3dm.DimStyleExtra));
                 //put("3FF7007C-3D04-463f-84E3-132ACEB91062", typeof(Rhino3dm.HatchExtra));
                 //put("0559733B-5332-49d1-A936-0532AC76ADE5", typeof(Rhino3dm.Hatch));
                 //put("F9CFB638-B9D4-4340-87E3-C56E7865D96A", typeof(Rhino3dm.InstanceRef));
                 //put("3E4904E6-E930-4fbc-AA42-EBD407AEFE3B", typeof(Rhino3dm.LayerExtensions));
-                //put("4ED7D4D9-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.CurveProxy));
-                //put("4ED7D4DB-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.LineCurve));
+                put("4ED7D4D9-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.CurveProxy));
+                put("4ED7D4DB-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.LineCurve));
+                put("11D3E947-E5BF-1000-8301-22F0F49BE923", typeof(Rhino3dm.LineCurve));
                 put("4ED7D4E4-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.Mesh));
                 //put("4ED7D4E4-FFFFE947-000011D3-BFE50010830122F0", typeof(Rhino3dm.Mesh));
                 //put("C547B4BD-BDCD-49b6-A983-0C4A7F02E31A", typeof(Rhino3dm.MeshVertexRef));
                 //put("ED727872-463A-4424-851F-9EC02CB0F155", typeof(Rhino3dm.MeshEdgeRef));
                 //put("4F529AA5-EF8D-4c25-BCBB-162D510AA280", typeof(Rhino3dm.MeshFaceRef));
                 //put("31F55AA3-71FB-49f5-A975-757584D937FF", typeof(Rhino3dm.MeshNgonUserData));
-                //put("4ED7D4DD-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.NurbsCurve));
+                put("4ED7D4DD-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.NurbsCurve));
                 //put("4ED7D4DE-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.NurbsSurface));
                 //put("06936AFB-3D3C-41ac-BF70-C9319FA480A1", typeof(Rhino3dm.NurbsCage));
                 //put("D379E6D8-7C31-4407-A913-E3B7040D034A", typeof(Rhino3dm.MorphControl));
                 //put("00C61749-D430-4ecc-83A8-29130A20CF9C", typeof(Rhino3dm.OffsetSurface));
-                //put("4ED7D4DF-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PlaneSurface));
+                put("4ED7D4DF-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PlaneSurface));
+                put("11D3E947-E5BF-1000-8301-22F073D7D8F7", typeof(Rhino3dm.PlaneSurface));
                 //put("DBC5A584-CE3F-4170-98A8-497069CA5C36", typeof(Rhino3dm.ClippingPlaneSurface));
                 //put("2488F347-F8FA-11d3-BFEC-0010830122F0", typeof(Rhino3dm.PointCloud));
-                //put("C3101A1D-F157-11d3-BFE7-0010830122F0", typeof(Rhino3dm.Point));
+                put("C3101A1D-F157-11d3-BFE7-0010830122F0", typeof(Rhino3dm.Point));
                 //put("4ED7D4E5-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PointGrid));
-                //put("4ED7D4E0-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PolyCurve));
+                put("4ED7D4E0-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PolyCurve));
                 //put("42F47A87-5B1B-4e31-AB87-4639D78325D6", typeof(Rhino3dm.PolyEdgeSegment));
                 //put("39FF3DD3-FE0F-4807-9D59-185F0D73C0E4", typeof(Rhino3dm.PolyEdgeCurve));
-                //put("4ED7D4E6-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PolylineCurve));
+                put("4ED7D4E6-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.PolylineCurve));
                 //put("A16220D3-163B-11d4-8000-0010830122F0", typeof(Rhino3dm.RevSurface));
                 //put("C4CD5359-446D-4690-9FF5-29059732472B", typeof(Rhino3dm.SumSurface));
-                //put("4ED7D4E2-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.SurfaceProxy));
+                put("4ED7D4E2-E947-11d3-BFE5-0010830122F0", typeof(Rhino3dm.SurfaceProxy));
                 //put("850324A8-050E-11d4-BFFA-0010830122F0", typeof(Rhino3dm.UnknownUserData));
                 //put("D66E5CCF-EA39-11d3-BFE5-0010830122F0", typeof(Rhino3dm.Viewport));
-                //put("5EAF1119-0B51-11d4-BFFE-0010830122F0", typeof(Rhino3dm.NurbsCurve));
-                //put("76A709D5-1550-11d4-8000-0010830122F0", typeof(Rhino3dm.NurbsCurve));
+                put("5EAF1119-0B51-11d4-BFFE-0010830122F0", typeof(Rhino3dm.NurbsCurve));
+                put("76A709D5-1550-11d4-8000-0010830122F0", typeof(Rhino3dm.NurbsCurve));
+                put("11D40B51-FEBF-1000-8301-22F04A1A7917", typeof(Rhino3dm.NurbsCurve));
+
                 //put("4760C817-0BE3-11d4-BFFE-0010830122F0", typeof(Rhino3dm.NurbsSurface));
                 //put("FA4FD4B5-1613-11d4-8000-0010830122F0", typeof(Rhino3dm.NurbsSurface));
-                //put("EF638317-154B-11d4-8000-0010830122F0", typeof(Rhino3dm.PolyCurve));
-                //put("0705FDEF-3E2A-11d4-800E-0010830122F0", typeof(Rhino3dm.Brep));
-                //put("2D4CFEDB-3E2A-11d4-800E-0010830122F0", typeof(Rhino3dm.Brep));
-                //put("F06FC243-A32A-4608-9DD8-A7D2C4CE2A36", typeof(Rhino3dm.Brep));
+                put("EF638317-154B-11d4-8000-0010830122F0", typeof(Rhino3dm.PolyCurve));
+                put("0705FDEF-3E2A-11d4-800E-0010830122F0", typeof(Rhino3dm.Brep));
+                put("2D4CFEDB-3E2A-11d4-800E-0010830122F0", typeof(Rhino3dm.Brep));
+                put("F06FC243-A32A-4608-9DD8-A7D2C4CE2A36", typeof(Rhino3dm.Brep));
                 //put("0A8401B6-4D34-4b99-8615-1B4E723DC4E5", typeof(Rhino3dm.RevSurface));
                 //put("665F6331-2A66-4cce-81D0-B5EEBD9B5417", typeof(Rhino3dm.SumSurface));
             }
@@ -852,30 +856,31 @@ namespace Hsy.IO
 
             public static Type get(UUID var0)
             {
-                
-                Console.WriteLine(map.Keys.ToArray()[4]);
+
+                //Console.WriteLine(map.Keys.ToArray()[4]);
                 Type t = null;
                 foreach (var key in map.Keys.ToArray())
                 {
+                    Console.WriteLine("key:   " + key);
                     if (key.Equals(var0))
                     {
                         map.TryGetValue(key, out t);
                     }
                 }
-                
+
                 Console.WriteLine(t);
                 return t;
             }
         }
         public class Geometry : Rhino3dm.RhinoObject
         {
-            public static readonly String uuid = "4ED7D4DA-E947-11d3-BFE5-0010830122F0";
+            public new static readonly String uuid = "4ED7D4DA-E947-11d3-BFE5-0010830122F0";
 
             public Geometry()
             {
             }
 
-            public UUID getClassUUID()
+            public new UUID getClassUUID()
             {
                 return new UUID("4ED7D4DA-E947-11d3-BFE5-0010830122F0");
             }
@@ -1035,7 +1040,7 @@ namespace Hsy.IO
             public Xform()
             {
                 this.xform = new double[4][];
-                for(int i = 0; i < xform.Length; i++)
+                for (int i = 0; i < xform.Length; i++)
                 {
                     this.xform[i] = new double[4];
                 }
@@ -1101,65 +1106,65 @@ namespace Hsy.IO
                 return var1;
             }
         }
-        public  class TextureMapping : RhinoObject
+        public class TextureMapping : RhinoObject
         {
-        public static readonly String uuid = "32EC997A-C3BF-4ae5-AB19-FD572B8AD554";
+            public static readonly String uuid = "32EC997A-C3BF-4ae5-AB19-FD572B8AD554";
 
-        public TextureMapping()
-        {
-        }
-
-        public static TextureMapping.Type_ type(int var0)
-        {
-            switch (var0)
+            public TextureMapping()
             {
-                case 0:
-                    return TextureMapping.Type_.NoMapping;
-                case 1:
-                    return TextureMapping.Type_.SrfpMapping;
-                case 2:
-                    return TextureMapping.Type_.PlaneMapping;
-                case 3:
-                    return TextureMapping.Type_.CylinderMapping;
-                case 4:
-                    return TextureMapping.Type_.SphereMapping;
-                case 5:
-                    return TextureMapping.Type_.BoxMapping;
-                case 6:
-                    return TextureMapping.Type_.MeshMappingPrimitive;
-                case 7:
-                    return TextureMapping.Type_.SrfMappingPrimitive;
-                case 8:
-                    return TextureMapping.Type_.BrepMappingPrimitive;
-                default:
-                    return TextureMapping.Type_.NoMapping;
+            }
+
+            public static TextureMapping.Type_ type(int var0)
+            {
+                switch (var0)
+                {
+                    case 0:
+                        return TextureMapping.Type_.NoMapping;
+                    case 1:
+                        return TextureMapping.Type_.SrfpMapping;
+                    case 2:
+                        return TextureMapping.Type_.PlaneMapping;
+                    case 3:
+                        return TextureMapping.Type_.CylinderMapping;
+                    case 4:
+                        return TextureMapping.Type_.SphereMapping;
+                    case 5:
+                        return TextureMapping.Type_.BoxMapping;
+                    case 6:
+                        return TextureMapping.Type_.MeshMappingPrimitive;
+                    case 7:
+                        return TextureMapping.Type_.SrfMappingPrimitive;
+                    case 8:
+                        return TextureMapping.Type_.BrepMappingPrimitive;
+                    default:
+                        return TextureMapping.Type_.NoMapping;
+                }
+            }
+
+            public UUID getClassUUID()
+            {
+                return new UUID("32EC997A-C3BF-4ae5-AB19-FD572B8AD554");
+            }
+
+            public enum Type_
+            {
+                NoMapping,
+                SrfpMapping,
+                PlaneMapping,
+                CylinderMapping,
+                SphereMapping,
+                BoxMapping,
+                MeshMappingPrimitive,
+                SrfMappingPrimitive,
+                BrepMappingPrimitive
+
             }
         }
 
-        public UUID getClassUUID()
-        {
-            return new UUID("32EC997A-C3BF-4ae5-AB19-FD572B8AD554");
-        }
-
-        public enum Type_
-        {
-            NoMapping,
-            SrfpMapping,
-            PlaneMapping,
-            CylinderMapping,
-            SphereMapping,
-            BoxMapping,
-            MeshMappingPrimitive,
-            SrfMappingPrimitive,
-            BrepMappingPrimitive
-
-    }
-}
 
 
 
-
-public class MappingTag
+        public class MappingTag
         {
             public UUID mappingId;
             public TextureMapping.Type_ mappingType;
@@ -1170,24 +1175,26 @@ public class MappingTag
             {
             }
 
-            public void read(Rhino3dmFile var1,Stream var2)
+            public void read(Rhino3dmFile var1, Stream var2)
             {
 
                 Chunk var3 = I3dmImporter.readChunk(var2);
-           MemoryStream var6 = new  MemoryStream(var3.content);
-            int var4 = I3dmImporter.readInt(var6);
-            int var5 = I3dmImporter.readInt(var6);
-            if (var4 == 1) {
-                this.mappingId = I3dmImporter.readUUID(var6);
-                this.mappingCRC = I3dmImporter.readInt(var6);
-                this.meshXform = I3dmImporter.readXform(var6);
-                if (var5 >= 1) {
-                    this.mappingType = TextureMapping.type(I3dmImporter.readInt(var6));
+                MemoryStream var6 = new MemoryStream(var3.content);
+                int var4 = I3dmImporter.readInt(var6);
+                int var5 = I3dmImporter.readInt(var6);
+                if (var4 == 1)
+                {
+                    this.mappingId = I3dmImporter.readUUID(var6);
+                    this.mappingCRC = I3dmImporter.readInt(var6);
+                    this.meshXform = I3dmImporter.readXform(var6);
+                    if (var5 >= 1)
+                    {
+                        this.mappingType = TextureMapping.type(I3dmImporter.readInt(var6));
+                    }
                 }
-    }
 
-}
-    }
+            }
+        }
 
 
         public class MeshParameters
@@ -1416,7 +1423,7 @@ public class MappingTag
 
         public class Mesh : Rhino3dm.Geometry
         {
-            public static String uuid = "4ED7D4E4-E947-11d3-BFE5-0010830122F0";
+            public new static String uuid = "4ED7D4E4-E947-11d3-BFE5-0010830122F0";
             public List<HS_Vector> vertices;
             public int invalidCount;
             public int quadCount;
@@ -1441,11 +1448,11 @@ public class MappingTag
             public bool packedTextureRotate;
             public MappingTag ttag;
 
-            public UUID getClassUUID()
+            public new UUID getClassUUID()
             {
                 return new UUID("4ED7D4E4-E947-11d3-BFE5-0010830122F0");
             }
-            public int getType()
+            public new int getType()
             {
                 return 32;
             }
@@ -1511,7 +1518,7 @@ public class MappingTag
                     if (var13 > 0)
                     {
                         Rhino3dm.Chunk var16 = I3dmImporter.readChunk(var2);
-                       
+
                         if (var16.header != 1073774592)
                         {
                             throw new IOException("invalid type code = " + Rhino3dm.hex(var16.header));
@@ -1543,7 +1550,7 @@ public class MappingTag
 
                     this.readFaceArray(var1, var2, var6, var7);
                     Console.WriteLine("var4:  " + var4);
-                    Console.WriteLine("Faces:  " + this.faces.Count) ;
+                    Console.WriteLine("Faces:  " + this.faces.Count);
                     if (var4 == 1)
                     {
                         this.read1(var1, var2);
@@ -1587,7 +1594,7 @@ public class MappingTag
                         }
                     }
 
-                    if (this.surfaceParameter == null && this.vertices != null && this.vertices.Count> 0)
+                    if (this.surfaceParameter == null && this.vertices != null && this.vertices.Count > 0)
                     {
                     }
                 }
@@ -1604,7 +1611,7 @@ public class MappingTag
 
             public void read2(Rhino3dmFile var1, Stream var2, int var3)
             {
-                Endian var4=Endian.BigEndian;
+                Endian var4 = Endian.BigEndian;
                 if (var3 > 0)
                 {
                     byte var6 = 12;
@@ -1729,6 +1736,2910 @@ public class MappingTag
 
         }
 
+
+        public abstract class Curve : Rhino3dm.Geometry
+        {
+            public new static readonly String uuid = "4ED7D4D7-E947-11d3-BFE5-0010830122F0";
+            //public ICurveGeo icurve;
+
+            public Curve()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4D7-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public new int getType()
+            {
+                return 4;
+            }
+
+            public abstract Interval domain();
+
+            public abstract bool isValid();
+
+            //public IObject createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return null;
+            //}
+
+            //public ICurveGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return null;
+            //}
+
+            //public ITrimCurve createTrimCurve(Rhino3dmFile var1, IServerI var2, ISurfaceI var3)
+            //{
+            //    return null;
+            //}
+        }
+        public class LineCurve : Curve
+        {
+            public static readonly String uuid = "4ED7D4DB-E947-11d3-BFE5-0010830122F0";
+            public Line line;
+            public Interval t;
+            public int dim;
+
+            public LineCurve()
+            {
+            }
+
+            public UUID getClassUUID()
+            {
+                return new UUID("4ED7D4DB-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public override Interval domain()
+            {
+                return this.t;
+            }
+
+            public override bool isValid()
+            {
+                return this.t.isIncreasing() && this.line.length() > 0.0D;
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                if (var4 == 1)
+                {
+                    this.line = I3dmImporter.readLine(var2);
+                    this.t = I3dmImporter.readInterval(var2);
+                    this.dim = I3dmImporter.readInt32(var2);
+                    Console.WriteLine(100 + "line = " + this.line.from + ", " + this.line.to);
+                }
+                else
+                {
+                    throw new Exception("wrong chunk major version :" + var4);
+                }
+
+            }
+
+            //public ICurve createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    if (this.line == null)
+            //    {
+            //        return null;
+            //    }
+            //    else
+            //    {
+            //        ICurve var3 = new ICurve(var2, this.line.from, this.line.to);
+            //        return var3;
+            //    }
+            //}
+
+            //public ICurveGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return this.line == null ? null : new ICurveGeo(this.line.from, this.line.to);
+            //}
+
+            //public ITrimCurve createTrimCurve(Rhino3dmFile var1, IServerI var2, ISurfaceI var3)
+            //{
+            //    return this.line == null ? null : new ITrimCurve(this.line.from, this.line.to);
+            //}
+        }
+        public class Line
+        {
+            public HS_Vector from;
+            public HS_Vector to;
+
+            public Line()
+            {
+            }
+
+            public double length()
+            {
+                return this.from.dist(this.to);
+            }
+
+            public override String ToString()
+            {
+                return "< " + this.from.ToString() + ", " + this.to.ToString() + " >";
+            }
+        }
+
+        public class CurveOnSurface : Curve
+        {
+            public new static readonly String uuid = "4ED7D4D8-E947-11d3-BFE5-0010830122F0";
+            public Curve curve2;
+            public Curve curve3;
+            public Surface surface;
+
+            public CurveOnSurface()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4D8-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public override bool isValid()
+            {
+                if (this.curve2 == null)
+                {
+                    return false;
+                }
+                else if (this.surface == null)
+                {
+                    return false;
+                }
+                else if (!this.curve2.isValid())
+                {
+                    return false;
+                }
+                else
+                {
+                    return this.curve3 == null || this.curve3.isValid();
+                }
+            }
+
+            public override Interval domain()
+            {
+                return this.curve2.domain();
+            }
+        }
+        public class PolylineCurve : Curve
+        {
+            public new static readonly String uuid = "4ED7D4E6-E947-11d3-BFE5-0010830122F0";
+            public Polyline pline;
+            public List<double> t;
+            public int dim;
+
+            public PolylineCurve()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4E6-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public override bool isValid()
+            {
+                return this.pline.isValid();
+            }
+
+            public override Interval domain()
+            {
+                int var1 = this.pline.Count;
+                return var1 >= 2 && (double)this.t[0] < (double)this.t[var1 - 1] ? new Interval((double)this.t[0], (double)this.t[var1 - 1]) : null;
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                if (var4 == 1)
+                {
+                    this.pline = I3dmImporter.readPolyline(var2);
+                    this.t = I3dmImporter.readArrayDouble(var2);
+                    this.dim = I3dmImporter.readInt(var2);
+                }
+
+            }
+
+            //public ICurve createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    ICurve var3 = new ICurve(var2, (IVecI[])this.pline.toArray(new IVec[this.pline.Count]));
+            //    return var3;
+            //}
+
+            //public ICurveGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return new ICurveGeo((IVecI[])this.pline.toArray(new IVec[this.pline.Count]));
+            //}
+
+            //public ITrimCurve createTrimCurve(Rhino3dmFile var1, IServerI var2, ISurfaceI var3)
+            //{
+            //    return new ITrimCurve((IVecI[])this.pline.toArray(new IVec[this.pline.Count]));
+            //}
+        }
+
+        public class Polyline : PointArray
+        {
+            public bool isValid()
+            {
+                return true;
+            }
+
+            public Polyline()
+            {
+            }
+
+            public Polyline(int var1) : base(var1)
+            {
+
+            }
+        }
+
+        public class Point2Array : List<HS_Vector>
+        {
+            public Point2Array()
+            {
+            }
+
+            public Point2Array(int var1) : base(var1)
+            {
+
+            }
+        }
+
+        public class PointArray : List<HS_Vector>
+        {
+            public PointArray()
+            {
+            }
+
+            public PointArray(int var1) : base(var1)
+            {
+
+            }
+        }
+
+        public class ArcCurve : Curve
+        {
+            public static readonly String uuid = "CF33BE2A-09B4-11d4-BFFB-0010830122F0";
+            public Arc arc;
+            public Interval t;
+            public int dim;
+
+            public ArcCurve()
+            {
+            }
+
+            public UUID getClassUUID()
+            {
+                return new UUID("CF33BE2A-09B4-11d4-BFFB-0010830122F0");
+            }
+
+            public override Interval domain()
+            {
+                return this.t;
+            }
+
+            public override  bool isValid()
+            {
+                if (!this.t.isIncreasing())
+                {
+                    return false;
+                }
+                else
+                {
+                    return this.arc.isValid();
+                }
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                if (var4 == 1)
+                {
+                    this.arc = I3dmImporter.readArc(var2);
+                    this.t = I3dmImporter.readInterval(var2);
+                    this.dim = I3dmImporter.readInt(var2);
+                    if (this.dim != 2 && this.dim != 3)
+                    {
+                        this.dim = 3;
+                    }
+                }
+
+            }
+
+            //public ICurve createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    IVec var3 = this.arc.plane.origin;
+            //    IVec var4 = this.arc.plane.zaxis;
+            //    IVec var5;
+            //    if (Math.abs(this.arc.angle.length()) < 6.283185307179586D - IConfig.angleTolerance)
+            //    {
+            //        var5 = this.arc.plane.xaxis.dup().len(this.arc.radius).add(var3);
+            //        var5.rot(var3, var4, this.arc.angle.v1);
+            //        double var9 = this.arc.angle.v2 - this.arc.angle.v1;
+            //        IArc var8 = new IArc(var2, var3, var4, var5, var9);
+            //        return var8;
+            //    }
+            //    else
+            //    {
+            //        var5 = this.arc.plane.xaxis;
+            //        ICircle var6 = new ICircle(var2, var3, var4, var5, this.arc.radius);
+            //        return var6;
+            //    }
+            //}
+
+            //public ICurveGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    IVec var3 = this.arc.plane.origin;
+            //    IVec var4 = this.arc.plane.zaxis;
+            //    IVec var5;
+            //    if (Math.abs(this.arc.angle.length()) < 6.283185307179586D - IConfig.angleTolerance)
+            //    {
+            //        var5 = this.arc.plane.xaxis.dup().len(this.arc.radius).add(var3);
+            //        var5.rot(var3, var4, this.arc.angle.v1);
+            //        double var9 = this.arc.angle.v2 - this.arc.angle.v1;
+            //        IArcGeo var8 = new IArcGeo(var3, var4, var5, var9);
+            //        return var8;
+            //    }
+            //    else
+            //    {
+            //        var5 = this.arc.plane.xaxis;
+            //        ICircleGeo var6 = new ICircleGeo(var3, var4, var5, this.arc.radius);
+            //        return var6;
+            //    }
+            //}
+
+            //public ITrimCurve createTrimCurve(Rhino3dmFile var1, IServerI var2, ISurfaceI var3)
+            //{
+            //    IVec var4 = this.arc.plane.origin;
+            //    IVec var5 = this.arc.plane.zaxis;
+            //    IVec var6;
+            //    if (Math.abs(this.arc.angle.length()) < 6.283185307179586D - IConfig.angleTolerance)
+            //    {
+            //        var6 = this.arc.plane.xaxis.dup().len(this.arc.radius).add(var4);
+            //        var6.rot(var4, var5, this.arc.angle.v1);
+            //        double var10 = this.arc.angle.v2 - this.arc.angle.v1;
+            //        IArcGeo var9 = new IArcGeo(var4, var5, var6, var10);
+            //        return new ITrimCurve(var9);
+            //    }
+            //    else
+            //    {
+            //        var6 = this.arc.plane.xaxis;
+            //        ICircleGeo var7 = new ICircleGeo(var4, var5, var6, this.arc.radius);
+            //        return new ITrimCurve(var7);
+            //    }
+            //}
+        }
+
+        public class Arc : Circle
+        {
+            public Interval angle;
+
+            public Arc()
+            {
+            }
+
+            public new bool isValid()
+            {
+                return base.isValid() && this.angle.isValid() && this.angleRadians() >= 0.0D && this.angleRadians() <= 6.283185307179586D;
+            }
+
+            public double angleRadians()
+            {
+                return this.angle.v2 - this.angle.v1;
+            }
+
+            public Interval domain()
+            {
+                return this.angle;
+            }
+        }
+
+        public class Circle
+        {
+            public Plane plane;
+            public double radius;
+
+            public Circle()
+            {
+            }
+
+            public bool isValid()
+            {
+                return this.radius > 0.0D && this.plane.isValid();
+            }
+        }
+
+
+
+        public class CurveProxy : Curve
+        {
+            public new static readonly String uuid = "4ED7D4D9-E947-11d3-BFE5-0010830122F0";
+            public Curve realCurve;
+            public bool reversed;
+            public Interval realCurveDomain = new Interval();
+            public Interval thisDomain = new Interval();
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4D9-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public CurveProxy()
+            {
+            }
+
+            public void setProxyCurve(Curve var1, Interval var2)
+            {
+                if (var1 != this)
+                {
+                    var1 = null;
+                    this.realCurveDomain = null;
+                    this.thisDomain = null;
+                    this.reversed = false;
+                }
+                else
+                {
+                    if (this.isValid() && this.thisDomain.includes(var2))
+                    {
+                        var1 = this.realCurve;
+                        double var3 = this.realCurveParameter(var2.v1);
+                        double var5 = this.realCurveParameter(var2.v2);
+                        var2.set(var3, var5);
+                    }
+                    else
+                    {
+                        var1 = null;
+                    }
+
+                    this.realCurve = null;
+                }
+
+                if (this.realCurve != null)
+                {
+                    this.setProxyCurveDomain(var2);
+                }
+                else
+                {
+                    this.realCurveDomain = var2;
+                }
+
+                this.thisDomain = this.realCurveDomain;
+            }
+
+            public bool setProxyCurveDomain(Interval var1)
+            {
+                if (!var1.isIncreasing())
+                {
+                    return false;
+                }
+                else
+                {
+                    if (this.realCurve != null)
+                    {
+                        Interval var2 = this.realCurve.domain();
+                        var2.intersection(var1);
+                        if (var2.isIncreasing())
+                        {
+                            this.realCurveDomain = var2;
+                        }
+                    }
+                    else
+                    {
+                        this.realCurveDomain = var1;
+                    }
+
+                    return true;
+                }
+            }
+
+            public Interval proxyCurveDomain()
+            {
+                return this.realCurveDomain;
+            }
+
+            public double realCurveParameter(double var1)
+            {
+                if (this.reversed || this.realCurveDomain.equals(this.thisDomain))
+                {
+                    double var3 = this.thisDomain.normalizedParameterAt(var1);
+                    if (this.reversed)
+                    {
+                        var3 = 1.0D - var3;
+                    }
+
+                    var1 = this.realCurveDomain.parameterAt(var3);
+                }
+
+                return var1;
+            }
+
+            public void setDomain(Interval var1)
+            {
+                if (var1.isIncreasing())
+                {
+                    this.thisDomain.set(var1);
+                }
+
+            }
+
+
+            public override Interval domain()
+            {
+                return this.thisDomain;
+            }
+            public bool reverse()
+            {
+                if (this.thisDomain.isIncreasing())
+                {
+                    this.reversed = !this.reversed;
+                    this.thisDomain.reverse();
+                }
+
+                return true;
+            }
+
+            public bool proxyCurveIsReversed()
+            {
+                return this.reversed;
+            }
+            public override bool isValid()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public class PolyCurve : Curve
+        {
+            public new static readonly String uuid = "4ED7D4E0-E947-11d3-BFE5-0010830122F0";
+            public static readonly double sqrtEpsilon = 1.490116119385E-8D;
+            public CurveArray segment;
+            public List<double> t;
+
+            public PolyCurve()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4E0-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public override Interval domain()
+            {
+                int var1 = this.segment.Count;
+                return var1 > 0 && (double)this.t[0] < (double)this.t[var1] ? new Interval((double)this.t[0], (double)this.t[var1]) : null;
+            }
+
+            public Interval segmentDomain(int var1)
+            {
+                Interval var2 = new Interval();
+                if (var1 >= 0 && var1 < this.count())
+                {
+                    var2.v1 = (double)this.t[var1];
+                    var2.v2 = (double)this.t[var1 + 1];
+                }
+
+                return var2;
+            }
+
+            public override bool isValid()
+            {
+                return this.isValid(false);
+            }
+
+            public bool isValid(bool var1)
+            {
+                for (int var2 = 0; var2 < this.segment.Count; ++var2)
+                {
+                    if (!((Curve)this.segment[var2]).isValid())
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                int var6 = I3dmImporter.readInt(var2);
+                int var7 = I3dmImporter.readInt(var2);
+                int var8 = I3dmImporter.readInt(var2);
+                BoundingBox var9 = I3dmImporter.readBoundingBox(var2);
+                this.t = I3dmImporter.readArrayDouble(var2);
+                this.segment = new CurveArray(var6);
+
+                for (int var10 = 0; var10 < var6; ++var10)
+                {
+                    RhinoObject var11 = I3dmImporter.readObject(var1, var2);
+                    if (var11 != null)
+                    {
+                        if (!(var11 is Curve))
+                        {
+                            throw new IOException("invalid class of instance: " + var11);
+                        }
+
+                        Curve var12 = (Curve)var11;
+                        this.segment.Add(var12);
+                    }
+                }
+
+                if (this.segment.Count == 0)
+                {
+                    throw new IOException("number of segemnts is zero");
+                }
+                else if (this.segment.Count != var6)
+                {
+                    throw new IOException("number of segemnts doesn't match with count");
+                }
+                else if (this.t.Count != var6 + 1)
+                {
+                    throw new IOException("number of domain doesn't match with number of segment");
+                }
+                else
+                {
+                    Interval var23 = null;
+                    Interval var24 = ((Curve)this.segment[0]).domain();
+                    double var25 = 0.0D;
+                    double var14 = var24.length();
+                    double var16 = 0.0D;
+                    double var18 = 0.0D;
+                    double var20 = 0.0D;
+
+                    for (int var22 = 1; var22 < var6; ++var22)
+                    {
+                        var18 = (double)this.t[var22];
+                        var23 = var24;
+                        var25 = var14;
+                        var24 = ((Curve)this.segment[var22]).domain();
+                        if (var24 == null)
+                        {
+                        }
+
+                        var14 = var24.length();
+                        var20 = var23.v2;
+                        if (var20 != var18 && var20 == var24.v1 && var18 > var23.v1 && var18 < var24.v2)
+                        {
+                            var16 = (var25 <= var14 ? var25 : var14) * 1.490116119385E-8D;
+                            if (Math.Abs(var18 - var20) <= var16)
+                            {
+                                //this.t.set(var22, var20);
+                                this.t[var22] = var20;
+                            }
+                        }
+                    }
+
+                    var16 = var14 * 1.490116119385E-8D;
+                    var18 = (double)this.t[var6];
+                    var20 = var24.v2;
+                    if (var20 != var18 && var18 > var24.v1 && Math.Abs(var20 - var18) <= var16)
+                    {
+                        //this.t.set(var6, var20);
+                        this.t[var6] = var20;
+                    }
+
+                    if (var1.openNurbsVersion < 200304080)
+                    {
+                        this.removeNesting();
+                    }
+
+                }
+            }
+
+            public int count()
+            {
+                return this.segment == null ? 0 : this.segment.Count;
+            }
+
+            public Curve segmentCurve(int var1)
+            {
+                return (Curve)this.segment[var1];
+            }
+
+            public void removeNesting()
+            {
+                int var1 = this.count();
+                List<double> var2 = this.t;
+                CurveArray var3 = this.segment;
+                this.t = new List<double>();
+                this.t.Add(var2[0]);
+                this.segment = new CurveArray();
+
+                for (int var4 = 0; var4 < var1; ++var4)
+                {
+                    if (var3[var4] is PolyCurve)
+                    {
+                        PolyCurve var5 = (PolyCurve)var3[var4];
+                        this.flatten(var5, new Interval((double)var2[var4], (double)var2[var4 + 1]), this.t, this.segment);
+                    }
+                    else
+                    {
+                        this.t.Add(var2[var4 + 1]);
+                        this.segment.Add(var3[var4]);
+                    }
+                }
+
+            }
+
+            public void flatten(PolyCurve var1, Interval var2, List<double> var3, CurveArray var4)
+            {
+                int var5 = var1.count();
+                double var6 = var2.v1;
+                Interval var8 = var1.domain();
+
+                for (int var9 = 0; var9 < var5; ++var9)
+                {
+                    double var10 = var1.segmentDomain(var9).v1;
+                    double var12 = var8.normalizedParameterAt(var10);
+                    double var14 = var2.parameterAt(var12);
+                    Curve var16 = var1.segmentCurve(var9);
+                    if (var16 is PolyCurve)
+                    {
+                        this.flatten((PolyCurve)var16, new Interval(var6, var14), var3, var4);
+                        var1.harvestSegment(var9);
+                    }
+                    else
+                    {
+                        var3.Add(var14);
+                        var4.Add(var16);
+                        var1.harvestSegment(var9);
+                    }
+
+                    var6 = var14;
+                }
+
+            }
+
+            public Curve harvestSegment(int var1)
+            {
+                Curve var2 = null;
+                if (var1 >= 0 && var1 < this.segment.Count)
+                {
+                    var2 = (Curve)this.segment[var1];
+                    this.segment[var1] = (Curve)null;
+                    //this.segment.set(var1, (Object)null);
+                }
+
+                return var2;
+            }
+
+            //public IObject createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    List var3 = newList();
+            //    bool var4 = true;
+
+            //    for (int var5 = 0; var5 < this.segment.Count; ++var5)
+            //    {
+            //        IObject var6 = ((Curve)this.segment.get(var5)).createIObject(var1, var2);
+            //        if (var6 is ICurve)
+            //        {
+            //            ICurve var7 = (ICurve)var6;
+            //            var3.Add(var7);
+            //            if (var7.deg() > 1)
+            //            {
+            //                var4 = false;
+            //            }
+            //        }
+            //    }
+
+            //    if (!var4)
+            //    {
+            //        return new IPolycurve(var3);
+            //    }
+            //    else
+            //    {
+            //        List var9 = newList();
+
+            //        for (int var10 = 0; var10 < var3.Count; ++var10)
+            //        {
+            //            for (int var11 = 0; var11 < ((ICurve)var3.get(var10)).num(); ++var11)
+            //            {
+            //                HS_Vector var8 = ((ICurve)var3.get(var10)).cp(var11);
+            //                if (var11 == 0 && (var10 == 0 || !((HS_Vector)var9.get(var9.Count - 1)).eq(var8)) || var11 > 0)
+            //                {
+            //                    var9.Add(var8);
+            //                }
+            //            }
+
+            //            ((ICurve)var3.get(var10)).del();
+            //        }
+
+            //        return new ICurve(var2, (HS_VectorI[])var9.toArray(new HS_Vector[var9.Count]));
+            //    }
+            //}
+
+            //public ICurveGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    if (this.segment != null && this.segment.Count != 0)
+            //    {
+            //        List var3 = newList();
+            //        bool var4 = true;
+
+            //        for (int var5 = 0; var5 < this.segment.Count; ++var5)
+            //        {
+            //            ICurveGeo var6 = ((Curve)this.segment.get(var5)).createIGeometry(var1, var2);
+            //            var3.Add(var6);
+            //            if (var6.deg() > 1)
+            //            {
+            //                var4 = false;
+            //            }
+            //        }
+
+            //        if (!var4)
+            //        {
+            //            return (ICurveGeo)var3.get(0);
+            //        }
+            //        else
+            //        {
+            //            List var9 = newList();
+
+            //            for (int var10 = 0; var10 < var3.Count; ++var10)
+            //            {
+            //                for (int var7 = 0; var7 < ((ICurveGeo)var3.get(var10)).num(); ++var7)
+            //                {
+            //                    HS_VectorI var8 = ((ICurveGeo)var3.get(var10)).cp(var7);
+            //                    if (var7 == 0 && (var10 == 0 || !((HS_VectorI)var9.get(var9.Count - 1)).eq(var8)) || var7 > 0)
+            //                    {
+            //                        var9.Add(var8);
+            //                    }
+            //                }
+            //            }
+
+            //            return new ICurveGeo((HS_VectorI[])var9.toArray(new HS_Vector[var9.Count]));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return null;
+            //    }
+            //}
+
+            //public ITrimCurve createTrimCurve(Rhino3dmFile var1, IServerI var2, ISurfaceI var3)
+            //{
+            //    if (this.segment != null && this.segment.Count != 0)
+            //    {
+            //        List var4 = newList();
+            //        bool var5 = true;
+
+            //        for (int var6 = 0; var6 < this.segment.Count; ++var6)
+            //        {
+            //            ITrimCurve var7 = ((Curve)this.segment.get(var6)).createTrimCurve(var1, var2, var3);
+            //            var4.Add(var7);
+            //            if (var7.deg() > 1)
+            //            {
+            //                var5 = false;
+            //            }
+            //        }
+
+            //        List var10 = newList();
+
+            //        for (int var11 = 0; var11 < var4.Count; ++var11)
+            //        {
+            //            for (int var8 = 0; var8 < ((ITrimCurve)var4.get(var11)).num(); ++var8)
+            //            {
+            //                HS_VectorI var9 = ((ITrimCurve)var4.get(var11)).cp(var8);
+            //                if (var8 == 0 && (var11 == 0 || !((HS_VectorI)var10.get(var10.Count - 1)).eq(var9)) || var8 > 0)
+            //                {
+            //                    var10.Add(var9);
+            //                }
+            //            }
+            //        }
+
+            //        return new ITrimCurve((HS_VectorI[])var10.toArray(new HS_Vector[var10.Count]));
+            //    }
+            //    else
+            //    {
+            //        return null;
+            //    }
+            //}
+        }
+
+
+
+        public class CurveArray : List<Curve>
+        {
+            public CurveArray()
+            {
+            }
+
+            public CurveArray(int var1) : base(var1)
+            {
+
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var11 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var11);
+                    int var5 = var4[0];
+                    int var6 = var4[1];
+                    if (var5 == 1)
+                    {
+                        int var7 = I3dmImporter.readInt(var11);
+
+                        for (int var8 = 0; var8 < var7; ++var8)
+                        {
+                            int var9 = I3dmImporter.readInt(var11);
+                            if (var9 == 1)
+                            {
+                                RhinoObject var10 = I3dmImporter.readObject(var1, var11);
+                                if (var10 == null)
+                                {
+                                    throw new IOException("instance is null");
+                                }
+
+                                if (!(var10 is Curve))
+                                {
+                                    throw new IOException("invalid class of instance: " + var10);
+                                }
+
+                                this.Add((Curve)var10);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //I3dmExporter.writeChunkVersion(var4, 1, 0, var4.getCRC());
+            //int var5 = this.Count;
+            //I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //for (int var6 = 0; var6 < var5; ++var6)
+            //{
+            //    if (this.get(var6) != null)
+            //    {
+            //        I3dmExporter.writeInt32(var4, 1, var4.getCRC());
+            //        Chunk var7 = I3dmExporter.getObjectChunk(var1, (RhinoObject)this.get(var6));
+            //        I3dmExporter.writeChunk(var4, var7);
+            //    }
+            //    else
+            //    {
+            //        I3dmExporter.writeInt32(var4, 0, var4.getCRC());
+            //    }
+            //}
+
+            //I3dmExporter.writeChunk(var2, var4.getChunk());
+            //        }
+        }
+
+        public class Surface : Rhino3dm.Geometry
+        {
+            public new static readonly String uuid = "4ED7D4E1-E947-11d3-BFE5-0010830122F0";
+
+            public Surface()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4E1-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public new int getType()
+            {
+                return 8;
+            }
+
+            public static Surface.ISO readIso(int var0)
+            {
+                switch (var0)
+                {
+                    case 0:
+                        return Surface.ISO.NotIso;
+                    case 1:
+                        return Surface.ISO.XIso;
+                    case 2:
+                        return Surface.ISO.YIso;
+                    case 3:
+                        return Surface.ISO.WIso;
+                    case 4:
+                        return Surface.ISO.SIso;
+                    case 5:
+                        return Surface.ISO.EIso;
+                    case 6:
+                        return Surface.ISO.NIso;
+                    default:
+                        return Surface.ISO.NotIso;
+                }
+            }
+
+            public static int getInt(Surface.ISO var0)
+            {
+                switch (var0)
+                {
+                    case ISO.NotIso:
+                        return 0;
+                    case ISO.XIso:
+                        return 1;
+                    case ISO.YIso:
+                        return 2;
+                    case ISO.WIso:
+                        return 3;
+                    case ISO.SIso:
+                        return 4;
+                    case ISO.EIso:
+                        return 5;
+                    case ISO.NIso:
+                        return 6;
+                    default:
+                        return 0;
+                }
+            }
+
+            public Interval domain(int var1)
+            {
+                return new Interval(0.0D, 1.0D);
+            }
+
+            //public ISurface createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return null;
+            //}
+
+            //public ISurfaceGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return null;
+            //}
+
+            public enum ISO
+            {
+                NotIso,
+                XIso,
+                YIso,
+                WIso,
+                SIso,
+                EIso,
+                NIso,
+                IsoCount
+            }
+        }
+
+        public class PlaneSurface : Surface
+        {
+            public static readonly String uuid = "4ED7D4DF-E947-11d3-BFE5-0010830122F0";
+            public Plane plane;
+            public Interval[] Domain;
+            public Interval[] extents;
+
+            public PlaneSurface()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4DF-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                if (var4 == 1)
+                {
+                    this.plane = I3dmImporter.readPlane(var2);
+                    this.Domain = new Interval[2];
+                    this.Domain[0] = I3dmImporter.readInterval(var2);
+                    this.Domain[1] = I3dmImporter.readInterval(var2);
+                    this.extents = new Interval[2];
+                    this.extents[0] = this.Domain[0];
+                    this.extents[1] = this.Domain[1];
+                    if (var5 >= 1)
+                    {
+                        this.extents[0] = I3dmImporter.readInterval(var2);
+                        this.extents[1] = I3dmImporter.readInterval(var2);
+                    }
+                }
+
+            }
+
+            //public ISurface createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    if (this.plane == null)
+            //    {
+            //        IOut.err("plane is null");
+            //        return null;
+            //    }
+            //    else if (this.extents == null)
+            //    {
+            //        IOut.err("extent is null");
+            //        return null;
+            //    }
+            //    else
+            //    {
+            //        HS_Vector var3 = this.plane.origin;
+            //        HS_Vector[][] var4 = new HS_Vector[2][2];
+            //        var4[0][0] = var3.dup().add(this.plane.xaxis, this.extents[0].v1).add(this.plane.yaxis, this.extents[1].v1);
+            //        var4[1][0] = var3.dup().add(this.plane.xaxis, this.extents[0].v2).add(this.plane.yaxis, this.extents[1].v1);
+            //        var4[0][1] = var3.dup().add(this.plane.xaxis, this.extents[0].v1).add(this.plane.yaxis, this.extents[1].v2);
+            //        var4[1][1] = var3.dup().add(this.plane.xaxis, this.extents[0].v2).add(this.plane.yaxis, this.extents[1].v2);
+            //        double[] var5 = new double[] { this.Domain[0].v1, this.Domain[0].v1, this.Domain[0].v2, this.Domain[0].v2 };
+            //        double[] var6 = new double[] { this.Domain[1].v1, this.Domain[1].v1, this.Domain[1].v2, this.Domain[1].v2 };
+            //        return new ISurface(var2, var4, 1, 1, var5, var6, this.Domain[0].v1, this.Domain[0].v2, this.Domain[1].v1, this.Domain[1].v2);
+            //    }
+            //}
+
+            //public ISurfaceGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    if (this.plane == null)
+            //    {
+            //        IOut.err("plane is null");
+            //        return null;
+            //    }
+            //    else if (this.extents == null)
+            //    {
+            //        IOut.err("extent is null");
+            //        return null;
+            //    }
+            //    else
+            //    {
+            //        HS_Vector var3 = this.plane.origin;
+            //        HS_Vector[][] var4 = new HS_Vector[2][2];
+            //        var4[0][0] = var3.dup().add(this.plane.xaxis, this.extents[0].v1).add(this.plane.yaxis, this.extents[1].v1);
+            //        var4[1][0] = var3.dup().add(this.plane.xaxis, this.extents[0].v2).add(this.plane.yaxis, this.extents[1].v1);
+            //        var4[0][1] = var3.dup().add(this.plane.xaxis, this.extents[0].v1).add(this.plane.yaxis, this.extents[1].v2);
+            //        var4[1][1] = var3.dup().add(this.plane.xaxis, this.extents[0].v2).add(this.plane.yaxis, this.extents[1].v2);
+            //        double[] var5 = new double[] { this.Domain[0].v1, this.Domain[0].v1, this.Domain[0].v2, this.Domain[0].v2 };
+            //        double[] var6 = new double[] { this.Domain[1].v1, this.Domain[1].v1, this.Domain[1].v2, this.Domain[1].v2 };
+            //        return new ISurfaceGeo(var4, 1, 1, var5, var6, this.Domain[0].v1, this.Domain[0].v2, this.Domain[1].v1, this.Domain[1].v2);
+            //    }
+            //}
+
+            public new Interval domain(int var1)
+            {
+                return var1 != 0 ? this.Domain[1] : this.Domain[0];
+            }
+
+            public bool isValid()
+            {
+                return this.plane.isValid() && this.Domain[0].isIncreasing() && this.Domain[1].isIncreasing() && this.extents[0].isIncreasing() && this.extents[1].isIncreasing();
+            }
+        }
+
+        public class Plane
+        {
+            public HS_Vector origin;
+            public HS_Vector xaxis;
+            public HS_Vector yaxis;
+            public HS_Vector zaxis;
+            public PlaneEquation planeEquation;
+
+            public Plane()
+            {
+            }
+
+            public bool isValid()
+            {
+                return true;
+            }
+
+            public override String ToString()
+            {
+                return "orig=" + this.origin + ", x=" + this.xaxis + ", y=" + this.yaxis + ", z=" + this.zaxis + ", eq=" + this.planeEquation;
+            }
+        }
+
+        public class PlaneEquation
+        {
+            public double x;
+            public double y;
+            public double z;
+            public double d;
+
+            public PlaneEquation()
+            {
+            }
+
+            public PlaneEquation(double var1, double var3, double var5, double var7)
+            {
+                this.x = var1;
+                this.y = var3;
+                this.z = var5;
+                this.d = var7;
+            }
+
+            public PlaneEquation(HS_Vector var1, HS_Vector var2)
+            {
+                this.x = var1.xd;
+                this.y = var1.yd;
+                this.z = var1.zd;
+                this.d = -var1.dot(var2);
+            }
+
+            public override String ToString()
+            {
+                return "plane equation {" + this.x + "," + this.y + "," + this.z + "," + this.d + "}";
+            }
+        }
+
+        public class SurfaceArray : List<Surface>
+        {
+            public SurfaceArray()
+            {
+            }
+
+            public SurfaceArray(int var1) : base(var1)
+            {
+
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var11 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var11);
+                    int var5 = var4[0];
+                    int var6 = var4[1];
+                    if (var5 == 1)
+                    {
+                        int var7 = I3dmImporter.readInt(var11);
+
+                        for (int var8 = 0; var8 < var7; ++var8)
+                        {
+                            int var9 = I3dmImporter.readInt(var11);
+                            if (var9 == 1)
+                            {
+                                RhinoObject var10 = I3dmImporter.readObject(var1, var11);
+                                if (var10 == null)
+                                {
+                                    throw new IOException("instance is null");
+                                }
+
+                                if (!(var10 is Surface))
+                                {
+                                    throw new IOException("invalid class of instance: " + var10);
+                                }
+
+                                this.Add((Surface)var10);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //I3dmExporter.writeChunkVersion(var4, 1, 0, var4.getCRC());
+            //int var5 = this.Count;
+            //I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //for (int var6 = 0; var6 < var5; ++var6)
+            //{
+            //    if (this.get(var6) != null)
+            //    {
+            //        I3dmExporter.writeInt32(var4, 1, var4.getCRC());
+            //        Chunk var7 = I3dmExporter.getObjectChunk(var1, (RhinoObject)this.get(var6));
+            //        I3dmExporter.writeChunk(var4, var7);
+            //    }
+            //    else
+            //    {
+            //        I3dmExporter.writeInt32(var4, 0, var4.getCRC());
+            //    }
+            //}
+
+            //I3dmExporter.writeChunk(var2, var4.getChunk());
+            //        }
+        }
+
+        public class SurfaceProxy : Surface
+        {
+            public new static readonly String uuid = "4ED7D4E2-E947-11d3-BFE5-0010830122F0";
+            public Surface surface;
+            public bool transposed;
+
+            public SurfaceProxy()
+            {
+            }
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("4ED7D4E2-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public void setProxySurface(Surface var1)
+            {
+                if (var1 == this)
+                {
+                    var1 = null;
+                }
+
+                this.surface = var1;
+                this.transposed = false;
+            }
+        }
+        public class BrepEdge : CurveProxy
+        {
+            public new static readonly String uuid = "60B5DBC1-E660-11d3-BFE4-0010830122F0";
+            public int edgeIndex;
+            public int curve3Index;
+            public int[] vertexIndex;
+            public List<int> trimIndex;
+            public double tolerance;
+            public Brep brep;
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("60B5DBC1-E660-11d3-BFE4-0010830122F0");
+            }
+
+            public new int getType()
+            {
+                return 4;
+            }
+
+            public BrepEdge()
+            {
+            }
+
+            public BrepEdge(int var1, int var2, int var3, int var4, Interval var5, Interval var6, Brep var7)
+            {
+                this.edgeIndex = var1;
+                this.curve3Index = var2;
+                this.vertexIndex = new int[2];
+                this.vertexIndex[0] = var3;
+                this.vertexIndex[1] = var4;
+                this.brep = var7;
+                this.trimIndex = new List<int>();
+                this.tolerance = 0.0D;
+                this.setProxyCurveDomain(var5);
+                this.setDomain(var6);
+            }
+
+            public void addTrimIndex(int var1)
+            {
+                this.trimIndex.Add(var1);
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                this.edgeIndex = I3dmImporter.readInt(var2);
+                this.curve3Index = I3dmImporter.readInt(var2);
+                int var3 = I3dmImporter.readInt(var2);
+                Interval var4 = I3dmImporter.readInterval(var2);
+                this.vertexIndex = new int[2];
+                this.vertexIndex[0] = I3dmImporter.readInt(var2);
+                this.vertexIndex[1] = I3dmImporter.readInt(var2);
+                this.trimIndex = I3dmImporter.readArrayInt(var2);
+                this.tolerance = I3dmImporter.readDouble(var2);
+                Interval var5 = var4;
+                if (var1.version > 4)
+                {
+                    if (var1.version >= 3 && var1.openNurbsVersion <= -1912309923)
+                    {
+                        try
+                        {
+                            var5 = I3dmImporter.readInterval(var2);
+                        }
+                        catch (IOException var7)
+                        {
+                            var5 = var4;
+                        }
+                    }
+                }
+                else
+                {
+                    if (var1.version >= 3 && var1.openNurbsVersion >= 200206180)
+                    {
+                        try
+                        {
+                            var5 = I3dmImporter.readInterval(var2);
+                        }
+                        catch (IOException var7)
+                        {
+                            var5 = var4;
+                        }
+                    }
+                }
+
+
+                this.setProxyCurve((Curve)null, var4);
+                if (var3 != 0)
+                {
+                    this.reverse();
+                }
+
+                this.setDomain(var5);
+                Console.WriteLine(200 + " edgeIndex = " + this.edgeIndex);
+                Console.WriteLine(200 + " curve3Index = " + this.curve3Index);
+                Console.WriteLine(200 + " vertexIndex = " + this.vertexIndex[0] + ", " + this.vertexIndex[1]);
+                Console.WriteLine(200 + " trimIndex = " + this.trimIndex);
+                Console.WriteLine(200 + " tolerance = " + this.tolerance);
+                Console.WriteLine(200 + " domain = " + this.domain());
+            }
+
+            //public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3)
+            //{
+            //    I3dmExporter.writeInt32(var2, this.edgeIndex, var3);
+            //    I3dmExporter.writeInt32(var2, this.curve3Index, var3);
+            //    int var4 = this.proxyCurveIsReversed() ? 1 : 0;
+            //    I3dmExporter.writeInt32(var2, var4, var3);
+            //    I3dmExporter.writeInterval(var2, this.proxyCurveDomain(), var3);
+            //    I3dmExporter.writeInt32(var2, this.vertexIndex[0], var3);
+            //    I3dmExporter.writeInt32(var2, this.vertexIndex[1], var3);
+            //    I3dmExporter.writeArrayInt(var2, this.trimIndex, var3);
+            //    I3dmExporter.writedouble(var2, this.tolerance, var3);
+            //    if (var1.version >= 4)
+            //    {
+            //        I3dmExporter.writeInterval(var2, this.domain(), var3);
+            //    }
+
+            //}
+        }
+
+        public class BrepEdgeArray : List<BrepEdge>
+        {
+            public BrepEdgeArray()
+            {
+            }
+
+            public BrepEdgeArray(int var1) : base(var1)
+            {
+
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var10 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var10);
+                    int var5 = var4[0];
+                    int var6 = var4[1];
+                    if (var5 == 1)
+                    {
+                        int var7 = I3dmImporter.readInt(var10);
+
+                        for (int var8 = 0; var8 < var7; ++var8)
+                        {
+                            BrepEdge var9 = new BrepEdge();
+                            var9.read(var1, var10);
+                            this.Add(var9);
+                        }
+                    }
+
+                }
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //I3dmExporter.writeChunkVersion(var4, 1, 0, var4.getCRC());
+            //int var5 = this.Count;
+            //I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //for (int var6 = 0; var6 < var5; ++var6)
+            //{
+            //    ((BrepEdge)this.get(var6)).write(var1, var4, var4.getCRC());
+            //}
+
+            //I3dmExporter.writeChunk(var2, var4.getChunk());
+            //        }
+        }
+
+
+
+        public class Point : Rhino3dm.Geometry
+        {
+            public new static readonly String uuid = "C3101A1D-F157-11d3-BFE7-0010830122F0";
+            public HS_Vector point;
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("C3101A1D-F157-11d3-BFE7-0010830122F0");
+            }
+
+            public new int getType()
+            {
+                return 1;
+            }
+
+            public Point()
+            {
+            }
+
+            public Point(HS_Vector var1)
+            {
+                this.point = var1;
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                if (var3[0] != 1)
+                {
+                    throw new IOException("invalid major version : " + (var3[0]).ToString());
+                }
+                else
+                {
+                    this.point = new HS_Vector();
+                    this.point.xd = I3dmImporter.readDouble(var2);
+                    this.point.yd = I3dmImporter.readDouble(var2);
+                    this.point.zd = I3dmImporter.readDouble(var2);
+                }
+            }
+
+            //public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    I3dmExporter.writeChunkVersion(var2, 1, 0, var3);
+            //            if (this.point == null) {
+            //        throw new Exception("point is null");
+            //        this.point = new HS_Vector();
+            //    }
+
+            //    I3dmExporter.writedouble(var2, this.point.xd, var3);
+            //    I3dmExporter.writedouble(var2, this.point.yd, var3);
+            //    I3dmExporter.writedouble(var2, this.point.zd, var3);
+            //}
+
+            //public IPoint createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    IPoint var3 = new IPoint(var2, this.point);
+            //    return var3;
+            //}
+
+            //public HS_Vector createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    return this.point.dup();
+            //}
+        }
+
+        public class NurbsCurve : Curve
+        {
+            public static readonly String uuid = "4ED7D4DD-E947-11d3-BFE5-0010830122F0";
+            public int dim;
+            public int isRat;
+            public int order;
+            public int cvCount;
+            public int knotCapacity;
+            public double[] knot;
+            public HS_Vector[] cv;
+
+            public UUID getClassUUID()
+            {
+                return new UUID("4ED7D4DD-E947-11d3-BFE5-0010830122F0");
+            }
+
+            public NurbsCurve()
+            {
+            }
+
+            //public NurbsCurve(ICurveGeo var1)
+            //{
+            //    this.dim = 3;
+            //    this.isRat = var1.isRational() ? 1 : 0;
+            //    this.order = var1.deg() + 1;
+            //    this.cvCount = var1.num();
+            //    double[] var2 = new double[var1.knotNum()];
+
+            //    int var3;
+            //    for (var3 = 0; var3 < var1.knotNum(); ++var3)
+            //    {
+            //        var2[var3] = var1.knot(var3);
+            //    }
+
+            //    this.knot = getRhinoKnots(var2);
+            //    this.cv = new HS_Vector[var1.num()];
+
+            //    for (var3 = 0; var3 < var1.num(); ++var3)
+            //    {
+            //        this.cv[var3] = var1.cp(var3).get();
+            //    }
+
+            //    this.icurve = var1;
+            //}
+
+            //public NurbsCurve(ITrimCurve var1)
+            //{
+            //    this.dim = 2;
+            //    this.isRat = var1.isRational() ? 1 : 0;
+            //    this.order = var1.deg() + 1;
+            //    this.cvCount = var1.num();
+            //    double[] var2 = new double[var1.knotNum()];
+
+            //    int var3;
+            //    for (var3 = 0; var3 < var1.knotNum(); ++var3)
+            //    {
+            //        var2[var3] = var1.knot(var3);
+            //    }
+
+            //    this.knot = getRhinoKnots(var2);
+            //    this.cv = new HS_Vector[var1.num()];
+
+            //    for (var3 = 0; var3 < var1.num(); ++var3)
+            //    {
+            //        this.cv[var3] = var1.cp(var3).get();
+            //    }
+
+            //}
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                if (var4 == 1)
+                {
+                    this.dim = I3dmImporter.readInt(var2);
+                    this.isRat = I3dmImporter.readInt(var2);
+                    this.order = I3dmImporter.readInt(var2);
+                    this.cvCount = I3dmImporter.readInt(var2);
+                    int var6 = I3dmImporter.readInt(var2);
+                    int var7 = I3dmImporter.readInt(var2);
+                    BoundingBox var8 = I3dmImporter.readBoundingBox(var2);
+                    int var9 = I3dmImporter.readInt(var2);
+                    this.knot = new double[var9];
+
+                    int var10;
+                    for (var10 = 0; var10 < var9; ++var10)
+                    {
+                        this.knot[var10] = I3dmImporter.readDouble(var2);
+                        Console.WriteLine(100 + "knot[" + var10 + "] = " + this.knot[var10]);
+                    }
+
+                    var10 = I3dmImporter.readInt(var2);
+                    int var10000;
+                    if (this.isRat != 0)
+                    {
+                        var10000 = this.dim + 1;
+                    }
+                    else
+                    {
+                        var10000 = this.dim;
+                    }
+
+                    this.cv = new HS_Vector[var10];
+
+                    for (int var12 = 0; var12 < var10; ++var12)
+                    {
+                        if (this.isRat != 0)
+                        {
+                            this.cv[var12] = new HS_Vector();
+                        }
+                        else
+                        {
+                            this.cv[var12] = new HS_Vector();
+                        }
+
+                        if (this.dim >= 1)
+                        {
+                            this.cv[var12].xd = I3dmImporter.readDouble(var2);
+                        }
+
+                        if (this.dim >= 2)
+                        {
+                            this.cv[var12].yd = I3dmImporter.readDouble(var2);
+                        }
+
+                        if (this.dim >= 3)
+                        {
+                            this.cv[var12].zd = I3dmImporter.readDouble(var2);
+                        }
+
+                        if (this.dim >= 4)
+                        {
+                            throw new Exception(this.dim + " dimension point cannot be read");
+
+                            for (int var13 = 0; var13 < this.dim - 3; ++var13)
+                            {
+                                I3dmImporter.readDouble(var2);
+                            }
+                        }
+
+                        if (this.isRat != 0)
+                        {
+                            double var15 = I3dmImporter.readDouble(var2);
+                            //((HS_Vector)this.cv[var12]).w = var15;
+                            HS_Vector var16 = this.cv[var12];
+                            var16.xd /= var15;
+                            var16 = this.cv[var12];
+                            var16.yd /= var15;
+                            var16 = this.cv[var12];
+                            var16.zd /= var15;
+                        }
+
+                        Console.WriteLine(100 + "cv[" + var12 + "] = " + this.cv[var12]);
+                    }
+                }
+
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    I3dmExporter.writeChunkVersion(var2, 1, 0, var3);
+            //    I3dmExporter.writeInt32(var2, this.dim, var3);
+            //    I3dmExporter.writeInt32(var2, this.isRat, var3);
+            //    I3dmExporter.writeInt32(var2, this.order, var3);
+            //    I3dmExporter.writeInt32(var2, this.cvCount, var3);
+            //    I3dmExporter.writeInt32(var2, 0, var3);
+            //    I3dmExporter.writeInt32(var2, 0, var3);
+            //    I3dmExporter.writeBoundingBox(var2, new BoundingBox(), var3);
+            //int var4 = this.knot == null ? 0 : this.knot.Length;
+            //I3dmExporter.writeInt32(var2, var4, var3);
+
+            //int var5;
+            //for (var5 = 0; var5 < var4; ++var5)
+            //{
+            //    I3dmExporter.writeDouble(var2, this.knot[var5], var3);
+            //}
+
+            //var5 = this.cv == null || this.dim != 2 && this.dim != 3 ? 0 : this.cv.Length;
+            //I3dmExporter.writeInt32(var2, var5, var3);
+
+            //for (int var6 = 0; var6 < var5; ++var6)
+            //{
+            //    double var7;
+            //    if (this.dim == 2)
+            //    {
+            //        if (this.isRat == 0)
+            //        {
+            //            I3dmExporter.writeDouble(var2, this.cv[var6].xd, var3);
+            //            I3dmExporter.writeDouble(var2, this.cv[var6].yd, var3);
+            //        }
+            //        else
+            //        {
+            //            var7 = 1.0D;
+            //            if (this.cv[var6] instanceof HS_Vector4) {
+            //    var7 = ((HS_Vector4)this.cv[var6]).w;
+            //}
+
+            //I3dmExporter.writeDouble(var2, this.cv[var6].xd * var7, var3);
+            //I3dmExporter.writeDouble(var2, this.cv[var6].yd * var7, var3);
+            //I3dmExporter.writeDouble(var2, var7, var3);
+            //                    }
+            //        } else if (this.dim == 3)
+            //{
+            //            if (this.isRat == 0)
+            //            {
+            //                I3dmExporter.writeDouble(var2, this.cv[var6].xd, var3);
+            //                I3dmExporter.writeDouble(var2, this.cv[var6].yd, var3);
+            //                I3dmExporter.writeDouble(var2, this.cv[var6].zd, var3);
+            //            }
+            //            else
+            //            {
+            //                var7 = 1.0D;
+            //                if (this.cv[var6] instanceof HS_Vector4) {
+            //                    var7 = ((HS_Vector4)this.cv[var6]).w;
+            //                }
+
+            //                I3dmExporter.writeDouble(var2, this.cv[var6].xd * var7, var3);
+            //                I3dmExporter.writeDouble(var2, this.cv[var6].yd * var7, var3);
+            //                I3dmExporter.writeDouble(var2, this.cv[var6].zd * var7, var3);
+            //                I3dmExporter.writeDouble(var2, var7, var3);
+            //            }
+            //        }
+            //        }
+
+            //}
+
+            public double[] getIGKnots()
+            {
+                double[] var1 = new double[this.knot.Length + 2];
+                int var2;
+                if (this.order == 2)
+                {
+                    var1[0] = this.knot[0];
+
+                    for (var2 = 0; var2 < this.knot.Length; ++var2)
+                    {
+                        var1[var2 + 1] = this.knot[var2];
+                    }
+
+                    var1[this.knot.Length + 1] = this.knot[this.knot.Length - 1];
+                }
+                else if (this.order > 2 && this.knot.Length > 2)
+                {
+                    var1[0] = this.knot[0] - (this.knot[1] - this.knot[0]);
+
+                    for (var2 = 0; var2 < this.knot.Length; ++var2)
+                    {
+                        var1[var2 + 1] = this.knot[var2];
+                    }
+
+                    var1[this.knot.Length + 1] = this.knot[this.knot.Length - 1] + (this.knot[this.knot.Length - 1] - this.knot[this.knot.Length - 2]);
+                }
+                else
+                {
+                    throw new Exception("wrong knot length (" + this.knot.Length + ") at order = " + this.order + ", and cv count = " + this.cvCount);
+                }
+
+                return var1;
+            }
+
+            public static double[] getRhinoKnots(double[] var0)
+            {
+                if (var0.Length <= 2)
+                {
+                    throw new Exception("knot is too short");
+                }
+
+                double[] var1 = new double[var0.Length - 2];
+
+                for (int var2 = 0; var2 < var1.Length; ++var2)
+                {
+                    var1[var2] = var0[var2 + 1];
+                }
+
+                return var1;
+            }
+
+            //public ICurve createIObject(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    double[] var3 = this.getIGKnots();
+            //    double var4 = 0.0D;
+            //    double var6 = 1.0D;
+            //    if (this.knot.Length > this.order - 2)
+            //    {
+            //        var4 = this.knot[this.order - 2];
+            //        var6 = this.knot[this.knot.Length - 1 - (this.order - 2)];
+            //        ICurve var8 = new ICurve(var2, this.cv, this.order - 1, var3, var4, var6);
+            //        return var8;
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("knot is too short: knot.Length=" + this.knot.Length + ", order=" + this.order);
+            //        return null;
+            //    }
+            //}
+
+            //public ICurveGeo createIGeometry(Rhino3dmFile var1, IServerI var2)
+            //{
+            //    double[] var3 = this.getIGKnots();
+            //    double var4 = 0.0D;
+            //    double var6 = 1.0D;
+            //    if (this.knot.Length > this.order - 2)
+            //    {
+            //        var4 = this.knot[this.order - 2];
+            //        var6 = this.knot[this.knot.Length - 1 - (this.order - 2)];
+            //        return new ICurveGeo(this.cv, this.order - 1, var3, var4, var6);
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("knot is too short: knot.Length=" + this.knot.Length + ", order=" + this.order);
+            //        return null;
+            //    }
+            //}
+
+            //public ITrimCurve createTrimCurve(Rhino3dmFile var1, IServerI var2, ISurfaceI var3)
+            //{
+            //    double[] var4 = this.getIGKnots();
+            //    double var5 = 0.0D;
+            //    double var7 = 1.0D;
+            //    if (this.knot.Length > this.order - 2)
+            //    {
+            //        var5 = this.knot[this.order - 2];
+            //        var7 = this.knot[this.knot.Length - 1 - (this.order - 2)];
+            //        return new ITrimCurve(this.cv, this.order - 1, var4, var5, var7);
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("knot is too short: knot.Length=" + this.knot.Length + ", order=" + this.order);
+            //        return null;
+            //    }
+            //}
+
+            public int cvSize()
+            {
+                return this.isRat != 0 ? this.dim + 1 : this.dim;
+            }
+
+            public static Interval getKnotVectorDomain(int var0, int var1, double[] var2)
+            {
+                if (var0 >= 2 && var1 >= var0 && var2 != null)
+                {
+                    Interval var3 = new Interval();
+                    var3.v1 = var2[var0 - 2];
+                    var3.v2 = var2[var1 - 1];
+                    return var3;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            public static bool isValidKnotVector(int var0, int var1, double[] var2)
+            {
+                if (var0 >= 2 && var1 >= var0 && var2 != null && !(var2[var0 - 2] >= var2[var0 - 1]) && !(var2[var1 - 2] >= var2[var1 - 1]))
+                {
+                    int var3;
+                    for (var3 = 0; var3 < var2.Length - 1; ++var3)
+                    {
+                        if (var2[var3] > var2[var3 + 1])
+                        {
+                            return false;
+                        }
+                    }
+
+                    for (var3 = 0; var3 < var2.Length - var0 + 1; ++var3)
+                    {
+                        if (var2[var3] >= var2[var3 + var0 - 1])
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override Interval domain()
+            {
+                return getKnotVectorDomain(this.order, this.cvCount, this.knot);
+            }
+
+            public override bool isValid()
+            {
+                if (this.dim > 0 && this.order >= 2 && this.cvCount >= this.order && this.cv != null && this.knot != null && !isValidKnotVector(this.order, this.cvCount, this.knot))
+                {
+                    if (this.isRat != 0)
+                    {
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+
+
+        public class BoundingBox
+        {
+            public HS_Vector min = new HS_Vector();
+            public HS_Vector max = new HS_Vector();
+
+            public BoundingBox()
+            {
+            }
+        }
+
+        public class BrepVertex : Point
+        {
+            public new static readonly String uuid = "60B5DBC0-E660-11d3-BFE4-0010830122F0";
+            public int vertexIndex;
+            public List<int> edgeIndex;
+            public double tolerance;
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("60B5DBC0-E660-11d3-BFE4-0010830122F0");
+            }
+
+            public BrepVertex()
+            {
+            }
+
+            public BrepVertex(int var1, HS_Vector var2) : base(var2)
+            {
+
+                this.vertexIndex = var1;
+                this.edgeIndex = new List<int>();
+                this.tolerance = 0.0D;
+            }
+
+            public void addEdgeIndex(int var1)
+            {
+                this.edgeIndex.Add(var1);
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                this.vertexIndex = I3dmImporter.readInt(var2);
+                this.point = I3dmImporter.readPoint3(var2);
+                this.edgeIndex = I3dmImporter.readArrayInt(var2);
+                this.tolerance = I3dmImporter.readDouble(var2);
+                Console.WriteLine(200 + "vertexIndex = " + this.vertexIndex);
+                Console.WriteLine(200 + "point = " + this.point);
+                String var3 = "";
+
+                for (int var4 = 0; var4 < this.edgeIndex.Count; ++var4)
+                {
+                    var3 = var3 + this.edgeIndex[var4] + ", ";
+                }
+
+                Console.WriteLine(200 + "edgeIndex = " + var3);
+                Console.WriteLine(200 + "tolerance = " + this.tolerance);
+            }
+
+            //public void write(Rhino3dmFile var1, Stream var2, CRC32 var3) 
+            //{
+            //    I3dmExporter.writeInt32(var2, this.vertexIndex, var3);
+            //    I3dmExporter.writePoint(var2, this.point, var3);
+            //    I3dmExporter.writeArrayInt(var2, this.edgeIndex, var3);
+            //    I3dmExporter.writedouble(var2, this.tolerance, var3);
+            //}
+        }
+        public class BrepVertexArray : List<BrepVertex>
+        {
+
+            public BrepVertexArray()
+            {
+            }
+
+            public BrepVertexArray(int var1) : base(var1)
+            {
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var10 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var10);
+                    int var5 = var4[0];
+                    int var6 = var4[1];
+                    if (var5 == 1)
+                    {
+                        int var7 = I3dmImporter.readInt(var10);
+
+                        for (int var8 = 0; var8 < var7; ++var8)
+                        {
+                            BrepVertex var9 = new BrepVertex();
+                            var9.read(var1, var10);
+                            this.Add(var9);
+                        }
+                    }
+
+                }
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //I3dmExporter.writeChunkVersion(var4, 1, 0, var4.getCRC());
+            //int var5 = this.Count;
+            //I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //for (int var6 = 0; var6 < var5; ++var6)
+            //{
+            //    ((BrepVertex)this.get(var6)).write(var1, var4, var4.getCRC());
+            //}
+
+            //I3dmExporter.writeChunk(var2, var4.getChunk());
+            //        }
+
+        }
+
+        public class BrepTrim : CurveProxy
+        {
+            public new static readonly String uuid = "60B5DBC2-E660-11d3-BFE4-0010830122F0";
+            public static readonly int force32BitTrimType = -1;
+            public int trimIndex;
+            public int curve2Index;
+            public int edgeIndex;
+            public int[] vertexIndex;
+            public bool rev3d;
+            public BrepTrim.Type type;
+            public Surface.ISO iso;
+            public int loopIndex;
+            public double[] tolerance;
+            public double legacy2dTol;
+            public double legacy3dTol;
+            public Brep brep;
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("60B5DBC2-E660-11d3-BFE4-0010830122F0");
+            }
+
+            public BrepTrim()
+            {
+            }
+
+            //public BrepTrim(int var1, int var2, int var3, int var4, int var5, int var6, Interval var7, Interval var8, Brep var9, ITrimCurve var10)
+            //{
+            //    this.trimIndex = var1;
+            //    this.curve2Index = var2;
+            //    this.edgeIndex = var3;
+            //    this.vertexIndex = new int[2];
+            //    this.vertexIndex[0] = var4;
+            //    this.vertexIndex[1] = var5;
+            //    this.rev3d = false;
+            //    this.type = Type.Boundary;
+            //    this.loopIndex = var6;
+            //    this.tolerance = new double[2];
+            //    this.tolerance[0] = 0.0D;
+            //    this.tolerance[1] = 0.0D;
+            //    this.legacy2dTol = 0.0D;
+            //    this.legacy3dTol = 0.0D;
+            //    this.iso = this.getISOType(var10);
+            //    this.setProxyCurveDomain(var7);
+            //    this.setDomain(var8);
+            //    this.brep = var9;
+            //}
+
+            //public Surface.ISO getISOType(ITrimCurve var1)
+            //{
+            //    if (this.isStraightOnX(var1))
+            //    {
+            //        if (var1.num() == 2)
+            //        {
+            //            if (var1.cp(0).yd() == 0.0D)
+            //            {
+            //                return Surface.ISO.SIso;
+            //            }
+
+            //            if (var1.cp(0).yd() == 1.0D)
+            //            {
+            //                return Surface.ISO.NIso;
+            //            }
+            //        }
+
+            //        return Surface.ISO.XIso;
+            //    }
+            //    else if (this.isStraightOnY(var1))
+            //    {
+            //        if (var1.num() == 2)
+            //        {
+            //            if (var1.cp(0).xd() == 0.0D)
+            //            {
+            //                return Surface.ISO.WIso;
+            //            }
+
+            //            if (var1.cp(0).xd() == 1.0D)
+            //            {
+            //                return Surface.ISO.EIso;
+            //            }
+            //        }
+
+            //        return Surface.ISO.YIso;
+            //    }
+            //    else
+            //    {
+            //        return Surface.ISO.NotIso;
+            //    }
+            //}
+
+            //public bool isStraightOnX(ITrimCurve var1)
+            //{
+            //    for (int var2 = 1; var2 < var1.num(); ++var2)
+            //    {
+            //        if (!var1.cp(0).eqY(var1.cp(var2)))
+            //        {
+            //            return false;
+            //        }
+            //    }
+
+            //    return true;
+            //}
+
+            //public bool isStraightOnY(ITrimCurve var1)
+            //{
+            //    for (int var2 = 1; var2 < var1.num(); ++var2)
+            //    {
+            //        if (!var1.cp(0).eqX(var1.cp(var2)))
+            //        {
+            //            return false;
+            //        }
+            //    }
+
+            //    return true;
+            //}
+
+            public static Type readType(int var0)
+            {
+                switch (var0)
+                {
+                    case 0:
+                        return Type.Unknown;
+                    case 1:
+                        return Type.Boundary;
+                    case 2:
+                        return Type.Mated;
+                    case 3:
+                        return Type.Seam;
+                    case 4:
+                        return Type.Singular;
+                    case 5:
+                        return Type.CrvOnSrf;
+                    case 6:
+                        return Type.PtOnSrf;
+                    case 7:
+                        return Type.Slit;
+                    default:
+                        return Type.Unknown;
+                }
+            }
+
+            public static int getInt(Type var0)
+            {
+                switch (var0)
+                {
+                    case Type.Unknown:
+                        return 0;
+                    case Type.Boundary:
+                        return 1;
+                    case Type.Mated:
+                        return 2;
+                    case Type.Seam:
+                        return 3;
+                    case Type.Singular:
+                        return 4;
+                    case Type.CrvOnSrf:
+                        return 5;
+                    case Type.PtOnSrf:
+                        return 6;
+                    case Type.Slit:
+                        return 7;
+                    default:
+                        return 0;
+                }
+            }
+
+            public new bool reverse()
+            {
+                this.rev3d = !this.rev3d;
+                return true;
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                this.trimIndex = I3dmImporter.readInt(var2);
+                this.curve2Index = I3dmImporter.readInt(var2);
+                Interval var3 = I3dmImporter.readInterval(var2);
+                this.setProxyCurveDomain(var3);
+                this.setDomain(var3);
+                this.edgeIndex = I3dmImporter.readInt(var2);
+                this.vertexIndex = new int[2];
+                this.vertexIndex[0] = I3dmImporter.readInt(var2);
+                this.vertexIndex[1] = I3dmImporter.readInt(var2);
+                this.rev3d = I3dmImporter.readInt(var2) != 0;
+                this.type = readType(I3dmImporter.readInt(var2));
+                this.iso = Surface.readIso(I3dmImporter.readInt(var2));
+                this.loopIndex = I3dmImporter.readInt(var2);
+                this.tolerance = new double[2];
+                this.tolerance[0] = I3dmImporter.readDouble(var2);
+                this.tolerance[1] = I3dmImporter.readDouble(var2);
+                if (var1.version >= 3 && var1.openNurbsVersion >= 200206180)
+                {
+                    Interval var8 = this.proxyCurveDomain();
+
+                    try
+                    {
+                        var8 = I3dmImporter.readInterval(var2);
+                    }
+                    catch (IOException var7)
+                    {
+                        var8 = this.proxyCurveDomain();
+                    }
+
+                    bool var9 = false;
+                    byte[] var6 = I3dmImporter.readBytes(var2, 8);
+                    if (var6[0] == 1)
+                    {
+                        var9 = true;
+                    }
+
+                    var6 = I3dmImporter.readBytes(var2, 24);
+                    if (var9)
+                    {
+                        this.reverse();
+                    }
+
+                    this.setDomain(var8);
+                }
+                else
+                {
+                    HS_Vector var4 = I3dmImporter.readPoint3(var2);
+                    HS_Vector var5 = I3dmImporter.readPoint3(var2);
+                }
+
+                this.legacy2dTol = I3dmImporter.readDouble(var2);
+                this.legacy3dTol = I3dmImporter.readDouble(var2);
+                Console.WriteLine(200 + " trimIndex = " + this.trimIndex);
+                Console.WriteLine(200 + " curve2Index = " + this.curve2Index);
+                Console.WriteLine(200 + " thisDomain = " + this.thisDomain);
+                Console.WriteLine(200 + " realCurveDomain = " + this.realCurveDomain);
+                Console.WriteLine(200 + " edgeIndex = " + this.edgeIndex);
+                Console.WriteLine(200 + " vertexIndex = " + this.vertexIndex[0] + ", " + this.vertexIndex[1]);
+                Console.WriteLine(200 + " rev3d = " + this.rev3d);
+                Console.WriteLine(200 + " type = " + this.type);
+                Console.WriteLine(200 + " iso = " + this.iso);
+                Console.WriteLine(200 + " loopIndex = " + this.loopIndex);
+                Console.WriteLine(200 + " tolerance = " + this.tolerance[0] + ", " + this.tolerance[1]);
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    I3dmExporter.writeInt32(var2, this.trimIndex, var3);
+            //    I3dmExporter.writeInt32(var2, this.curve2Index, var3);
+            //    I3dmExporter.writeInterval(var2, this.proxyCurveDomain(), var3);
+            //    I3dmExporter.writeInt32(var2, this.edgeIndex, var3);
+            //    I3dmExporter.writeInt32(var2, this.vertexIndex [0], var3);
+            //    I3dmExporter.writeInt32(var2, this.vertexIndex [1], var3);
+            //    I3dmExporter.writeInt32(var2, this.rev3d ? 1 : 0, var3);
+            //    I3dmExporter.writeInt32(var2, getInt(this.type), var3);
+            //    I3dmExporter.writeInt32(var2, Surface.getInt(this.iso), var3);
+            //    I3dmExporter.writeInt32(var2, this.loopIndex, var3);
+            //    I3dmExporter.writedouble(var2, this.tolerance [0], var3);
+            //    I3dmExporter.writedouble(var2, this.tolerance [1], var3);
+            //            if (var1.version < 3) {
+            //        HS_Vector var4 = new HS_Vector(0.0D, 0.0D, 0.0D);
+            //        I3dmExporter.writePoint(var2, var4, var3);
+            //        I3dmExporter.writePoint(var2, var4, var3);
+            //    } else {
+            //        I3dmExporter.writeInterval(var2, this.domain(), var3);
+            //        int var6 = this.proxyCurveIsReversed() ? 1 : 0;
+            //        I3dmExporter.writeByte(var2, (byte)var6, var3);
+
+            //        int var5;
+            //        for (var5 = 0; var5 < 7; ++var5)
+            //        {
+            //            I3dmExporter.writeByte(var2, (byte)0, var3);
+            //        }
+
+            //        for (var5 = 0; var5 < 24; ++var5)
+            //        {
+            //            I3dmExporter.writeByte(var2, (byte)0, var3);
+            //        }
+            //    }
+
+            //    I3dmExporter.writedouble(var2, this.legacy2dTol, var3);
+            //    I3dmExporter.writedouble(var2, this.legacy3dTol, var3);
+            //}
+
+            public override String ToString()
+            {
+                return "trimIndex = " + this.trimIndex + "\ncurve2Index = " + this.curve2Index + "\nedgeIndex = " + this.edgeIndex + "\nvertexIndex[0] = " + this.vertexIndex[0] + "\nvertexIndex[1] = " + this.vertexIndex[1] + "\nrev3d = " + this.rev3d + "\ntype = " + this.type + "\niso = " + this.iso + "\nloopIndex = " + this.loopIndex + "\ntolerance[0] = " + this.tolerance[0] + "\ntolerance[1] = " + this.tolerance[1] + "\nlegacy2dTol = " + this.legacy2dTol + "\nlegacy3dTol = " + this.legacy3dTol + "\nbrep = " + this.brep;
+            }
+
+            public enum Type
+            {
+                Unknown,
+                Boundary,
+                Mated,
+                Seam,
+                Singular,
+                CrvOnSrf,
+                PtOnSrf,
+                Slit,
+                TrimTypeCount
+            }
+        }
+
+        public class BrepTrimArray : List<BrepTrim>
+        {
+            public BrepTrimArray()
+            {
+            }
+
+            public BrepTrimArray(int var1) : base(var1)
+            {
+
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var10 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var10);
+                    int var5 = var4[0];
+                    int var6 = var4[1];
+                    if (var5 == 1)
+                    {
+                        int var7 = I3dmImporter.readInt(var10);
+
+                        for (int var8 = 0; var8 < var7; ++var8)
+                        {
+                            BrepTrim var9 = new BrepTrim();
+                            var9.read(var1, var10);
+                            this.Add(var9);
+                        }
+                    }
+
+                }
+            }
+
+            //public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3)  {
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //    I3dmExporter.writeChunkVersion(var4, 1, 0, var4.getCRC());
+            //    int var5 = this.Count;
+            //    I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //    for (int var6 = 0; var6 < var5; ++var6)
+            //    {
+            //        ((BrepTrim)this.get(var6)).write(var1, var4, var4.getCRC());
+            //    }
+
+            //    I3dmExporter.writeChunk(var2, var4.getChunk());
+            //}
+        }
+
+        public class BrepLoop : Geometry
+        {
+            public new static readonly String uuid = "60B5DBC3-E660-11d3-BFE4-0010830122F0";
+            public int loopIndex;
+            public List<int> trimIndex;
+            public Type type;
+            public int faceIndex;
+            public BoundingBox pbox;
+            public Brep brep;
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("60B5DBC3-E660-11d3-BFE4-0010830122F0");
+            }
+
+            public BrepLoop()
+            {
+            }
+
+            public BrepLoop(int var1, int var2, Type var3, Brep var4)
+            {
+                this.loopIndex = var1;
+                this.faceIndex = var2;
+                this.trimIndex = new List<int>();
+                this.type = var3;
+                this.brep = var4;
+            }
+
+            public void addTrimIndex(int var1)
+            {
+                this.trimIndex.Add(var1);
+            }
+
+            public static Type readType(int var0)
+            {
+                switch (var0)
+                {
+                    case 0:
+                        return Type.Unknown;
+                    case 1:
+                        return Type.Outer;
+                    case 2:
+                        return Type.Inner;
+                    case 3:
+                        return Type.Slit;
+                    case 4:
+                        return Type.CrvOnSrf;
+                    case 5:
+                        return Type.PtOnSrf;
+                    default:
+                        return Type.Unknown;
+                }
+            }
+
+            public static int getInt(Type var0)
+            {
+                switch (var0)
+                {
+                    case Type.Unknown:
+                        return 0;
+                    case Type.Outer:
+                        return 1;
+                    case Type.Inner:
+                        return 2;
+                    case Type.Slit:
+                        return 3;
+                    case Type.CrvOnSrf:
+                        return 4;
+                    case Type.PtOnSrf:
+                        return 5;
+                    default:
+                        return 0;
+                }
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                this.loopIndex = I3dmImporter.readInt(var2);
+                this.trimIndex = I3dmImporter.readArrayInt(var2);
+                this.type = readType(I3dmImporter.readInt(var2));
+                this.faceIndex = I3dmImporter.readInt(var2);
+            }
+
+            //public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    I3dmExporter.writeInt32(var2, this.loopIndex, var3);
+            //    I3dmExporter.writeArrayInt(var2, this.trimIndex, var3);
+            //    I3dmExporter.writeInt32(var2, getInt(this.type), var3);
+            //    I3dmExporter.writeInt32(var2, this.faceIndex, var3);
+            //}
+
+            public enum Type
+            {
+                Unknown,
+                Outer,
+                Inner,
+                Slit,
+                CrvOnSrf,
+                PtOnSrf,
+                TypeCount
+            }
+        }
+
+        public class BrepLoopArray : List<BrepLoop>
+        {
+            public BrepLoopArray()
+            {
+            }
+
+            public BrepLoopArray(int var1) : base(var1)
+            {
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var9 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var9);
+                    int var5 = var4[0];
+                    if (var5 == 1)
+                    {
+                        int var6 = I3dmImporter.readInt(var9);
+
+                        for (int var7 = 0; var7 < var6; ++var7)
+                        {
+                            BrepLoop var8 = new BrepLoop();
+                            var8.read(var1, var9);
+                            this.Add(var8);
+                        }
+                    }
+
+                }
+            }
+
+            //public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3)
+            //{
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //    I3dmExporter.writeChunkVersion(var4, 1, 0, var4.getCRC());
+            //    int var5 = this.Count;
+            //    I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //    for (int var6 = 0; var6 < var5; ++var6)
+            //    {
+            //        ((BrepLoop)this.get(var6)).write(var1, var4, var4.getCRC());
+            //    }
+
+            //    I3dmExporter.writeChunk(var2, var4.getChunk());
+            //}
+        }
+
+        public class BrepFace : SurfaceProxy
+        {
+            public new static readonly String uuid = "60B5DBC4-E660-11d3-BFE4-0010830122F0";
+            public int faceIndex;
+            public List<int> loopIndex;
+            public int surfaceIndex;
+            public bool rev;
+            public int faceMaterialChannel;
+            public UUID faceUUID;
+            public BoundingBox bbox;
+            public Interval[] Domain;
+            public Mesh renderMesh;
+            public Mesh analysisMesh;
+            public Mesh previewMesh;
+            public Brep brep;
+
+            public new UUID getClassUUID()
+            {
+                return new UUID("60B5DBC4-E660-11d3-BFE4-0010830122F0");
+            }
+
+            public BrepFace()
+            {
+            }
+
+            public BrepFace(int var1, int var2, Surface var3, Brep var4)
+            {
+                this.faceIndex = var1;
+                this.surfaceIndex = var2;
+                this.brep = var4;
+                this.loopIndex = new List<int>();
+                this.faceUUID = var3.getClassUUID();
+                this.Domain = new Interval[2];
+                this.Domain[0] = var3.domain(0);
+                this.Domain[1] = var3.domain(1);
+                this.rev = false;
+                this.faceMaterialChannel = 0;
+            }
+
+            public void addLoopIndex(int var1)
+            {
+                this.loopIndex.Add(var1);
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                this.faceIndex = I3dmImporter.readInt(var2);
+                this.loopIndex = I3dmImporter.readArrayInt(var2);
+                this.surfaceIndex = I3dmImporter.readInt(var2);
+                this.rev = I3dmImporter.readInt(var2) != 0;
+                this.faceMaterialChannel = I3dmImporter.readInt(var2);
+                if (this.faceMaterialChannel < 0)
+                {
+                    this.faceMaterialChannel = 0;
+                }
+
+            }
+
+            //public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    I3dmExporter.writeInt32(var2, this.faceIndex, var3);
+            //I3dmExporter.writeArrayInt(var2, this.loopIndex, var3);
+            //I3dmExporter.writeInt32(var2, this.surfaceIndex, var3);
+            //I3dmExporter.writeInt32(var2, this.rev? 1 : 0, var3);
+            //I3dmExporter.writeInt32(var2, this.faceMaterialChannel, var3);
+            //}
+        }
+
+        public class BrepFaceArray : List<BrepFace>
+        {
+            public BrepFaceArray()
+            {
+            }
+
+            public BrepFaceArray(int var1) : base(var1)
+            {
+            }
+
+            public void read(Rhino3dmFile var1, Stream var2)
+            {
+                Chunk var3 = I3dmImporter.readChunk(var2);
+                if (var3.header != 1073774592)
+                {
+                    throw new IOException("invalid type code = " + hex(var3.header));
+                }
+                else
+                {
+                    MemoryStream var9 = new MemoryStream(var3.content);
+                    int[] var4 = I3dmImporter.readChunkVersion(var9);
+                    int var5 = var4[0];
+                    if (var5 == 1)
+                    {
+                        int var6 = I3dmImporter.readInt(var9);
+
+                        for (int var7 = 0; var7 < var6; ++var7)
+                        {
+                            BrepFace var8 = new BrepFace();
+                            var8.read(var1, var9);
+                            this.Add(var8);
+                        }
+                    }
+
+                }
+            }
+
+            //        public void write(Rhino3dmFile var1, OutputStream var2, CRC32 var3) 
+            //{
+            //    ChunkOutputStream var4 = new ChunkOutputStream(1073774592);
+            //I3dmExporter.writeChunkVersion(var4, 1, 1, var4.getCRC());
+            //int var5 = this.Count;
+            //I3dmExporter.writeInt32(var4, var5, var4.getCRC());
+
+            //int var6;
+            //for (var6 = 0; var6 < var5; ++var6)
+            //{
+            //    ((BrepFace)this.get(var6)).write(var1, var4, var4.getCRC());
+            //}
+
+            //for (var6 = 0; var6 < var5; ++var6)
+            //{
+            //    I3dmExporter.writeUUID(var4, ((BrepFace)this.get(var6)).faceUUID, var4.getCRC());
+            //}
+
+            //I3dmExporter.writeChunk(var2, var4.getChunk());
+            //        }
+        }
+        public class Brep : Geometry
+        {
+            public new static readonly String uuid = "60B5DBC5-E660-11d3-BFE4-0010830122F0";
+            public CurveArray curves2;
+            public CurveArray curves3;
+            public SurfaceArray surfaces;
+            public BrepVertexArray vertices;
+            public BrepEdgeArray edges;
+            public BrepTrimArray trims;
+            public BrepLoopArray loops;
+            public BrepFaceArray faces;
+            public BoundingBox bbox;
+            public new UUID getClassUUID()
+            {
+                return new UUID("60B5DBC5-E660-11d3-BFE4-0010830122F0");
+            }
+
+            public new int getType()
+            {
+                return 16;
+            }
+
+            public Brep()
+            {
+
+            }
+
+            public override void read(Rhino3dmFile var1, Stream var2)
+            {
+                int[] var3 = I3dmImporter.readChunkVersion(var2);
+                int var4 = var3[0];
+                int var5 = var3[1];
+                if (var4 == 2)
+                {
+                    this.readOld200(var1, var2);
+                }
+                else if (var4 == 3)
+                {
+                    byte var6 = 100;
+                    Console.WriteLine(var6 + " read curves2");
+                    this.curves2 = new CurveArray();
+                    this.curves2.read(var1, var2);
+                    int var7 = this.curves2.Count;
+                    Console.WriteLine(var6 + " curves2Count = " + var7);
+                    Console.WriteLine(var6 + " read curves3");
+                    this.curves3 = new CurveArray();
+                    this.curves3.read(var1, var2);
+                    int var8 = this.curves3.Count;
+                    Console.WriteLine(var6 + " curves3Count = " + var8);
+                    Console.WriteLine(var6 + " read surface");
+                    this.surfaces = new SurfaceArray();
+                    this.surfaces.read(var1, var2);
+                    int var9 = this.surfaces.Count;
+                    Console.WriteLine(var6 + " surfacesCount = " + var9);
+                    Console.WriteLine(var6 + " read vertices");
+                    this.vertices = new BrepVertexArray();
+                    this.vertices.read(var1, var2);
+                    Console.WriteLine(var6 + " verticesCount = " + this.vertices.Count);
+                    Console.WriteLine(var6 + " read edges");
+                    this.edges = new BrepEdgeArray();
+                    this.edges.read(var1, var2);
+                    Console.WriteLine(var6 + " edgeCount = " + this.edges.Count);
+
+                    int var10;
+                    bool var12;
+                    Interval var13;
+                    Interval var14;
+                    for (var10 = 0; var10 < this.edges.Count; ++var10)
+                    {
+                        BrepEdge var11 = (BrepEdge)this.edges[var10];
+                        var11.brep = this;
+                        if (var11.curve3Index >= 0 && var11.curve3Index < var8)
+                        {
+                            var12 = var11.proxyCurveIsReversed();
+                            var13 = var11.proxyCurveDomain();
+                            var14 = var11.domain();
+                            var11.setProxyCurve((Curve)this.curves3[var11.curve3Index], var13);
+                            if (var12)
+                            {
+                                var11.reverse();
+                            }
+
+                            var11.setDomain(var14);
+                        }
+                    }
+
+                    Console.WriteLine(var6 + " read trims");
+                    this.trims = new BrepTrimArray();
+                    this.trims.read(var1, var2);
+                    Console.WriteLine(var6 + " trimCount = " + this.trims.Count);
+
+                    for (var10 = 0; var10 < this.trims.Count; ++var10)
+                    {
+                        BrepTrim var15 = (BrepTrim)this.trims[var10];
+                        var15.brep = this;
+                        if (var15.curve2Index >= 0 && var15.curve2Index < var7)
+                        {
+                            var12 = var15.proxyCurveIsReversed();
+                            var13 = var15.proxyCurveDomain();
+                            var14 = var15.domain();
+                            var15.setProxyCurve((Curve)this.curves2[var15.curve2Index], var13);
+                            if (var12)
+                            {
+                                var15.reverse();
+                            }
+
+                            var15.setDomain(var14);
+                        }
+                    }
+
+                    Console.WriteLine(var6 + " read loops");
+                    this.loops = new BrepLoopArray();
+                    this.loops.read(var1, var2);
+                    Console.WriteLine(var6 + " loopCount=" + this.loops.Count);
+
+                    for (var10 = 0; var10 < this.loops.Count; ++var10)
+                    {
+                        ((BrepLoop)this.loops[var10]).brep = this;
+                    }
+
+                    Console.WriteLine(var6 + " read faces");
+                    this.faces = new BrepFaceArray();
+                    this.faces.read(var1, var2);
+                    Console.WriteLine(var6 + " facesCount=" + this.faces.Count);
+
+                    for (var10 = 0; var10 < this.faces.Count; ++var10)
+                    {
+                        BrepFace var16 = (BrepFace)this.faces[var10];
+                        var16.brep = this;
+                        if (var16.surfaceIndex >= 0 && var16.surfaceIndex < var9)
+                        {
+                            var16.setProxySurface((Surface)this.surfaces[var16.surfaceIndex]);
+                        }
+                    }
+
+                    this.bbox = new BoundingBox();
+                    this.bbox.min = I3dmImporter.readPoint3(var2);
+                    this.bbox.max = I3dmImporter.readPoint3(var2);
+                }
+            }
+
+            public void readOld200(Rhino3dmFile var1, Stream var2)
+            {
+                int var3 = I3dmImporter.readInt(var2);
+                int var4 = I3dmImporter.readInt(var2);
+                int var5 = I3dmImporter.readInt(var2);
+                int var6 = I3dmImporter.readInt(var2);
+                int var7 = I3dmImporter.readInt(var2);
+                this.bbox.min = I3dmImporter.readPoint3(var2);
+                this.bbox.max = I3dmImporter.readPoint3(var2);
+                this.curves2 = new CurveArray(var6);
+
+                for (int var8 = 0; var8 < var6; ++var8)
+                {
+                    PolyCurve var9 = new PolyCurve();
+                    var9.read(var1, var2);
+                }
+
+            }
+
+        }
 
 
         public class UUID
@@ -1861,7 +4772,7 @@ public class MappingTag
 
                 for (int var2 = 0; var2 < var0.Length / 2; ++var2)
                 {
-                    var1[var2] = hexStringToByte(var0.Substring(var2 * 2,2));
+                    var1[var2] = hexStringToByte(var0.Substring(var2 * 2, 2));
                 }
 
                 return var1;
@@ -1945,7 +4856,7 @@ public class MappingTag
             public int version;
             public int openNurbsVersion;
             //public Rhino3dm.StartSection startSection;
-            //public Rhino3dm.Properties properties;
+            public Properties properties;
             //public Rhino3dm.Settings settings;
             //public Rhino3dm.Bitmap[] bitmaps;
             //public Rhino3dm.TextureMapping[] textureMappings;
@@ -1993,7 +4904,49 @@ public class MappingTag
                 return this.version < 50 ? 4 : 8;
             }
         }
+        public class Properties
+        {
+            public int openNurbsVersion = -1;
+            public byte[] notes;
+            public byte[] previewImage;
+            public byte[] application;
+            public byte[] compressedPreviewImage;
+            public byte[] revisionHistory;
 
+            public Properties()
+            {
+            }
+
+            public void setOpenNurbsVersion(Chunk var1)
+            {
+                this.openNurbsVersion = var1.body;
+            }
+
+            public void setNotes(Chunk var1)
+            {
+                this.notes = var1.content;
+            }
+
+            public void setPreviewImage(Chunk var1)
+            {
+                this.previewImage = var1.content;
+            }
+
+            public void setApplication(Chunk var1)
+            {
+                this.application = var1.content;
+            }
+
+            public void setCompressedPreviewImage(Chunk var1)
+            {
+                this.compressedPreviewImage = var1.content;
+            }
+
+            public void setRevisionHistory(Chunk var1)
+            {
+                this.revisionHistory = var1.content;
+            }
+        }
 
 
         public class UserData : RhinoObject

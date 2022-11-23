@@ -46,6 +46,8 @@ namespace Hsy.IO
                 {
                     //Console.WriteLine("3DM FILE VERSION = " + var5.ToCharArray()[0].ToString());
                     version = int.Parse(var5);
+                    this.file.version = version;
+
 
                 }
 
@@ -70,9 +72,9 @@ namespace Hsy.IO
                 do
                 {
                     var2++;
-                    Console.WriteLine(10 + " chunk #" + var2);
-                    Console.WriteLine("position:  " + this.InputStream.Position);
-                    Console.WriteLine("length:    " + this.InputStream.Length);
+                    Console.WriteLine("\n" + 10 + " chunk #" + var2);
+                    Console.WriteLine("pre position:  " + this.InputStream.Position);
+                    Console.WriteLine("pre length:    " + this.InputStream.Length);
                     try
                     {
                         var1 = readChunk(this.InputStream);
@@ -88,6 +90,9 @@ namespace Hsy.IO
                                 case 1:
                                     this.readStartSection(var1);
                                     break;
+                                case 268435476:
+                                    this.readPropertiesTable(var1);
+                                    break;
                                 case 268435475:
                                     this.readObjectTable(var1);
                                     break;
@@ -99,11 +104,10 @@ namespace Hsy.IO
                                     //    break;
 
                             }
-                            Console.WriteLine("position:  " + this.InputStream.Position);
-                            Console.WriteLine("length:    " + this.InputStream.Length);
+                            Console.WriteLine("post position:  " + this.InputStream.Position);
+                            Console.WriteLine("post length:    " + this.InputStream.Length);
                             if (this.InputStream.Position == this.InputStream.Length)
                             {
-                                Console.WriteLine("end!!!!!!!!!!!");
                                 var1 = null;
                             }
 
@@ -121,6 +125,59 @@ namespace Hsy.IO
                 Console.WriteLine(var6.StackTrace);
             }
         }
+
+        public void readPropertiesTable(Chunk var1)
+        {
+            Console.WriteLine(10+" Rhino3dmImporter.readProperties");
+            Chunk[] var2 = readChunkTable(var1);
+            if (var2 == null)
+            {
+                throw new Exception("no table item is found");
+            }
+            else
+            {
+                Properties var3 = new Properties();
+                Chunk[] var4 = var2;
+                int var5 = var2.Length;
+
+                for (int var6 = 0; var6 < var5; ++var6)
+                {
+                    Chunk var7 = var4[var6];
+                    switch (var7.header)
+                    {
+                        case -1610612698:
+                            var3.setOpenNurbsVersion(var7);
+                            this.file.openNurbsVersion = var3.openNurbsVersion;
+                            break;
+                        case -1:
+                            var7 = null;
+                            break;
+                        case 536903713:
+                            var3.setRevisionHistory(var7);
+                            break;
+                        case 536903714:
+                            var3.setNotes(var7);
+                            break;
+                        case 536903715:
+                            var3.setPreviewImage(var7);
+                            break;
+                        case 536903716:
+                            var3.setApplication(var7);
+                            break;
+                        case 536903717:
+                            var3.setCompressedPreviewImage(var7);
+                            break;
+                        //default:
+                        //    throw new Exception("unknown type code: " + hex(var7.header));
+                        //    break;
+                    }
+                }
+
+                this.file.properties = var3;
+            }
+        }
+
+
         public void readObjectTable(Chunk var1)
         {
             Console.WriteLine(10 + " Rhino3dmImporter.readObjectTable");
@@ -160,7 +217,7 @@ namespace Hsy.IO
 
         public void readEndMark(Chunk var1)
         {
-            Console.WriteLine(10+ " Rhino3dmImporter.readEndMark");
+            Console.WriteLine(10 + " Rhino3dmImporter.readEndMark");
 
             try
             {
@@ -168,7 +225,7 @@ namespace Hsy.IO
                 if (version > 4)
                 {
                     this.InputStream.Position += 4;
-                    Console.WriteLine("corrected position: "+this.InputStream.Position);
+                    Console.WriteLine("corrected position: " + this.InputStream.Position);
                     var2.Position += 4;
                 }
 
@@ -316,7 +373,7 @@ namespace Hsy.IO
             }
 
         }
-        public RhinoObject readObject(FileStream var1)
+        public RhinoObject readObject(Stream var1)
         {
             return readObject(this.file, readChunk(var1));
         }
@@ -326,12 +383,17 @@ namespace Hsy.IO
             return readObject(this.file, var1);
         }
 
-        public RhinoObject readObject(Rhino3dmFile var0, FileStream var1)
+        public static RhinoObject readObject(Rhino3dmFile var0, Stream var1)
         {
-            return readObject(var0, readChunk(var1));
+            if (version > 4)
+            {
+
+            }
+            Chunk temp = readChunk(var1);
+            return readObject(var0, temp);
         }
 
-        public RhinoObject readObject(Rhino3dmFile var0, Chunk var1)
+        public static RhinoObject readObject(Rhino3dmFile var0, Chunk var1)
         {
             if (var1 != null && var1.header == 163834)
             {
@@ -439,6 +501,90 @@ namespace Hsy.IO
 
             return new Xform(var1);
         }
+        public static Line readLine(Stream var0)
+        {
+            Line var1 = new Line();
+            var1.from = readPoint3(var0);
+            var1.to = readPoint3(var0);
+            return var1;
+        }
+        public static Plane readPlane(Stream var0)
+        {
+            Plane var1 = new Plane();
+            var1.origin = readPoint3(var0);
+            var1.xaxis = readPoint3(var0);
+            var1.yaxis = readPoint3(var0);
+            var1.zaxis = readPoint3(var0);
+            PlaneEquation var2 = new PlaneEquation();
+            var2.x = readDouble(var0);
+            var2.y = readDouble(var0);
+            var2.z = readDouble(var0);
+            var2.d = readDouble(var0);
+            var1.planeEquation = var2;
+            return var1;
+        }
+
+        public static PointArray readPointArray(Stream var0) 
+        {
+        int var1 = readInt(var0);
+        PointArray var2 = new PointArray(var1);
+
+        for(int var3 = 0; var3<var1; ++var3) {
+            var2.Add(readPoint3(var0));
+        }
+
+        return var2;
+    }
+
+public static Polyline readPolyline(Stream var0) 
+{
+        int var1 = readInt(var0);
+    Polyline var2 = new Polyline(var1);
+
+for (int var3 = 0; var3 < var1; ++var3)
+{
+    var2.Add(readPoint3(var0));
+}
+
+return var2;
+    }
+
+    public static Circle readCircle(Stream var0) 
+{
+    Circle var1 = new Circle();
+var1.plane = readPlane(var0);
+var1.radius = readDouble(var0);
+HS_Vector var2 = readPoint3(var0);
+var2 = readPoint3(var0);
+var2 = readPoint3(var0);
+return var1;
+    }
+
+    public static Arc readArc(Stream var0) 
+{
+    Arc var1 = new Arc();
+var1.plane = readPlane(var0);
+var1.radius = readDouble(var0);
+HS_Vector var2 = readPoint3(var0);
+var2 = readPoint3(var0);
+var2 = readPoint3(var0);
+var1.angle = readInterval(var0);
+return var1;
+    }
+
+
+        public static BoundingBox readBoundingBox(Stream var0)
+        {
+            BoundingBox var1 = new BoundingBox();
+            var1.min.xd = readDouble(var0);
+            var1.min.yd = readDouble(var0);
+            var1.min.zd = readDouble(var0);
+            var1.max.xd = readDouble(var0);
+            var1.max.yd = readDouble(var0);
+            var1.max.zd = readDouble(var0);
+            return var1;
+        }
+
         public static byte[] readCompressedBuffer(Stream var0, int var1)
         {
             bool var2 = false;
@@ -482,12 +628,12 @@ namespace Hsy.IO
 
                 int var3 = var2.body - 4;
                 Inflater var4 = new Inflater();
-                var4.SetInput(var2.content,0,var3);
+                var4.SetInput(var2.content, 0, var3);
                 byte[] var5 = new byte[var1];
 
                 try
                 {
-                    var4.Inflate(var5,0,var1);
+                    var4.Inflate(var5, 0, var1);
                     return var5;
                 }
                 catch (FormatException var7)
@@ -496,6 +642,7 @@ namespace Hsy.IO
                 }
             }
         }
+
         public static int readCompressedBufferSize(Stream var0)
         {
             return readSize(var0);
@@ -795,9 +942,33 @@ namespace Hsy.IO
         public static double readDouble(byte[] var0)
         {
 
-            return Convert.ToDouble(readInt64(var0));
+            return BitConverter.ToDouble(var0,0);
+        }
+        public static List<int> readArrayInt(Stream var0)
+        {
+            int var1 = readInt(var0);
+            List<int> var2 = new List<int>(var1);
+
+            for (int var3 = 0; var3 < var1; ++var3)
+            {
+                var2.Add(readInt(var0));
+            }
+
+            return var2;
         }
 
+        public static List<double> readArrayDouble(Stream var0)
+        {
+            int var1 = readInt(var0);
+            List<double> var2 = new List<double>(var1);
+
+            for (int var3 = 0; var3 < var1; ++var3)
+            {
+                var2.Add(readDouble(var0));
+            }
+
+            return var2;
+        }
 
         public static UUID readUUID(Chunk var0)
         {
@@ -850,12 +1021,14 @@ namespace Hsy.IO
                 Chunk var3 = null;
                 List<Chunk> var4 = new List<Chunk>();
                 int var5 = 1;
-
+                
                 do
                 {
                     try
                     {
-                        var3 = readChunk(var2);
+
+                        var3=readChunk(var2);
+
                         if (var3 == null)
                         {
                             throw new Exception("no chunk is read");
@@ -897,17 +1070,92 @@ namespace Hsy.IO
             }
         }
 
-        public static Chunk readChunk(Stream var0)
+        public static Chunk readChunkV4(Stream var0)
         {
             Console.WriteLine("***********************Read   chunk*************");
 
             var var_temp = readInt32(var0);
+            Console.WriteLine("temp_header:  " + var_temp);
             int var1;
             int var2;
+
+            var1 = var_temp;
+            var2 = readInt32(var0);
+
+
+            Console.WriteLine("header:  " + var1);
+            Console.WriteLine("length:  " + var2);
+
+            if (!isShortChunk(var1) && var2 != 0)
+            {
+                if (var2 < 0)
+                {
+                    throw new Exception("length of content isn't positive: " + var2);
+                    return null;
+                }
+                else if (var2 > 1000000000)
+                {
+                    throw new Exception("length of content seems too big: " + var2);
+                    return null;
+                }
+                else
+                {
+                    Console.WriteLine("this");
+                    byte[] var3 = read(var0, var2);
+
+                    return new Chunk(var1, var2, var3);
+                }
+            }
+            else
+            {
+
+                return new Chunk(var1, var2);
+            }
+        }
+        public static Chunk readChunk(Stream var0)
+        {
+            //bool shift = false;
+           
+            //if (version > 4)
+            //{
+            //    int temph = readInt32(var0);
+            //    int templ= readInt32(var0);
+            //    if (temph <= 0 || temph == 1706537||templ<0)
+            //    {
+
+            //        shift = true;
+
+            //    }
+            //    var0.Position -= 8;
+            //    if (shift)
+            //    {
+                    return readChunkO(var0);
+            //    }
+            //    else
+            //    {
+            //        return readChunkV4(var0);
+            //    }
+            //}
+            //else
+            //{
+            //    return readChunkV4(var0);
+            //}
+           
+
+        }
+
+        public static Chunk readChunkO(Stream var0)
+        {
+            Console.WriteLine("***********************Read   chunk*************");
+
+            var var_temp = readInt32(var0);
+            Console.WriteLine("temp_header:  " + var_temp);
+            int var1;
+            int var2;
+
             if (version > 4 && var_temp != 1)
             {
-                
-                if (var_temp== 1073774592)
+                if (var_temp== -2147319809||var_temp == 1073774592 || var_temp == 163834 || var_temp == 196603 || var_temp == 196604)
                 {
                     var1 = var_temp;
                     var2 = readInt32(var0);
@@ -918,15 +1166,13 @@ namespace Hsy.IO
                     var1 = readInt32(var0);
                     var2 = readInt32(var0);
                 }
-                
-
             }
             else
             {
                 var1 = var_temp;
                 var2 = readInt32(var0);
             }
-           
+
 
             Console.WriteLine("header:  " + var1);
             Console.WriteLine("length:  " + var2);
