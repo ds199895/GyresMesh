@@ -283,7 +283,7 @@ namespace Hsy.Render
             home.PushMatrix();
 
             home.Translate(v.xf, v.yf, v.zf);
-            home.sphere((float)r);
+            home.Sphere((float)r);
             home.PopMatrix();
             home.PopStyle();
         }

@@ -20,7 +20,6 @@ namespace Hsy.IO
         public I3dmImporter(FileStream var1)
         {
             this.InputStream = var1;
-
         }
 
 

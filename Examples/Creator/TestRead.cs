@@ -25,11 +25,15 @@ namespace Examples.Creator
         I3dmImporter im;
         CamController cam;
         GE_Render render;
+        FileIO fileIO;
         public override void SetUp()
         {
             Size(1000, 800);
             cam = new CamController(this);
             render = new GE_Render(this);
+            fileIO = new FileIO();
+            var f=FileIO.open("E://0917_VERSION7.3dm");
+            Print(f);
             //File f = new File("E://0917.3dm");
             //FileStream f = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
             //for(int i = 0; i < f.Length; i++)
@@ -37,23 +41,20 @@ namespace Examples.Creator
             //    f.Position = i;
             //    Console.WriteLine(f.ReadByte());
             //}
-            //FileStream fs = new FileStream("E://test.3dm", FileMode.Open, FileAccess.Read);
-            //FileStream fs = new FileStream("E://0917_VERSION4.3dm", FileMode.Open, FileAccess.Read);
-            //FileStream fs = new FileStream("E://0917_VERSION7.3dm", FileMode.Open, FileAccess.Read);
-            FileStream fs = new FileStream("E://surface.3dm", FileMode.Open, FileAccess.Read);
-            //FileStream fs = new FileStream("E://test2.3dm", FileMode.Open, FileAccess.Read);
-            im = new I3dmImporter(fs);
-            im.read();
-            Console.WriteLine(im.file.rhinoObjects.Length);
-            Rhino3dm.PolylineCurve brep = (Rhino3dm.PolylineCurve)im.file.rhinoObjects[0];
-            List<HS_Vector> pts = new List<HS_Vector>();
-            pts.AddRange(brep.pline);
 
 
-            HS_Polygon poly = new HS_Polygon().Create(pts);
-            GEC_FromPolygons gecp = new GEC_FromPolygons();
-            gecp.setPolygons(new HS_Polygon[] { poly });
-            m = gecp.create();
+            
+
+
+            //Rhino3dm.PolylineCurve brep = (Rhino3dm.PolylineCurve)im.file.rhinoObjects[1];
+            //List<HS_Vector> pts = new List<HS_Vector>();
+            //pts.AddRange(brep.pline);
+
+
+            //HS_Polygon poly = new HS_Polygon().Create(pts);
+            //GEC_FromPolygons gecp = new GEC_FromPolygons();
+            //gecp.setPolygons(new HS_Polygon[] { poly });
+            //m = gecp.create();
 
 
 
@@ -97,31 +98,22 @@ namespace Examples.Creator
             //creator.setFaces(faceList);
             //m = creator.create();
             //Print(m);
-            //long n = fs.Length;
-            //byte[] b = new byte[n];
-            //int cnt, m;
-            //m = 0;
-            //cnt = fs.ReadByte();
-            //while (cnt != -1)
-            //{
-            //    b[m++] = Convert.ToByte(cnt);
-            //    cnt = fs.ReadByte();
-            //}
-            //string Text = Encoding.Default.GetString(b);
-            //Console.WriteLine(Text);
+           
         }
 
         public override void Draw()
         {
             Background(255);
             cam.DrawSystem(this, 200);
-            //Fill(250, 250, 240,255);
+            //Fill(250, 250, 240, 255);
+            //NoFill();
+            
             //Stroke(0);
             //foreach (GE_Face f in m.GetFaces())
             //{
             //    render.drawFace(f);
             //}
-            render.displayHeMeshWithDegree(m, cam.CurrentView);
+            //render.displayHeMeshWithDegree(m, cam.CurrentView);
         }
 
         public override void KeyReleased()
