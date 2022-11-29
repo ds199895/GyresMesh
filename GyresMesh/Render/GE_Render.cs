@@ -1,6 +1,7 @@
 ﻿using Flowing;
 using Hsy.Geo;
 using Hsy.GyresMesh;
+using Hsy.IO;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -78,6 +79,22 @@ namespace Hsy.Render
             }
             this.home.EndShape();
         }
+        public void DisplayIObjects(List<IObject> objects,Camera cam)
+        {
+            foreach (IObject o in objects)
+            {
+                if (o.name() == "Mesh")
+                {
+                    displayHeMeshWithDegree((GE_Mesh)o, cam);
+                }else if (o.name() == "Point")
+                {
+                    drawPoint((HS_Vector)o);
+                }
+
+            }
+        }
+
+
         /**
      * 半边数据结构的显示
      *
@@ -284,6 +301,7 @@ namespace Hsy.Render
 
             home.Translate(v.xf, v.yf, v.zf);
             home.Sphere((float)r);
+           
             home.PopMatrix();
             home.PopStyle();
         }

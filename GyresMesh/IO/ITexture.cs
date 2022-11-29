@@ -1,14 +1,12 @@
-﻿using Hsy.IO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hsy.Geo
+namespace Hsy.IO
 {
-    public abstract class HS_Geometry:IObject
+    public class ITexture
     {
-
     }
 }

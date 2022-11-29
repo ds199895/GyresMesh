@@ -37,8 +37,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flowing">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+    <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="GeoAPI, Version=1.7.5.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoAPI.Core.1.7.5\lib\net45\GeoAPI.dll</HintPath>
@@ -55,8 +56,9 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="NetTopologySuite, Version=1.15.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.Core.1.15.3\lib\net45\NetTopologySuite.dll</HintPath>
@@ -64,8 +66,9 @@
     <Reference Include="NetTopologySuite.CoordinateSystems, Version=1.15.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.CoordinateSystems.1.15.3\lib\net45\NetTopologySuite.CoordinateSystems.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\fl\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -82,11 +85,13 @@
   <ItemGroup>
     <Compile Include="Geo\FastList.cs" />
     <Compile Include="Geo\HS_AABB.cs" />
+    <Compile Include="Geo\HS_Brep.cs" />
     <Compile Include="Geo\HS_CoordinateSystem.cs" />
     <Compile Include="Geo\HS_CoordOp3D.cs" />
     <Compile Include="Geo\HS_GeometryFactory3D.cs" />
     <Compile Include="Geo\HS_KDTree.cs" />
     <Compile Include="Geo\HS_KDTreeInteger.cs" />
+    <Compile Include="Geo\HS_Surface.cs" />
     <Compile Include="Geo\HS_Triangle.cs" />
     <Compile Include="GyresMesh\GEC_FromTriangles.cs" />
     <Compile Include="GyresMesh\GE_EdgeEnumerator.cs" />
@@ -133,7 +138,13 @@
     <Compile Include="Geo\HS_GeometryOp3D.cs" />
     <Compile Include="IO\FileIO.cs" />
     <Compile Include="IO\I3dmImporter.cs" />
+    <Compile Include="IO\IAttribute.cs" />
     <Compile Include="IO\IColor.cs" />
+    <Compile Include="IO\IConfig.cs" />
+    <Compile Include="IO\ILayer.cs" />
+    <Compile Include="IO\IMaterial.cs" />
+    <Compile Include="IO\IObject.cs" />
+    <Compile Include="IO\ITexture.cs" />
     <Compile Include="IO\Rhino3dm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Render\GE_Render.cs" />

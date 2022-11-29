@@ -1,4 +1,5 @@
 ﻿using Hsy.HsMath;
+using Hsy.IO;
 using System;
 
 using System;
@@ -10,7 +11,7 @@ using System.Windows.Media.Media3D;
 
 namespace Hsy.Geo
 {
-    public class HS_Vector : HS_MutableCoord
+    public class HS_Vector : IObject, HS_MutableCoord
     {
         public static  HS_Vector origin = new HS_Vector(0.0D, 0.0D, 0.0D);
         public static  HS_Vector xaxis = new HS_Vector(1.0D, 0.0D, 0.0D);
@@ -64,50 +65,58 @@ namespace Hsy.Geo
             this.xd = 0.0D;
             this.yd = 0.0D;
             this.zd = 0.0D;
+            this.attribute.name = "Point";
         }
 
-        public HS_Vector(HS_Coord hs_coord)
+        public HS_Vector(HS_Coord hs_coord) : base()
         {
             this.xd = hs_coord.xd;
             this.yd = hs_coord.yd;
             this.zd = hs_coord.zd;
+            this.attribute.name = "Point";
         }
 
-        public HS_Vector(HS_Coord from,HS_Coord to)
+        public HS_Vector(HS_Coord from,HS_Coord to):base()
         {
             this.xd = to.xd - from.xd;
             this.yd = to.yd - from.yd;
             this.zd = to.zd - from.zd;
+            this.attribute.name = "Point";
         }
-        public HS_Vector(double x, double y)
+        public HS_Vector(double x, double y) : base()
         {
             this.xd = x;
             this.yd = y;
             this.zd = 0.0;
+            this.attribute.name = "Point";
         }
-        public HS_Vector(double x, double y, double z)
+        public HS_Vector(double x, double y, double z) : base()
         {
             this.xd = x;
             this.yd = y;
             this.zd = z;
+            this.attribute.name = "Point";
         }
-        public HS_Vector(float x, float y, float z)
+        public HS_Vector(float x, float y, float z) : base()
         {
             this.xf = x;
             this.yf = y;
             this.zf = z;
+            this.attribute.name = "Point";
         }
-        public HS_Vector(double[] x)
+        public HS_Vector(double[] x) : base()
         {
             this.xd = x[0];
             this.yd = x[1];
             this.zd = x[2];
+            this.attribute.name = "Point";
         }
         public HS_Vector add(double x, double y, double z)
         {
             this.xd += x;
             this.yd += y;
             this.zd += z;
+            
             return this;
         }
         public HS_Vector get()

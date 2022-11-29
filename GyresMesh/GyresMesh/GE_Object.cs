@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hsy.IO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.GyresMesh
 {
-    public abstract class GE_Object
+    public abstract class GE_Object :IObject
     {
         private static long currentkey = 0;
         private protected long key;

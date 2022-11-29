@@ -46,6 +46,8 @@ namespace Hsy.GyresMesh
         public GE_Mesh create()
         {
             GE_Mesh based = this.createBase();
+            based.attribute = new IO.IAttribute();
+            based.attribute.name = "Mesh";
             return based;
         }
     }

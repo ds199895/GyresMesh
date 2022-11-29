@@ -27,7 +27,7 @@ namespace Hsy.IO
 
         }
 
-        public static List<Rhino3dm.RhinoObject> open(string var0)
+        public static List<IObject> open(string var0)
         {
             var dic = Path.GetDirectoryName(var0);
             
@@ -73,22 +73,34 @@ namespace Hsy.IO
         {
             return new List<object>();
         }
-        public static List<Rhino3dm.RhinoObject> openRhino(string var0)
+        public static List<IObject> openRhino(string var0)
         {
-            I3dmImporter im;
-            //FileStream fs = new FileStream("E://test.3dm", FileMode.Open, FileAccess.Read);
-            //FileStream fs = new FileStream("E://0917_VERSION4.3dm", FileMode.Open, FileAccess.Read);
-            FileStream fs = new FileStream("E://0917_VERSION7.3dm", FileMode.Open, FileAccess.Read);
+            List<IObject> var2=I3dmImporter.read(var0);
+
+            //I3dmImporter im;
+            ////FileStream fs = new FileStream("E://test.3dm", FileMode.Open, FileAccess.Read);
+            ////FileStream fs = new FileStream("E://0917_VERSION4.3dm", FileMode.Open, FileAccess.Read);
+            //FileStream fs = new FileStream("E://0917_VERSION7.3dm", FileMode.Open, FileAccess.Read);
 
 
-            //FileStream fs = new FileStream("E://surfacev7.3dm", FileMode.Open, FileAccess.Read);
-            //FileStream fs = new FileStream("E://test2.3dm", FileMode.Open, FileAccess.Read);
-            im = new I3dmImporter(fs);
-            im.read();
-            Console.WriteLine(im.file.rhinoObjects.Length);
+            ////FileStream fs = new FileStream("E://surfacev7.3dm", FileMode.Open, FileAccess.Read);
+            ////FileStream fs = new FileStream("E://test2.3dm", FileMode.Open, FileAccess.Read);
+            //im = new I3dmImporter(fs);
+            //im.read();
+            //Console.WriteLine(im.file.rhinoObjects.Length);
 
 
-            return im.file.rhinoObjects.ToList();
+            //return im.file.rhinoObjects.ToList();
+            if (var2 != null)
+            {
+                Console.WriteLine(0 + " opening complete");
+                return var2;
+            }
+            else
+            {
+                throw new Exception("error occured in opening file" + var0);
+                return var2;
+            }
         }
 
 

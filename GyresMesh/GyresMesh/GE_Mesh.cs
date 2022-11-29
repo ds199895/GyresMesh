@@ -1,4 +1,5 @@
 ﻿using Hsy.Geo;
+using Hsy.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,23 +21,25 @@ namespace Hsy.GyresMesh
          * Instantiates a new HE_Mesh.
          *
          */
-        public GE_Mesh()
+        public GE_Mesh() : base()
         {
             _halfedges = new List<GE_Halfedge>();
             _vertices = new List<GE_Vertex>();
             _faces = new List<GE_Face>();
             unpairedHalfedges = new List<GE_Halfedge>();
             edges = new List<GE_Halfedge>();
+            this.attribute.name = "Mesh";
         }
 
-        public GE_Mesh(GE_Mesh mesh)
+        public GE_Mesh(GE_Mesh mesh) : base()
         {
             this._vertices = mesh._vertices;
             this._halfedges = mesh._halfedges;
             this._faces = mesh._faces;
+            this.attribute.name = mesh.attribute.name;
         }
 
-        public GE_Mesh(GEC_Creator creator)
+        public GE_Mesh(GEC_Creator creator) : base()
         {
             _halfedges = new List<GE_Halfedge>();
             _vertices = new List<GE_Vertex>();
@@ -45,6 +48,7 @@ namespace Hsy.GyresMesh
             edges = new List<GE_Halfedge>();
             this.setNoCopy(creator.create());
             this.triangles = null;
+            this.attribute.name = "Mesh";
         }
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void setNoCopy(GE_Mesh target)

@@ -14,10 +14,11 @@ namespace Hsy.IO
 {
     public class I3dmImporter : Rhino3dm
     {
-        private FileStream InputStream;
+        private Stream InputStream;
         private static int version;
         public Rhino3dmFile file;
-        public I3dmImporter(FileStream var1)
+        public List<IObject> objects;
+        public I3dmImporter(Stream var1)
         {
             this.InputStream = var1;
         }
@@ -57,11 +58,36 @@ namespace Hsy.IO
                 throw new Exception(var7.StackTrace);
             }
         }
+        public static List<IObject> read(string var0)
+        {
+            try
+            {
+                Stream var2 = new FileStream(var0, FileMode.Open, FileAccess.Read);
+                List<IObject> var3 = read(var2);
+                if (var2 != null)
+                {
+                    var2.Close();
+                }
+                return var3;
+            }
+            catch (IOException var4)
+            {
+                Console.WriteLine(var4.StackTrace);
+                return null;
+            }
+        }
+
+        public static List<IObject> read(Stream var0)
+        {
+            I3dmImporter var2 = new I3dmImporter(var0);
+            var2.read();
+            return var2.objects;
+        }
         public void read()
         {
             this.file = new Rhino3dmFile();
             ClassRegistry.init();
-
+            this.objects = new List<IObject>();
             try
             {
                 this.readFileHeader();
@@ -127,7 +153,7 @@ namespace Hsy.IO
 
         public void readPropertiesTable(Chunk var1)
         {
-            Console.WriteLine(10+" Rhino3dmImporter.readProperties");
+            Console.WriteLine(10 + " Rhino3dmImporter.readProperties");
             Chunk[] var2 = readChunkTable(var1);
             if (var2 == null)
             {
@@ -166,9 +192,9 @@ namespace Hsy.IO
                         case 536903717:
                             var3.setCompressedPreviewImage(var7);
                             break;
-                        //default:
-                        //    throw new Exception("unknown type code: " + hex(var7.header));
-                        //    break;
+                            //default:
+                            //    throw new Exception("unknown type code: " + hex(var7.header));
+                            //    break;
                     }
                 }
 
@@ -311,12 +337,12 @@ namespace Hsy.IO
                             }
                         }
 
-                        //IObject var8 = var3.createIObject(this.file, this.server);
-                        //if (var8 != null)
-                        //{
-                        //    var3.setAttributesToIObject(this.file, var8);
-                        //    this.objects.add(var8);
-                        //}
+                        IObject var8 = var3.createIObject(this.file);
+                        if (var8 != null)
+                        {
+                            var3.setAttributesToIObject(this.file, var8);
+                            this.objects.Add(var8);
+                        }
 
                         return var3;
                     }
@@ -384,10 +410,6 @@ namespace Hsy.IO
 
         public static RhinoObject readObject(Rhino3dmFile var0, Stream var1)
         {
-            if (version > 4)
-            {
-
-            }
             Chunk temp = readChunk(var1);
             return readObject(var0, temp);
         }
@@ -523,53 +545,54 @@ namespace Hsy.IO
             return var1;
         }
 
-        public static PointArray readPointArray(Stream var0) 
+        public static PointArray readPointArray(Stream var0)
         {
-        int var1 = readInt(var0);
-        PointArray var2 = new PointArray(var1);
+            int var1 = readInt(var0);
+            PointArray var2 = new PointArray(var1);
 
-        for(int var3 = 0; var3<var1; ++var3) {
-            var2.Add(readPoint3(var0));
+            for (int var3 = 0; var3 < var1; ++var3)
+            {
+                var2.Add(readPoint3(var0));
+            }
+
+            return var2;
         }
 
-        return var2;
-    }
+        public static Polyline readPolyline(Stream var0)
+        {
+            int var1 = readInt(var0);
+            Polyline var2 = new Polyline(var1);
 
-public static Polyline readPolyline(Stream var0) 
-{
-        int var1 = readInt(var0);
-    Polyline var2 = new Polyline(var1);
+            for (int var3 = 0; var3 < var1; ++var3)
+            {
+                var2.Add(readPoint3(var0));
+            }
 
-for (int var3 = 0; var3 < var1; ++var3)
-{
-    var2.Add(readPoint3(var0));
-}
+            return var2;
+        }
 
-return var2;
-    }
+        public static Circle readCircle(Stream var0)
+        {
+            Circle var1 = new Circle();
+            var1.plane = readPlane(var0);
+            var1.radius = readDouble(var0);
+            HS_Vector var2 = readPoint3(var0);
+            var2 = readPoint3(var0);
+            var2 = readPoint3(var0);
+            return var1;
+        }
 
-    public static Circle readCircle(Stream var0) 
-{
-    Circle var1 = new Circle();
-var1.plane = readPlane(var0);
-var1.radius = readDouble(var0);
-HS_Vector var2 = readPoint3(var0);
-var2 = readPoint3(var0);
-var2 = readPoint3(var0);
-return var1;
-    }
-
-    public static Arc readArc(Stream var0) 
-{
-    Arc var1 = new Arc();
-var1.plane = readPlane(var0);
-var1.radius = readDouble(var0);
-HS_Vector var2 = readPoint3(var0);
-var2 = readPoint3(var0);
-var2 = readPoint3(var0);
-var1.angle = readInterval(var0);
-return var1;
-    }
+        public static Arc readArc(Stream var0)
+        {
+            Arc var1 = new Arc();
+            var1.plane = readPlane(var0);
+            var1.radius = readDouble(var0);
+            HS_Vector var2 = readPoint3(var0);
+            var2 = readPoint3(var0);
+            var2 = readPoint3(var0);
+            var1.angle = readInterval(var0);
+            return var1;
+        }
 
 
         public static BoundingBox readBoundingBox(Stream var0)
@@ -836,6 +859,39 @@ return var1;
         {
             return readColor(readInt32(var0));
         }
+
+        public unsafe static String readString(Stream var0)
+        {
+            int var2 = readInt(var0);
+            if (var2 == 0)
+            {
+                return "";
+            }
+            else if (var2 < 65535)
+            {
+                byte[] var3 = read(var0, var2 * 2);
+                sbyte* ptr_sbyte;
+                // The "fixed" statement tells the runtime to keep the array in the same
+                // place in memory (relocating it would make the pointer invalid)
+                fixed (byte* ptr_byte = &var3[0])
+                {
+                    // Cast the pointer to sbyte*
+                    ptr_sbyte = (sbyte*)ptr_byte;
+
+                    // Do your stuff here
+                }
+
+                // The end of the "fixed" block tells the runtime that the original array
+                // is available for relocation and/or garbage collection again
+
+                return new String(ptr_sbyte, 0, var2 * 2 - 2, Encoding.UTF32);
+            }
+            else
+            {
+                throw new Exception("invalid string length: len = " + var2);
+                return null;
+            }
+        }
         public static byte readByte(Stream var0)
         {
 
@@ -896,9 +952,11 @@ return var1;
             return readInt32(read(var0, 4));
         }
 
-        public static int readInt32(byte[] var0)
+        public unsafe static int readInt32(byte[] var0)
         {
-            return var0[3] << 24 | (var0[2] & 255) << 16 | (var0[1] & 255) << 8 | var0[0] & 255;
+            return BitConverter.ToInt32(var0,0);
+            //return Convert.ToInt32((byte)ptr_sbyte);
+            //return var0[3] << 24 | (var0[2] & 255) << 16 | (var0[1] & 255) << 8 | var0[0] & 255;
         }
 
 
@@ -941,11 +999,12 @@ return var1;
         public static double readDouble(byte[] var0)
         {
 
-            return BitConverter.ToDouble(var0,0);
+            return BitConverter.ToDouble(var0, 0);
         }
         public static List<int> readArrayInt(Stream var0)
         {
             int var1 = readInt(var0);
+            //var1 = readInt(var0);
             List<int> var2 = new List<int>(var1);
 
             for (int var3 = 0; var3 < var1; ++var3)
@@ -1020,13 +1079,13 @@ return var1;
                 Chunk var3 = null;
                 List<Chunk> var4 = new List<Chunk>();
                 int var5 = 1;
-                
+
                 do
                 {
                     try
                     {
 
-                        var3=readChunk(var2);
+                        var3 = readChunk(var2);
 
                         if (var3 == null)
                         {
@@ -1114,7 +1173,7 @@ return var1;
         public static Chunk readChunk(Stream var0)
         {
             //bool shift = false;
-           
+
             //if (version > 4)
             //{
             //    int temph = readInt32(var0);
@@ -1128,7 +1187,7 @@ return var1;
             //    var0.Position -= 8;
             //    if (shift)
             //    {
-                    return readChunkO(var0);
+            return readChunkO(var0);
             //    }
             //    else
             //    {
@@ -1139,7 +1198,7 @@ return var1;
             //{
             //    return readChunkV4(var0);
             //}
-           
+
 
         }
 
@@ -1154,14 +1213,21 @@ return var1;
 
             if (version > 4 && var_temp != 1)
             {
-                if (var_temp== -2147319809||var_temp == 1073774592 || var_temp == 163834 || var_temp == 196603 || var_temp == 196604)
+                if (var_temp == -2147319809 || var_temp == 1073774592 || var_temp == 163834 || var_temp == 196603 || var_temp == 196604)
                 {
                     var1 = var_temp;
                     var2 = readInt32(var0);
                     var0.Position += 4;
+                    
                 }
                 else
                 {
+                    var1 = readInt32(var0);
+                    var2 = readInt32(var0);
+                }
+                if (var2 == 196603)
+                {
+                    var0.Position -= 16;
                     var1 = readInt32(var0);
                     var2 = readInt32(var0);
                 }

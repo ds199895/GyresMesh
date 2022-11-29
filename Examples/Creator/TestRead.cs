@@ -26,13 +26,15 @@ namespace Examples.Creator
         CamController cam;
         GE_Render render;
         FileIO fileIO;
+        List<IObject> f = new List<IObject>();
         public override void SetUp()
         {
             Size(1000, 800);
             cam = new CamController(this);
             render = new GE_Render(this);
             fileIO = new FileIO();
-            var f=FileIO.open("E://0917_VERSION7.3dm");
+            //E://0917_VERSION4.3dm"
+            f=FileIO.open("E://inputbrep.3dm");
             Print(f);
             //File f = new File("E://0917.3dm");
             //FileStream f = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
@@ -107,20 +109,26 @@ namespace Examples.Creator
             cam.DrawSystem(this, 200);
             //Fill(250, 250, 240, 255);
             //NoFill();
-            
+
             //Stroke(0);
-            //foreach (GE_Face f in m.GetFaces())
+            //foreach (GE_Mesh m in f)
             //{
-            //    render.drawFace(f);
+            //    foreach (GE_Face f in m.GetFaces())
+            //    {
+            //        render.drawFace(f);
+            //    }
+
+            //    render.displayHeMeshWithDegree(m, cam.CurrentView);
             //}
-            //render.displayHeMeshWithDegree(m, cam.CurrentView);
+            render.DisplayIObjects(f, cam.CurrentView);
+
         }
 
         public override void KeyReleased()
         {
             if (key == "F")
             {
-                cam.Focus(m.getAABB().getLimits(), false);
+                cam.Focus(((GE_Mesh)f[0]).getAABB().getLimits(), false);
             }
         }
     }
