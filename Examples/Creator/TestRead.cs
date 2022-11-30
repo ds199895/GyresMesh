@@ -34,7 +34,7 @@ namespace Examples.Creator
             render = new GE_Render(this);
             fileIO = new FileIO();
             //E://0917_VERSION4.3dm"
-            f=FileIO.open("E://inputbrep.3dm");
+            f =FileIO.open("E://inputtest.3dm");
             Print(f);
             //File f = new File("E://0917.3dm");
             //FileStream f = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
@@ -110,7 +110,7 @@ namespace Examples.Creator
             //Fill(250, 250, 240, 255);
             //NoFill();
 
-            //Stroke(0);
+            Stroke(0);
             //foreach (GE_Mesh m in f)
             //{
             //    foreach (GE_Face f in m.GetFaces())

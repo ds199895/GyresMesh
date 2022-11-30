@@ -576,16 +576,16 @@ namespace Hsy.Geo
             HS_OrthoProject o = new HS_OrthoProject(snormal);
             Console.WriteLine("sv: " + snormal);
             Console.WriteLine("mode: " + o.mode);
-            if (o.mode > 2)
-            {
+            //if (o.mode > 2)
+            //{
 
-                points.Reverse();
-                return snormal * (-1);
-            }
-            else
-            {
+            //    points.Reverse();
+            //    return snormal * (-1);
+            //}
+            //else
+            //{
                 return snormal;
-            }
+            //}
 
             Console.WriteLine("first : " + points[0]);
 

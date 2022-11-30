@@ -70,6 +70,14 @@ namespace Hsy.Render
             this.home.Cube(10, 10, 10);
             this.home.PopMatrix();
         }
+        public void drawPoint<T>(T p,float r) where T : HS_Coord
+        {
+            this.home.PushMatrix();
+
+            this.home.Translate(p.xf, p.yf, p.zf);
+            this.home.Cube(r, r, r);
+            this.home.PopMatrix();
+        }
         public void drawFace(GE_Face face)
         {
             this.home.BeginShape();
@@ -88,7 +96,7 @@ namespace Hsy.Render
                     displayHeMeshWithDegree((GE_Mesh)o, cam);
                 }else if (o.name() == "Point")
                 {
-                    drawPoint((HS_Vector)o);
+                    drawPoint((HS_Vector)o,5);
                 }
 
             }
@@ -320,6 +328,11 @@ namespace Hsy.Render
         }
         public void displaySingleHalfEdge(GE_Halfedge he, Color color)
         {
+            home.PushStyle();
+            home.Stroke(0,0,0);
+            line(he.GetStart(), he.GetEnd());
+            home.PopStyle();
+
             double offsetDis = he.GetLength() / 100.0D;
             home.PushStyle();
             home.Stroke(color.R,color.G,color.B);
