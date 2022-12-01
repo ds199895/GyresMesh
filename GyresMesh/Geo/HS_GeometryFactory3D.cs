@@ -175,7 +175,12 @@ namespace Hsy.Geo
             m /= p.Length;
             return m;
         }
-
+        public HS_Point createInterpolatedPoint(HS_Coord p, HS_Coord q,double f)
+        {
+            return new HS_Point((1.0 - f) * p.xd + f * q.xd,
+                    (1.0 - f) * p.yd + f * q.yd,
+                    (1.0 - f) * p.zd+ f * q.zd);
+        }
         public HS_Map2D createEmbeddedPlane(HS_Plane P)
         {
             return new HS_PlanarMap(P);

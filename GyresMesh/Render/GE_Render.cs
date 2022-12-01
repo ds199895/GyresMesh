@@ -18,7 +18,7 @@ namespace Hsy.Render
 
         public GE_Render(IApp home)
         {
-            this.home= home;
+            this.home = home;
         }
         public void drawAABB(HS_AABB AABB)
         {
@@ -56,13 +56,13 @@ namespace Hsy.Render
                     GE_Halfedge e = (GE_Halfedge)eItr.Current;
                     if (e.isVisible())
                     {
-  
+
                         this.line(e.GetStart(), e.GetEnd());
                     }
                 }
             }
         }
-        public void drawPoint<T>(T p)where T:HS_Coord
+        public void drawPoint<T>(T p) where T : HS_Coord
         {
             this.home.PushMatrix();
 
@@ -70,7 +70,7 @@ namespace Hsy.Render
             this.home.Cube(10, 10, 10);
             this.home.PopMatrix();
         }
-        public void drawPoint<T>(T p,float r) where T : HS_Coord
+        public void drawPoint<T>(T p, float r) where T : HS_Coord
         {
             this.home.PushMatrix();
 
@@ -81,28 +81,61 @@ namespace Hsy.Render
         public void drawFace(GE_Face face)
         {
             this.home.BeginShape();
-            foreach(GE_Vertex v in face.GetFaceVertices())
+            var Etr = face.GetFaceVertices().GetEnumerator();
+            while (Etr.MoveNext())
             {
-                this.vertex(v);
+                this.vertex(Etr.Current);
             }
             this.home.EndShape();
         }
-        public void DisplayIObjects(List<IObject> objects,Camera cam)
+        public void drawFaces(GE_Mesh mesh)
         {
-            foreach (IObject o in objects)
+            GE_FaceEnumerator fEtr = mesh.fEtr();
+            while (fEtr.MoveNext())
             {
-                if (o.name() == "Mesh")
-                {
-                    displayHeMeshWithDegree((GE_Mesh)o, cam);
-                }else if (o.name() == "Point")
-                {
-                    drawPoint((HS_Vector)o,5);
-                }
-
+                drawFace(fEtr.Current);
             }
         }
+        public void DisplayIObjects(List<IObject> objects, Camera cam, bool detail)
+        {
+
+            var oEtr = objects.GetEnumerator();
+            while (oEtr.MoveNext())
+            {
+                var o = oEtr.Current;
+                if (o.name() == "Mesh")
+                {
+                    if (detail)
+                    {
+                        displayHeMeshWithDegree((GE_Mesh)o, cam);
+                    }
+                    else
+                    {
+                        home.PushStyle();
+                        home.NoFill();
+                        home.Stroke(0,80);
+         
+                        drawEdges((GE_Mesh)o);
+                        home.PopStyle();
+                       
+                        home.PushStyle();
+                        home.Fill(255, 255, 255);
+                        //home.Stroke(0, 0, 0);
+                        home.NoStroke();
+                        drawFaces((GE_Mesh)o);
+                        home.PopStyle();
+     
+                    }
+
+                }
+                else if (o.name() == "Point")
+                {
+                    drawPoint((HS_Vector)o, 5);
+                }
+            }
 
 
+        }
         /**
      * 半边数据结构的显示
      *
@@ -111,11 +144,13 @@ namespace Hsy.Render
         public double calAverageEdgeLength(GE_Mesh mesh)
         {
             double average = 0;
-            foreach (GE_Halfedge he in mesh.GetHalfedges())
+            GE_EdgeEnumerator eEtr = mesh.eEtr();
+            while (eEtr.MoveNext())
             {
-                average += he.GetLength();
+                average += eEtr.Current.GetLength();
 
             }
+           
             average /= mesh.GetNumberOfHalfedges();
             return average;
         }
@@ -123,9 +158,10 @@ namespace Hsy.Render
         public double displayHeFaces(GE_Mesh mesh, Color color)
         {
             double average = 0;
-            foreach (GE_Face face in mesh.GetFaces())
+            GE_FaceEnumerator fEtr = mesh.fEtr();
+            while (fEtr.MoveNext())
             {
-                displaySingleHeFace(face, color);
+                displaySingleHeFace(fEtr.Current, color);
             }
             average /= mesh.GetNumberOfHalfedges();
             return average;
@@ -134,7 +170,7 @@ namespace Hsy.Render
         public void displaySingleHeFace(GE_Face face, Color color)
         {
             home.PushStyle();
-            home.Fill(color.R,color.G,color.B);
+            home.Fill(color.R, color.G, color.B);
             this.drawFace(face);
             home.PopStyle();
         }
@@ -145,8 +181,10 @@ namespace Hsy.Render
             double[] range = new double[2];
             double minLength = double.MaxValue;
             double maxLength = 0;
-            foreach(GE_Halfedge he in mesh.GetHalfedges())
+            GE_EdgeEnumerator eEtr = mesh.eEtr();
+            while (eEtr.MoveNext())
             {
+                var he = eEtr.Current;
                 if (he.GetLength() < minLength)
                 {
                     minLength = he.GetLength();
@@ -165,7 +203,7 @@ namespace Hsy.Render
             displayHalfEdges(mesh);
             displayHeVertices(mesh);
         }
-        public void displayHeMeshWithDegree(GE_Mesh mesh,Camera cam)
+        public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam)
         {
             displayHeMeshWithDegree(mesh, (cam.Position - cam.target).Length);
             //        displayHeFaces(mesh,color6);
@@ -199,9 +237,10 @@ namespace Hsy.Render
             //        Color color6=Color.FromRgb(240, 230, 230);
             //        Color color7=Color.FromRgb(230, 220, 240);
             //        Color colormore=Color.FromRgb(245, 235, 253);
-
-            foreach (GE_Face f in mesh.GetFaces())
+            GE_FaceEnumerator fEtr = mesh.fEtr();
+            while (fEtr.MoveNext())
             {
+                var f = fEtr.Current;
                 if (f.GetFaceDegree() == 5)
                 {
                     displaySingleHeFace(f, color5);
@@ -223,6 +262,7 @@ namespace Hsy.Render
                     displaySingleHeFace(f, colormore);
                 }
             }
+         
             home.PopStyle();
         }
 
@@ -238,11 +278,11 @@ namespace Hsy.Render
             //调控防止顶点显示与mesh显示比例过大或过小
             if (distance > averageLength * 8)
             {
-                r = averageLength * 8 /254 * target;
+                r = averageLength * 8 / 254 * target;
             }
-            else if (distance < averageLength*1.5D)
+            else if (distance < averageLength * 1.5D)
             {
-                r = averageLength*1.5D /254 * target;
+                r = averageLength * 1.5D / 254 * target;
             }
             //            r=1000/coefficient;
             //        }else if(distance>10000) {
@@ -257,8 +297,10 @@ namespace Hsy.Render
             Color color6 = Color.FromRgb(205, 237, 159);
             Color color7 = Color.FromRgb(95, 178, 199);
             Color colormore = Color.FromRgb(166, 149, 223);
-            foreach (GE_Vertex v in mesh.GetVertices())
+            GE_VertexEnumerator vEtr = mesh.vEtr();
+            while (vEtr.MoveNext())
             {
+                var v = vEtr.Current;
                 home.PushMatrix();
                 if (v.GetVertexDegree() == 5)
                 {
@@ -283,6 +325,7 @@ namespace Hsy.Render
 
                 home.PopMatrix();
             }
+
             home.PopStyle();
         }
         public void displayHeVertices(GE_Mesh mesh)
@@ -291,8 +334,10 @@ namespace Hsy.Render
             home.PushStyle();
             Color color = Color.FromRgb(205, 237, 159);
 
-            foreach (GE_Vertex v in mesh.GetVertices())
+            GE_VertexEnumerator vEtr = mesh.vEtr();
+            while (vEtr.MoveNext())
             {
+                var v = vEtr.Current;
                 home.PushMatrix();
 
                 displaySingleHeVertex(v, color, r);
@@ -303,13 +348,13 @@ namespace Hsy.Render
         public void displaySingleHeVertex(GE_Vertex v, Color color, double r)
         {
             home.PushStyle();
-            home.Fill(color.R,color.G,color.B);
+            home.Fill(color.R, color.G, color.B);
             home.NoStroke();
             home.PushMatrix();
 
             home.Translate(v.xf, v.yf, v.zf);
-            home.Sphere((float)r);
-           
+            home.Sphere((float)r, 5);
+
             home.PopMatrix();
             home.PopStyle();
         }
@@ -317,10 +362,13 @@ namespace Hsy.Render
         {
             home.PushStyle();
             Color color = Color.FromRgb(95, 178, 199);
-            home.Stroke(color.R,color.G,color.B);
+            home.Stroke(color.R, color.G, color.B);
             home.StrokeWeight(2);
-            foreach (GE_Halfedge he in mesh.GetHalfedges())
+
+            GE_EdgeEnumerator eEtr = mesh.eEtr();
+            while (eEtr.MoveNext())
             {
+                var he = eEtr.Current;
                 displaySingleHalfEdge(he, color);
             }
 
@@ -329,14 +377,15 @@ namespace Hsy.Render
         public void displaySingleHalfEdge(GE_Halfedge he, Color color)
         {
             home.PushStyle();
-            home.Stroke(0,0,0);
+            home.Stroke(0, 0, 0);
+            home.StrokeWeight(1f);
             line(he.GetStart(), he.GetEnd());
             home.PopStyle();
 
             double offsetDis = he.GetLength() / 100.0D;
             home.PushStyle();
-            home.Stroke(color.R,color.G,color.B);
-            home.StrokeWeight(2);
+            home.Stroke(color.R, color.G, color.B);
+            home.StrokeWeight(2.0f);
             GE_Face referFace = he.IsOuterBoundary() ? he.Pair().GetFace() : he.GetFace();
 
             HS_Vector vec = new HS_Vector(he.GetStart(), he.GetEnd());
@@ -359,7 +408,7 @@ namespace Hsy.Render
         {
             this.home.Vertex(p.xf, p.yf, p.zf);
         }
-        public void vertex(double x,double y,double z)
+        public void vertex(double x, double y, double z)
         {
             this.home.Vertex((float)x, (float)y, (float)z);
         }
@@ -367,7 +416,7 @@ namespace Hsy.Render
         {
             this.home.Line(p.xf, p.yf, p.zf, q.xf, q.yf, q.zf);
         }
-        private void line(double x1,double y1,double z1, double x2, double y2, double z2)
+        private void line(double x1, double y1, double z1, double x2, double y2, double z2)
         {
             this.home.Line((float)x1, (float)y1, (float)z1, (float)x2, (float)y2, (float)z2);
         }

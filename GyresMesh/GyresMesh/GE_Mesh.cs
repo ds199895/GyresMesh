@@ -6,17 +6,45 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Hsy.Core;
+using System.Threading;
 
 namespace Hsy.GyresMesh
 {
     public class GE_Mesh : GE_MeshObject
     {
+        protected internal readonly static HS_ProgressReporter.HS_ProgressTracker tracker = HS_ProgressReporter.HS_ProgressTracker.instance();
+
+        class CreatorThread:HS_Thread
+        {
+           
+            GEC_Creator creator;
+            GE_Mesh result;
+            public CreatorThread(GEC_Creator creator)
+            {
+                this.creator = creator;
+                Thread newThread = new Thread(new ThreadStart(run));
+                newThread.Start();
+            }
+
+            public override void run()
+            {
+                this.result = creator.create();
+            }
+            
+        }
+
+
         private List<GE_Halfedge> _halfedges;
         private List<GE_Vertex> _vertices;
         private List<GE_Face> _faces;
         private List<GE_Halfedge> unpairedHalfedges;
         private List<GE_Halfedge> edges;
         int[] triangles;
+        Task executor;
+        LinkedList<HS_Thread> tasks;
+
+
         /**
          * Instantiates a new HE_Mesh.
          *
@@ -28,10 +56,12 @@ namespace Hsy.GyresMesh
             _faces = new List<GE_Face>();
             unpairedHalfedges = new List<GE_Halfedge>();
             edges = new List<GE_Halfedge>();
+            tasks = new LinkedList<HS_Thread>();
+            executor = null;
             this.attribute.name = "Mesh";
         }
 
-        public GE_Mesh(GE_Mesh mesh) : base()
+        public GE_Mesh(GE_Mesh mesh) : this()
         {
             this._vertices = mesh._vertices;
             this._halfedges = mesh._halfedges;
@@ -39,7 +69,7 @@ namespace Hsy.GyresMesh
             this.attribute.name = mesh.attribute.name;
         }
 
-        public GE_Mesh(GEC_Creator creator) : base()
+        public GE_Mesh(GEC_Creator creator) : this()
         {
             _halfedges = new List<GE_Halfedge>();
             _vertices = new List<GE_Vertex>();
@@ -57,6 +87,10 @@ namespace Hsy.GyresMesh
             this.replaceFaces(target);
             this.replaceHalfedges(target);
 
+        }
+        public void createThreaded(GEC_Creator creator)
+        {
+            tasks.Append(new CreatorThread(creator));
         }
         private void replaceVertices(GE_Mesh mesh)
         {
@@ -168,6 +202,26 @@ namespace Hsy.GyresMesh
                 GE_Face f = (GE_Face)var3.Current;
                 this.Add(f);
             }
+        }
+        public void addDerivedElement(GE_Vertex v,params GE_Object[]el)
+        {
+            Add(v);
+            //for (HE_Selection sel : selections.values())
+            //{
+            //    boolean contains = false;
+            //    for (int i = 0; i < el.length; i++)
+            //    {
+            //        contains |= sel.contains(el[i]);
+            //        if (contains)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    if (contains)
+            //    {
+            //        sel.add(v);
+            //    }
+            //}
         }
 
         public void addDerivedElement(GE_Halfedge he,params GE_Object[] el)

@@ -348,7 +348,7 @@ namespace Hsy.Geo
             return HS_CoordOp3D.getDistance3D(p1, p2);
         }
 
-        public double dist(HS_Vector v)
+        public double dist(HS_Coord v)
         {
             return Math.Sqrt((this.xd - v.xd) * (this.xd - v.xd) + (this.yd - v.yd) * (this.yd - v.yd) + (this.zd - v.zd) * (this.zd - v.zd));
         }

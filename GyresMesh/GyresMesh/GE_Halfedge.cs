@@ -248,6 +248,12 @@ namespace Hsy.GyresMesh
             throw new NotImplementedException();
         }
 
+        public void Clone(GE_Vertex ob)
+        {
+            base.Clone(ob);
+
+        }
+
         override
         public String ToString()
         {

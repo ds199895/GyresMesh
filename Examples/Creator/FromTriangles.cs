@@ -25,7 +25,7 @@ namespace Examples
             Size(800, 600);
             cam = new CamController(this);
             render = new GE_Render(this);
-            int count =5;
+            int count =50;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
 

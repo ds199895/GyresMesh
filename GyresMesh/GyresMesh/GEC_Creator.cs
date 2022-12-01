@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Hsy.Core.HS_ProgressReporter;
 
 namespace Hsy.GyresMesh
 {
     public abstract class GEC_Creator
     {
-
+        public static HS_ProgressTracker tracker = HS_ProgressTracker.instance();
         public IApp home;
         /** Center. */
         protected HS_Point center;
@@ -45,9 +46,14 @@ namespace Hsy.GyresMesh
 
         public GE_Mesh create()
         {
+            tracker.setStartStatus(this, "Creating base mesh.");
+
             GE_Mesh based = this.createBase();
+            
+
             based.attribute = new IO.IAttribute();
             based.attribute.name = "Mesh";
+            tracker.setStopStatus(this, "Base mesh created.");
             return based;
         }
     }

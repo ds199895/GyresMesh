@@ -34,7 +34,7 @@ namespace Examples.Creator
             render = new GE_Render(this);
             fileIO = new FileIO();
             //E://0917_VERSION4.3dm"
-            f =FileIO.open("E://inputtest.3dm");
+            f =FileIO.open("E://mesh.3dm");
             Print(f);
             //File f = new File("E://0917.3dm");
             //FileStream f = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
@@ -105,12 +105,12 @@ namespace Examples.Creator
 
         public override void Draw()
         {
-            Background(255);
-            cam.DrawSystem(this, 200);
+            Background(0);
+            //cam.DrawSystem(this, 200);
             //Fill(250, 250, 240, 255);
             //NoFill();
 
-            Stroke(0);
+            //Stroke(0);
             //foreach (GE_Mesh m in f)
             //{
             //    foreach (GE_Face f in m.GetFaces())
@@ -120,15 +120,18 @@ namespace Examples.Creator
 
             //    render.displayHeMeshWithDegree(m, cam.CurrentView);
             //}
-            render.DisplayIObjects(f, cam.CurrentView);
+            render.DisplayIObjects(f, cam.CurrentView,detail);
 
         }
-
+        bool detail = false;
         public override void KeyReleased()
         {
             if (key == "F")
             {
                 cam.Focus(((GE_Mesh)f[0]).getAABB().getLimits(), false);
+            }else if (key == "D")
+            {
+                detail = !detail;
             }
         }
     }

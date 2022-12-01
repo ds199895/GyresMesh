@@ -1,5 +1,6 @@
 ﻿using Hsy.Geo;
 using Hsy.GyresMesh;
+using Hsy.HsMath;
 using Lucene.Net.Support;
 using System;
 using System.Collections.Generic;
@@ -2005,7 +2006,7 @@ namespace Hsy.IO
         {
             public new static readonly String uuid = "4ED7D4D7-E947-11d3-BFE5-0010830122F0";
             //public ICurveGeo icurve;
-
+            public HS_Vector[] cv;
             public Curve()
             {
             }
@@ -2041,8 +2042,9 @@ namespace Hsy.IO
         }
         public class LineCurve : Curve
         {
-            public static readonly String uuid = "4ED7D4DB-E947-11d3-BFE5-0010830122F0";
+            public new static readonly String uuid = "4ED7D4DB-E947-11d3-BFE5-0010830122F0";
             public Line line;
+
             public Interval t;
             public int dim;
 
@@ -2050,7 +2052,7 @@ namespace Hsy.IO
             {
             }
 
-            public UUID getClassUUID()
+            public new UUID getClassUUID()
             {
                 return new UUID("4ED7D4DB-E947-11d3-BFE5-0010830122F0");
             }
@@ -2065,14 +2067,17 @@ namespace Hsy.IO
                 return this.t.isIncreasing() && this.line.length() > 0.0D;
             }
 
-            public void read(Rhino3dmFile var1, Stream var2)
+            public override void read(Rhino3dmFile var1, Stream var2)
             {
                 int[] var3 = I3dmImporter.readChunkVersion(var2);
                 int var4 = var3[0];
                 int var5 = var3[1];
                 if (var4 == 1)
                 {
+                    this.cv = new HS_Vector[2];
                     this.line = I3dmImporter.readLine(var2);
+                    this.cv[0] = this.line.from;
+                    this.cv[1] = this.line.to;
                     this.t = I3dmImporter.readInterval(var2);
                     this.dim = I3dmImporter.readInt32(var2);
                     Console.WriteLine(100 + "line = " + this.line.from + ", " + this.line.to);
@@ -3599,7 +3604,7 @@ namespace Hsy.IO
             public int cvCount;
             public int knotCapacity;
             public double[] knot;
-            public HS_Vector[] cv;
+            //public HS_Vector[] cv;
 
             public new UUID getClassUUID()
             {
@@ -3661,7 +3666,9 @@ namespace Hsy.IO
 
             public override void read(Rhino3dmFile var1, Stream var2)
             {
+
                 int[] var3 = I3dmImporter.readChunkVersion(var2);
+
                 int var4 = var3[0];
                 int var5 = var3[1];
                 if (var4 == 1)
@@ -4847,7 +4854,7 @@ namespace Hsy.IO
                 return true;
             }
 
-            public void read(Rhino3dmFile var1, Stream var2)
+            public override void read(Rhino3dmFile var1, Stream var2)
             {
                 this.trimIndex = I3dmImporter.readInt(var2);
                 this.curve2Index = I3dmImporter.readInt(var2);
@@ -5336,260 +5343,73 @@ namespace Hsy.IO
             }
             public override IObject createIObject(Rhino3dmFile var0)
             {
-
-
                 List<BrepVertex> vertices = this.vertices;
-
-
 
                 List<int[]> faceList = new List<int[]>();
                 List<HS_Polygon> polys = new List<HS_Polygon>();
 
-
-
                 for (int i = 0; i < this.faces.Count; i++)
                 {
-
-
                     BrepFace f = this.faces[i];
-                    var type1 = this.trims[this.loops[f.loopIndex[0]].trimIndex[0]].type;
 
+                    HS_Polygon poly;
+                    BrepLoop lshell = this.loops[f.loopIndex[0]];
+
+                    List<HS_Vector> shellpts = new List<HS_Vector>();
+
+                    for (int j = 0; j < lshell.trimIndex.Count; j++)
+                    {
+
+                        var cl = this.trims[lshell.trimIndex[j]].cv.ToList();
+                        cl.RemoveAt(0);
+                        shellpts.AddRange(cl);
+                    }
                     if (f.rev)
                     {
-                        Console.WriteLine(type1 + "rev: " + f.rev);
-                        if (f.loopIndex.Count == 1)
-                        {
-                            for (int j = 0; j < f.loopIndex.Count; j++)
-                            {
-                                BrepLoop l = this.loops[f.loopIndex[j]];
-                                //Array.Reverse(l.trimIndex);
-                                l.trimIndex.Reverse();
-                                for (int k = 0; k < l.trimIndex.Count; k++)
-                                {
-                                    //foreach(int vid in this.edges[index].vertexIndex) {
-                                    //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                    //}
-                                    Array.Reverse(this.trims[l.trimIndex[k]].vertexIndex);
-                                }
+                        shellpts.Reverse();
+                    }
 
-                                //Array.Reverse(l.trimIndex);
-                            }
-
-                        }
-                        else
-                        {
-                            //for (int j = 1; j < f.loopIndex.Count; j++)
-                            //{
-                            BrepLoop l = this.loops[f.loopIndex[0]];
-                            //Array.Reverse(l.trimIndex);
-                            l.trimIndex.Reverse();
-                            for (int k = 0; k < l.trimIndex.Count; k++)
-                            {
-                                //foreach(int vid in this.edges[index].vertexIndex) {
-                                //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                //}
-                                Array.Reverse(this.trims[l.trimIndex[k]].vertexIndex);
-                            }
-                            //}
-
-                        }
+                    if (f.loopIndex.Count == 1)
+                    {
+                        poly = new HS_Polygon().Create(shellpts);
                     }
                     else
+                    {
+                        List<List<HS_Vector>> holes = new List<List<HS_Vector>>();
+
+                        for (int j = 1; j < f.loopIndex.Count; j++)
                         {
-                            if (type1 != BrepTrim.Type.Boundary)
+                            BrepLoop lhole = this.loops[f.loopIndex[j]];
+                            List<HS_Vector> holepts = new List<HS_Vector>();
+                            for (int k = 0; k < lhole.trimIndex.Count; k++)
                             {
-                                if (f.loopIndex.Count != 1)
-                                {
-
-                                    for (int j = 1; j < f.loopIndex.Count; j++)
-                                    {
-                                        BrepLoop l = this.loops[f.loopIndex[j]];
-                                        //Array.Reverse(l.trimIndex);
-                                        l.trimIndex.Reverse();
-                                        for (int k = 0; k < l.trimIndex.Count; k++)
-                                        {
-                                            //foreach(int vid in this.edges[index].vertexIndex) {
-                                            //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                            //}
-                                            Array.Reverse(this.trims[l.trimIndex[k]].vertexIndex);
-                                        }
-
-                                        //Array.Reverse(l.trimIndex);
-                                    }
-                                }
-                                else
-                                {
-                                    //for (int j = 0; j < f.loopIndex.Count; j++)
-                                    //{
-                                    //    BrepLoop l = this.loops[f.loopIndex[j]];
-                                    //    //Array.Reverse(l.trimIndex);
-                                    //    l.trimIndex.Reverse();
-                                    //    for (int k = 0; k < l.trimIndex.Count; k++)
-                                    //    {
-                                    //        //foreach(int vid in this.edges[index].vertexIndex) {
-                                    //        //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                    //        //}
-                                    //        Array.Reverse(this.trims[l.trimIndex[k]].vertexIndex);
-                                    //    }
-
-                                    //    //Array.Reverse(l.trimIndex);
-                                    //}
-                                }
+                                var cl=this.trims[lhole.trimIndex[k]].cv.ToList();
+                                cl.RemoveAt(0);
+                                holepts.AddRange(cl);
                             }
-                            else
+                            if (!f.rev)
                             {
-                                if (f.loopIndex.Count != 1)
-                                {
-
-                                    for (int j = 1; j < f.loopIndex.Count; j++)
-                                    {
-                                        BrepLoop l = this.loops[f.loopIndex[j]];
-                                        //Array.Reverse(l.trimIndex);
-                                        l.trimIndex.Reverse();
-                                        for (int k = 0; k < l.trimIndex.Count; k++)
-                                        {
-                                            //foreach(int vid in this.edges[index].vertexIndex) {
-                                            //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                            //}
-                                            Array.Reverse(this.trims[l.trimIndex[k]].vertexIndex);
-                                        }
-
-                                        //Array.Reverse(l.trimIndex);
-                                    }
-                                }
+                                holepts.Reverse();
                             }
 
+                            holes.Add(holepts);
                         }
 
-                        HS_Polygon poly;
-                        if (f.loopIndex.Count == 1)
-                        {
-                            BrepLoop l = this.loops[f.loopIndex[0]];
-
-                            List<HS_Vector> polypts = new List<HS_Vector>();
-                            int[] vindex = new int[l.trimIndex.Count + 1];
-                            polypts.Add(this.vertices[this.trims[l.trimIndex[0]].vertexIndex[0]].point);
-                            for (int j = 0; j < l.trimIndex.Count; j++)
-                            {
-                                //foreach(int vid in this.edges[index].vertexIndex) {
-                                //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                //}
-                                polypts.Add(this.vertices[this.trims[l.trimIndex[j]].vertexIndex[1]].point);
-                            }
-                            poly = new HS_Polygon().Create(polypts);
-                        }
-                        else
-                        {
-
-                            BrepLoop lshell = this.loops[f.loopIndex[0]];
-
-                            List<HS_Vector> shellpts = new List<HS_Vector>();
-                            int[] vindex = new int[lshell.trimIndex.Count + 1];
-                            shellpts.Add(this.vertices[this.trims[lshell.trimIndex[0]].vertexIndex[0]].point);
-                            for (int j = 0; j < lshell.trimIndex.Count - 1; j++)
-                            {
-                                //foreach(int vid in this.edges[index].vertexIndex) {
-                                //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                //}
-                                shellpts.Add(this.vertices[this.trims[lshell.trimIndex[j]].vertexIndex[1]].point);
-                            }
-                            //shellpts.Add(shellpts[0]);
-
-                            List<HS_Vector>[] holes = new List<HS_Vector>[f.loopIndex.Count - 1];
-                            for (int j = 1; j < f.loopIndex.Count; j++)
-                            {
-                                BrepLoop lhole = this.loops[f.loopIndex[j]];
-                                List<HS_Vector> holepts = new List<HS_Vector>();
-                                int[] holevindex = new int[lhole.trimIndex.Count + 1];
-                                holepts.Add(this.vertices[this.trims[lhole.trimIndex[0]].vertexIndex[0]].point);
-                                for (int k = 0; k < lhole.trimIndex.Count - 1; k++)
-                                {
-                                    //foreach(int vid in this.edges[index].vertexIndex) {
-                                    //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                                    //}
-                                    holepts.Add(this.vertices[this.trims[lhole.trimIndex[k]].vertexIndex[1]].point);
-                                }
-                                //holepts.Add(holepts[0]);
-                                holes[j - 1] = holepts;
-                            }
-                            poly = new HS_Polygon().Create(shellpts, holes);
-                        }
-
-                        polys.Add(poly);
-                        //faceList.Add(vindex);
+                        poly = new HS_Polygon().Create(shellpts, holes.ToArray());
                     }
 
-                    GEC_FromPolygons gecp = new GEC_FromPolygons();
-                    gecp.setPolygons(polys);
-                    GE_Mesh m = gecp.create();
-
-                    Console.WriteLine(m);
-                    m.attribute.name = "Mesh";
-                    return m;
-
-
-
-                    //List<BrepVertex> vertices = this.vertices;
-                    //List<HS_Point> pts = new List<HS_Point>();
-                    //foreach (BrepVertex vertex in vertices)
-                    //{
-                    //    HS_Point pt = new HS_Point(vertex.point);
-
-                    //    pts.Add(pt);
-                    //}
-
-
-                    //List<int[]> faceList = new List<int[]>();
-
-                    //for (int i = 0; i < this.faces.Count; i++)
-                    //{
-                    //    BrepFace f = this.faces[i];
-                    //    if (f.loopIndex.Count == 1)
-                    //    {
-                    //        BrepLoop l = this.loops[i];
-                    //        if (f.rev)
-                    //        {
-                    //            //Array.Reverse(l.trimIndex);
-                    //            l.trimIndex.Reverse();
-                    //            for (int j = 0; j < l.trimIndex.Count; j++)
-                    //            {
-                    //                //foreach(int vid in this.edges[index].vertexIndex) {
-                    //                //vindex[i + 1] = this.trims[l.trimIndex[i]].vertexIndex[1];
-                    //                //}
-                    //                Array.Reverse(this.trims[l.trimIndex[j]].vertexIndex);
-                    //            }
-                    //        }
-                    //        int[] vindex = new int[l.trimIndex.Count + 1];
-                    //        vindex[0] = this.trims[l.trimIndex[0]].vertexIndex[0];
-                    //        for (int j = 0; j < l.trimIndex.Count; j++)
-                    //        {
-                    //            //foreach(int vid in this.edges[index].vertexIndex) {
-                    //            vindex[j + 1] = this.trims[l.trimIndex[j]].vertexIndex[1];
-                    //            //}
-
-                    //        }
-                    //    }
-
-                    //    //HS_Vector v1 = this.vertices[vindex[0]].point;
-                    //    //HS_Vector v2 = this.vertices[vindex[1]].point;
-                    //    //HS_Vector v3 = this.vertices[vindex[2]].point;
-                    //    //HS_Vector v1_2 = v2 - v1;
-                    //    //HS_Vector v2_3 = v3 - v2;
-                    //    //Console.WriteLine(v1_2.cross(v2_3));
-                    //    faceList.Add(vindex);
-                    //}
-
-
-
-
-                    //GEC_FromFaceList creator = new GEC_FromFaceList();
-                    //creator.setVertices(pts);
-                    //creator.setFaces(faceList);
-                    //GE_Mesh m = creator.create();
-                    //Console.WriteLine(m);
-                    //m.attribute.name = "Mesh";
-                    //return m;
+                    polys.Add(poly);
                 }
+
+                GEC_FromPolygons gecp = new GEC_FromPolygons();
+
+                gecp.setPolygons(polys);
+                GE_Mesh m = gecp.create();
+
+                Console.WriteLine(m);
+                m.attribute.name = "Mesh";
+                return m;
+            }
             public override void read(Rhino3dmFile var1, Stream var2)
             {
                 int[] var3 = I3dmImporter.readChunkVersion(var2);
@@ -5652,6 +5472,19 @@ namespace Hsy.IO
                     Console.WriteLine(var6 + " read trims");
                     this.trims = new BrepTrimArray();
                     this.trims.read(var1, var2);
+
+                    foreach (BrepTrim t in this.trims)
+                    {
+
+                        t.cv = new HS_Vector[this.curves3[t.edgeIndex].cv.Length];
+                        this.curves3[t.edgeIndex].cv.CopyTo(t.cv, 0);
+                        if (t.rev3d)
+                        {
+                            Array.Reverse(t.cv);
+                        }
+                    }
+
+
                     Console.WriteLine(var6 + " trimCount = " + this.trims.Count);
 
                     for (var10 = 0; var10 < this.trims.Count; ++var10)

@@ -88,12 +88,12 @@ namespace Hsy.GyresMesh
             this.color = ob.color;
         }
 
-        public int getColor()
+        public new int getColor()
         {
             return color;
         }
 
-        public void setColor(int color)
+        public new void setColor(int color)
         {
             this.color = color;
         }
