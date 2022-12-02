@@ -159,7 +159,10 @@ namespace Hsy.GyresMesh
             _face = face;
         }
 
-
+        public HS_Coord GetCenter()
+        {
+            return GE_MeshOp.getEdgeCenter(this);
+        }
 
         public GE_Vertex GetEnd()
         {

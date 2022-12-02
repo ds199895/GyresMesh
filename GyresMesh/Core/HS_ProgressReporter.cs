@@ -127,7 +127,7 @@ namespace Hsy.Core
 
             public void increment(int inc)
             {
-                Console.WriteLine(count);
+                //Console.WriteLine(count);
                 count += inc;
                 if (count >= nextUpdate)
                 {

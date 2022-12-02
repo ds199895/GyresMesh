@@ -6,15 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Hsy.Core;
+using static Hsy.Core.HS_ProgressReporter;
 
 namespace Hsy.GyresMesh
 {
     public abstract class GEC_Creator
     {
-        public static HS_ProgressReporter reporter=new HS_ProgressReporter("E://log.txt");
-        public static HS_ProgressReporter.HS_ProgressTracker tracker = reporter.tracker;
+        //public static HS_ProgressReporter reporter=new HS_ProgressReporter("E://log.txt");
+        //public static HS_ProgressReporter.HS_ProgressTracker tracker = reporter.tracker;
+        public static HS_ProgressReporter.HS_ProgressTracker tracker = HS_ProgressTracker.instance();
 
-       public IApp home;
+        public IApp home;
         /** Center. */
         protected HS_Point center;
         /** Rotation angle about Z-axis. */

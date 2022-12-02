@@ -25,10 +25,12 @@ namespace Examples
             Size(800, 600);
             cam = new CamController(this);
             render = new GE_Render(this);
-            int count =50;
+            int count =5··00;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
+            stopwatch.Start();
             for (int j = 0; j < count; j++)
             {
                 for (int i = 0; i < count; i++)
@@ -66,6 +68,7 @@ namespace Examples
             //    Print(he);
             //}
             aabb = mesh.getAABB();
+            Console.WriteLine("创建Mesh总用时   " + stopwatch.ElapsedMilliseconds + "ms");
         }
 
         public override void Draw()

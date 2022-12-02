@@ -13,8 +13,8 @@ namespace Hsy.GyresMesh
     {
         private static HS_GeometryFactory gf = new HS_GeometryFactory();
 
-        public static HS_ProgressReporter reporter = new HS_ProgressReporter("E://log.txt");
-        public static HS_ProgressReporter.HS_ProgressTracker tracker = reporter.tracker;
+        //public static HS_ProgressReporter reporter = new HS_ProgressReporter("E://log.txt");
+        public static HS_ProgressReporter.HS_ProgressTracker tracker = HS_ProgressTracker.instance();
         protected GE_MeshOp()
         {
 
@@ -286,6 +286,10 @@ namespace Hsy.GyresMesh
                 return v;
             }
             return null;
+        }
+        public static HS_Coord getEdgeCenter(GE_Halfedge he)
+        {
+            return he.GetNextInFace() != null && he.GetStart() != null && he.GetNextInFace().GetStart() != null ? gf.createMidpoint(he.GetNextInFace().GetStart(), he.GetStart()) : null;
         }
         public static HS_Coord getFaceCenter(GE_Face f)
         {
@@ -623,8 +627,8 @@ namespace Hsy.GyresMesh
         {
 
 
-            List<GE_Vertex> cleanedVertices = new List<GE_Vertex>();
-            List<GE_Halfedge> cleanedHalfedges = new List<GE_Halfedge>();
+            HashSet<GE_Vertex> cleanedVertices = new HashSet<GE_Vertex>();
+            HashSet<GE_Halfedge> cleanedHalfedges = new HashSet<GE_Halfedge>();
             tracker.setStartStatusStr("GE_MeshOp", "Cleaning unused elements.");
             GE_Halfedge he;
             HS_ProgressCounter counter = new HS_ProgressCounter(mesh.GetNumberOfFaces(), 10);
@@ -632,7 +636,7 @@ namespace Hsy.GyresMesh
             //GE_Face f;
             IEnumerator<GE_Face> fetr = mesh.fEtr();
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism =5;
+            options.MaxDegreeOfParallelism =1;
             System.Threading.Tasks.Parallel.ForEach(mesh.GetFaces(), options,f =>
             {
                 he = f.GetHalfedge();
@@ -661,9 +665,10 @@ namespace Hsy.GyresMesh
             tracker.setCounterStatusStr("GE_MeshOp", "Processing halfedges.",counter);
 
             int n = cleanedHalfedges.Count;
-            for (int i = 0; i < n; i++)
+            var cHEtr = cleanedHalfedges.GetEnumerator();
+            while (cHEtr.MoveNext())
             {
-                he = cleanedHalfedges[i];
+                he = cHEtr.Current;
                 if (!cleanedHalfedges.Contains(he.Pair()))
                 {
                     mesh.ClearPair(he);
@@ -671,6 +676,13 @@ namespace Hsy.GyresMesh
                 }
                 counter.increment();
             }
+
+
+            //for (int i = 0; i < n; i++)
+            //{
+            //    he = cleanedHalfedges[i];
+               
+            //}
             List<GE_Vertex> removev = new List<GE_Vertex>();
             var var10 = mesh.GetVertices().GetEnumerator();
             while (var10.MoveNext())
