@@ -337,9 +337,21 @@ namespace Hsy.GyresMesh
 
         public void removeNoSelectionCheck(GE_Halfedge he)
         {
-            edges.Remove(he);
-            _halfedges.Remove(he);
-            unpairedHalfedges.Remove(he);
+            //edges.Remove(he);
+
+            //if (edges.Contains(he))
+            //{
+               edges.Remove(he);
+            //}
+            //if (_halfedges.Contains(he))
+            //{
+                _halfedges.Remove(he);
+            //}
+            //if (unpairedHalfedges.Contains(he))
+            //{
+                unpairedHalfedges.Remove(he);
+            //}
+            //unpairedHalfedges.Remove(he);
         }
         public void SetNext(GE_Halfedge he, GE_Halfedge nxt)
         {

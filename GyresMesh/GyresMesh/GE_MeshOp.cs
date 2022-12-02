@@ -1,4 +1,5 @@
-﻿using Hsy.Geo;
+﻿using Hsy.Core;
+using Hsy.Geo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace Hsy.GyresMesh
     {
         private static HS_GeometryFactory gf = new HS_GeometryFactory();
 
-        public static HS_ProgressTracker tracker = HS_ProgressTracker.instance();
+        public static HS_ProgressReporter reporter = new HS_ProgressReporter("E://log.txt");
+        public static HS_ProgressReporter.HS_ProgressTracker tracker = reporter.tracker;
         protected GE_MeshOp()
         {
 
@@ -425,6 +427,7 @@ namespace Hsy.GyresMesh
             GE_Halfedge he1, he2;
             HS_ProgressCounter counter = new HS_ProgressCounter(nuh, 10);
             tracker.setCounterStatus("GE_MeshOp", "Capping unpaired halfedges.", counter);
+
             for (int i = 0; i < nuh; i++)
             {
                 he1 = unpairedHalfedges[i];
@@ -473,26 +476,18 @@ namespace Hsy.GyresMesh
             List<GE_Halfedge> unpairedHalfedges = mesh.getUnpairedHalfedges();
             //GE_Vertex v;
             VertexInfo vi;
+            ParallelOptions options = new ParallelOptions(); 
+            options.MaxDegreeOfParallelism = 10;
             HS_ProgressCounter counter = new HS_ProgressCounter( unpairedHalfedges.Count, 10);
             tracker.setCounterStatus("GE_MeshOp", "Classifying unpaired halfedges.",counter);
 
             var var7 = unpairedHalfedges.GetEnumerator();
             GE_Halfedge he;
-            while (var7.MoveNext())
+            System.Threading.Tasks.Parallel.ForEach(unpairedHalfedges,options, he=>
             {
                 vi = new VertexInfo();
-                he = (GE_Halfedge)var7.Current;
+                //he = (GE_Halfedge)var7.Current;
                 GE_Vertex v = he.GetStart();
-                //try
-                //{
-                //    vi = vertexLists[v.GetKey()];
-                //}
-                //catch(Exception e)
-                //{
-
-                //}
-              
-                //Console.WriteLine(vi);
                 if (!vertexLists.Keys.Contains(v.GetKey()))
                 {
                     vi = new VertexInfo();
@@ -516,6 +511,27 @@ namespace Hsy.GyresMesh
                 vi.In.Add(he);
                 counter.increment();
             }
+
+
+
+            );
+            //while (var7.MoveNext())
+            //{
+            //    vi = new VertexInfo();
+            //    he = (GE_Halfedge)var7.Current;
+            //    GE_Vertex v = he.GetStart();
+            //    //try
+            //    //{
+            //    //    vi = vertexLists[v.GetKey()];
+            //    //}
+            //    //catch(Exception e)
+            //    //{
+
+            //    //}
+              
+            //    //Console.WriteLine(vi);
+                
+            //}
             GE_Halfedge he1;
 
             GE_Halfedge he2;
@@ -524,41 +540,8 @@ namespace Hsy.GyresMesh
             var vitr = vertexLists.GetEnumerator();
             VertexInfo vInfo;
             List<GE_Halfedge> mismatchedHalfedges = new List<GE_Halfedge>();
-            while (vitr.MoveNext())
-            {
-                vInfo = vitr.Current.Value;
-
-                //System.Threading.Tasks.Parallel.For(0,vInfo.Out.Count, i=> {
-                //    he1 = vInfo.Out[i];
-                //    if (he1.Pair() == null)
-                //    {
-                //        for (int j = 0; j < vInfo.In.Count; j++)
-                //        {
-                //            he2 = vInfo.In[j];
-                //            if (he2.Pair() == null)
-                //            {
-                //                if (he1.GetStart() == he2.GetNextInFace().GetStart() && he2.GetStart() == he1.GetNextInFace().GetStart())
-                //                {
-                //                    mesh.SetPair(he1, he2);
-                //                    break;
-                //                }
-                //            }
-                //        }
-                //        for (int j = 0; j < vInfo.Out.Count; j++)
-                //        {
-                //            he2 = vInfo.Out[j];
-                //            if (he2 != he1 && he2.Pair() == null)
-                //            {
-                //                if (he1.GetNextInFace().GetStart() == he2.GetNextInFace().GetStart())
-                //                {
-                //                    mismatchedHalfedges.Add(he1);
-                //                    mismatchedHalfedges.Add(he2);
-                //                    break;
-                //                }
-                //            }
-                //        }
-                //    }
-                //});
+            foreach(var vin in vertexLists) {
+                vInfo=vin.Value;
 
                 for (int i = 0; i < vInfo.Out.Count; i++)
                 {
@@ -594,6 +577,44 @@ namespace Hsy.GyresMesh
                 }
                 counter.increment();
             }
+
+            //while (vitr.MoveNext())
+            //{
+            //    vInfo = vitr.Current.Value;
+
+            //    //System.Threading.Tasks.Parallel.For(0,vInfo.Out.Count, i=> {
+            //    //    he1 = vInfo.Out[i];
+            //    //    if (he1.Pair() == null)
+            //    //    {
+            //    //        for (int j = 0; j < vInfo.In.Count; j++)
+            //    //        {
+            //    //            he2 = vInfo.In[j];
+            //    //            if (he2.Pair() == null)
+            //    //            {
+            //    //                if (he1.GetStart() == he2.GetNextInFace().GetStart() && he2.GetStart() == he1.GetNextInFace().GetStart())
+            //    //                {
+            //    //                    mesh.SetPair(he1, he2);
+            //    //                    break;
+            //    //                }
+            //    //            }
+            //    //        }
+            //    //        for (int j = 0; j < vInfo.Out.Count; j++)
+            //    //        {
+            //    //            he2 = vInfo.Out[j];
+            //    //            if (he2 != he1 && he2.Pair() == null)
+            //    //            {
+            //    //                if (he1.GetNextInFace().GetStart() == he2.GetNextInFace().GetStart())
+            //    //                {
+            //    //                    mismatchedHalfedges.Add(he1);
+            //    //                    mismatchedHalfedges.Add(he2);
+            //    //                    break;
+            //    //                }
+            //    //            }
+            //    //        }
+            //    //    }
+            //    //});
+
+            //}
             tracker.setStopStatus("GE_MeshOp", "Processed unpaired halfedges.");
             return mismatchedHalfedges;
         }
@@ -608,11 +629,12 @@ namespace Hsy.GyresMesh
             GE_Halfedge he;
             HS_ProgressCounter counter = new HS_ProgressCounter(mesh.GetNumberOfFaces(), 10);
             tracker.setCounterStatusStr("GE_MeshOp", "Processing faces.", counter);
-            GE_Face f;
+            //GE_Face f;
             IEnumerator<GE_Face> fetr = mesh.fEtr();
-            while (fetr.MoveNext())
+            ParallelOptions options = new ParallelOptions();
+            options.MaxDegreeOfParallelism =5;
+            System.Threading.Tasks.Parallel.ForEach(mesh.GetFaces(), options,f =>
             {
-                f = fetr.Current;
                 he = f.GetHalfedge();
                 do
                 {
@@ -628,7 +650,13 @@ namespace Hsy.GyresMesh
                     he = he.GetNextInFace();
                 } while (he != f.GetHalfedge());
                 counter.increment();
-            }
+            });
+
+            //while (fetr.MoveNext())
+            //{
+            //    f = fetr.Current;
+                
+            //}
             counter = new HS_ProgressCounter(cleanedHalfedges.Count, 10);
             tracker.setCounterStatusStr("GE_MeshOp", "Processing halfedges.",counter);
 

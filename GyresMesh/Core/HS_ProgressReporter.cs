@@ -12,18 +12,18 @@ namespace Hsy.Core
 {
     public class HS_ProgressReporter : HS_Thread
     {
-        HS_ProgressTracker tracker;
-        HS_ProgressStatus status;
-        StreamWriter output;
+        public HS_ProgressTracker tracker = HS_ProgressTracker.instance();
+        public HS_ProgressStatus status;
+        public StreamWriter output;
 
         String path;
-        public HS_ProgressReporter(String path)
+        public HS_ProgressReporter(String path):this(0,path,false)
         {
 
         }
-        public HS_ProgressReporter(int depth, String path, bool append) : base()
+        public HS_ProgressReporter(int depth, String path, bool append):base()
         {
-            tracker = HS_ProgressTracker.instance();
+            
             tracker.setMaxLevel(depth);
             this.path = path;
             try
@@ -44,6 +44,7 @@ namespace Hsy.Core
                 Console.WriteLine(e.StackTrace);
                 //e.printStackTrace();
             }
+        
         }
         public HS_ProgressReporter(int depth, int consoleDepth, String path) : this(depth, path, false)
         {
@@ -126,7 +127,7 @@ namespace Hsy.Core
 
             public void increment(int inc)
             {
-                //Console.WriteLine(count);
+                Console.WriteLine(count);
                 count += inc;
                 if (count >= nextUpdate)
                 {
@@ -201,8 +202,8 @@ namespace Hsy.Core
                     {
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
-                    Console.WriteLine(caller.GetType().FullName + " " + status);
-                    statuses.Append(new HS_ProgressStatus("\u250C",caller.GetType().FullName + key, status, level, DateTime.Now.ToString(sdf)));
+                    Console.WriteLine(caller.GetType().Name + " " + status);
+                    statuses.Append(new HS_ProgressStatus("\u250C",caller.GetType().Name + key, status, level, DateTime.Now.ToString(sdf)));
                 }
                 level = Math.Max(0, level + INCLVL);
             }
@@ -217,7 +218,7 @@ namespace Hsy.Core
                     {
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
-                    statuses.Append(new HS_ProgressStatus("\u2514",caller.GetType().FullName + key, status, level,DateTime.Now.ToString(sdf)));
+                    statuses.Append(new HS_ProgressStatus("\u2514",caller.GetType().Name + key, status, level,DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -230,7 +231,7 @@ namespace Hsy.Core
                     {
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
-                    statuses.Append(new HS_ProgressStatus("|",caller.GetType().FullName + key, status, level, DateTime.Now.ToString(sdf)));
+                    statuses.Append(new HS_ProgressStatus("|",caller.GetType().Name + key, status, level, DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -272,11 +273,11 @@ namespace Hsy.Core
                     {
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
-                    counter.caller = caller.GetType().FullName + key;
+                    counter.caller = caller.GetType().Name + key;
                     counter.text = status;
                     if (level <= maxLevel)
                     {
-                        statuses.Append(new HS_ProgressStatus("|",caller.GetType().FullName + key, status,counter, level, DateTime.Now.ToString(sdf)));
+                        statuses.Append(new HS_ProgressStatus("|",caller.GetType().Name + key, status,counter, level, DateTime.Now.ToString(sdf)));
                     }
                 }
             }
@@ -305,7 +306,7 @@ namespace Hsy.Core
             {
                 if (level <= maxLevel)
                 {
-                    statuses.Append(new HS_ProgressStatus(caller.GetType().FullName, level, DateTime.Now.ToString(sdf)));
+                    statuses.Append(new HS_ProgressStatus(caller.GetType().Name, level, DateTime.Now.ToString(sdf)));
                 }
             }
 

@@ -5,14 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Hsy.Core.HS_ProgressReporter;
+using Hsy.Core;
 
 namespace Hsy.GyresMesh
 {
     public abstract class GEC_Creator
     {
-        public static HS_ProgressTracker tracker = HS_ProgressTracker.instance();
-        public IApp home;
+        public static HS_ProgressReporter reporter=new HS_ProgressReporter("E://log.txt");
+        public static HS_ProgressReporter.HS_ProgressTracker tracker = reporter.tracker;
+
+       public IApp home;
         /** Center. */
         protected HS_Point center;
         /** Rotation angle about Z-axis. */

@@ -127,6 +127,7 @@ namespace Hsy.GyresMesh
                 bool useFaceUVW = uvws != null && faceuvws != null && faceuvws.Length == faces.Length;
                 GE_Vertex[] uniqueVertices = new GE_Vertex[vertices.Length];
                 bool[] duplicated = new bool[vertices.Length];
+                
                 if (duplicate)
                 {
                     HS_KDTreeInteger<HS_Coord> kdtree = new HS_KDTreeInteger<HS_Coord>();
@@ -305,6 +306,7 @@ namespace Hsy.GyresMesh
                 }
                 bool useFaceTextures = faceTextures != null && faceTextureIds.Length == faces.Length;
                 int faceid = 0;
+                Dictionary<HS_Point, GE_Halfedge> centers = new Dictionary<HS_Point, GE_Halfedge>();
                 foreach (int[] face in faces)
                 {
                     int[] faceuvw = null;
@@ -386,15 +388,31 @@ namespace Hsy.GyresMesh
                                     }
                                 }
                                 mesh.SetHalfedge(he.GetStart(), he);
+
+
                             }
+                            
                             mesh.Add(hef);
                             GE_MeshOp.cycleHalfedges(mesh, faceEdges);
+
+                            foreach(GE_Halfedge e in faceEdges)
+                            {
+                               
+                            }
+                            //foreach(GE_Halfedge h in faceEdges)
+                            //{
+                            //    GE_Halfedge hp = new GE_Halfedge();
+                            //    hp.SetVertex(h.GetEnd());
+
+                            //}
                             mesh.addHalfedges(faceEdges);
 
                         }
                     }
                     faceid++;
                 }
+
+
                 GE_MeshOp.pairHalfedges(mesh);
                 if (this.cleanunused)
                 {

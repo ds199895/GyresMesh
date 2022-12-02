@@ -10,6 +10,10 @@ namespace Hsy.Core
     public abstract class HS_Thread
     {
         Thread thread=null;
+        public HS_Thread()
+        {
+            start();
+        }
         public abstract void run();
 
         public virtual void start()
