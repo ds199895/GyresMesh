@@ -174,7 +174,7 @@ namespace Hsy.GyresMesh
             return removeAt(id);
         }
 
-    public int size()
+        public int size()
         {
             return objects.Count;
         }
