@@ -127,7 +127,9 @@ namespace Hsy.GyresMesh
                 bool useFaceUVW = uvws != null && faceuvws != null && faceuvws.Length == faces.Length;
                 GE_Vertex[] uniqueVertices = new GE_Vertex[vertices.Length];
                 bool[] duplicated = new bool[vertices.Length];
-                
+                System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+
+                stopwatch.Start();
                 if (duplicate)
                 {
                     HS_KDTreeInteger<HS_Coord> kdtree = new HS_KDTreeInteger<HS_Coord>();
@@ -388,8 +390,6 @@ namespace Hsy.GyresMesh
                                     }
                                 }
                                 mesh.SetHalfedge(he.GetStart(), he);
-
-
                             }
                             
                             mesh.Add(hef);
@@ -411,7 +411,7 @@ namespace Hsy.GyresMesh
                     }
                     faceid++;
                 }
-
+                Console.WriteLine("baseset总用   " + stopwatch.ElapsedMilliseconds + "ms");
                 //Dictionary<long, GE_Halfedge> centers = new Dictionary<long, GE_Halfedge>();
                 HS_KDTreeInteger<HS_Coord> cen = new HS_KDTreeInteger<HS_Coord>();
                 HS_KDEntryInteger<HS_Coord>[] nei;
@@ -451,41 +451,40 @@ namespace Hsy.GyresMesh
                     if (!(nei[0].d2 < HS_Epsilon.SQEPSILON))
                     {
                         cen.add(mid, i);
-                        pairs[i] =null;
+                        //pairs[i] =null;
                         //centers.Add(e.GetKey(), e);
                     }
                     else
                     {
                         //mesh.SetPair(hes[nei[0].value], e);
-                        pairs[i] = hes[nei[0].value];
+                        //pairs[i] = hes[nei[0].value];
+                        mesh.SetPair(e, hes[nei[0].value]);
                     }
                     //mids.Add(mid);
                 });
-                System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
-                stopwatch.Start();
-                options.MaxDegreeOfParallelism = 1;
-                System.Threading.Tasks.Parallel.For(1, hes.Count, options, i => {
-                    GE_Halfedge e = hes[i];
+                //options.MaxDegreeOfParallelism = 1;
+                //System.Threading.Tasks.Parallel.For(1, hes.Count, options, i => {
+                //    GE_Halfedge e = hes[i];
       
 
-                    if (pairs[i]!=null)
-                    {
-                        mesh.SetPair(e, pairs[i]);
+                //    if (pairs[i]!=null)
+                //    {
+                //        mesh.SetPair(e, pairs[i]);
    
 
 
-                        //centers.Add(e.GetKey(), e);
-                    }
-                    //mids.Add(mid);
-                });
+                //        //centers.Add(e.GetKey(), e);
+                //    }
+                //    //mids.Add(mid);
+                //});
 
                 Console.WriteLine("pairing线程总用   " + stopwatch.ElapsedMilliseconds + "ms");
 
                 //GE_MeshOp.pairHalfedges(mesh);
                 if (this.cleanunused)
                 {
-                    mesh.cleanUnusedElementsByface();
+                    //mesh.cleanUnusedElementsByface();
                     GE_MeshOp.capHalfedges(mesh);
                 }
                 if (this.manifoldcheck)

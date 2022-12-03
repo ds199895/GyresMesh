@@ -444,6 +444,7 @@ namespace Hsy.GyresMesh
             }
             counter = new HS_ProgressCounter(nuh, 10);
             tracker.setCounterStatus("GE_MeshOp", "Cycling new halfedges.", counter);
+
             for (int i = 0; i < nuh; i++)
             {
                 he1 = newHalfedges[i];

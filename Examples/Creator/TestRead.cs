@@ -34,7 +34,7 @@ namespace Examples.Creator
             render = new GE_Render(this);
             fileIO = new FileIO();
             //E://0917_VERSION4.3dm"
-            f =FileIO.open("E://mesh.3dm");
+            f =FileIO.open("E://inputsurface2.3dm");
             Print(f);
             //File f = new File("E://0917.3dm");
             //FileStream f = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
