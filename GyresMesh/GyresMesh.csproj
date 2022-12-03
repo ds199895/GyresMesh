@@ -83,7 +83,7 @@
     <Compile Include="GyresMesh\GE_RAS.cs" />
     <Compile Include="Core\HS_ProgressReporter.cs" />
     <Compile Include="Core\HS_Thread.cs" />
-    <Compile Include="Geo\FastList.cs" />
+    <Compile Include="Core\FastList.cs" />
     <Compile Include="Geo\HS_AABB.cs" />
     <Compile Include="Geo\HS_Brep.cs" />
     <Compile Include="Geo\HS_CoordinateSystem.cs" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hsy.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,31 +8,31 @@ using System.Threading.Tasks;
 
 namespace Hsy.GyresMesh
 {
-    public class GE_RAS<T> : ISet<T> where T:GE_Object
+    public class GE_RAS<T> : ISet<T> where T : GE_Object
     {
-        List<T> objects;
-        Dictionary<long, int> indices;
+        public FastList<T> objects;
+        public Dictionary<long, int> indices;
         public GE_RAS()
         {
-            objects = new List<T>();
+            objects = new FastList<T>();
             indices = new Dictionary<long, int>();
         }
         public GE_RAS(int n)
         {
-            objects = new List<T>(n);
+            objects = new FastList<T>(n);
             indices = new Dictionary<long, int>(n);
         }
         public GE_RAS(ICollection<T> items) : this(items.Count)
         {
-            foreach(T e in items)
+            foreach (T e in items)
             {
                 Add(e);
             }
         }
         public int _size;
-        public int Count { get { return _size; } set { _size = value; } }
+        public int Count { get { return this.objects.Count; } }
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
 
         public bool Add(T item)
         {
@@ -41,8 +42,9 @@ namespace Hsy.GyresMesh
             }
             if (!indices.ContainsKey(item.GetKey()))
             {
-                indices.Add(item.GetKey(), objects.Count);
-                objects.Add(item);
+                objects.add(item);
+                indices.Add(item.GetKey(), objects.Count-1);
+                
                 return true;
             }
             return false;
@@ -50,7 +52,8 @@ namespace Hsy.GyresMesh
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.objects.Clear();
+            this.indices.Clear();
         }
 
         public bool Contains(T item)
@@ -60,7 +63,7 @@ namespace Hsy.GyresMesh
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            this.objects.CopyTo(array, arrayIndex);
         }
 
         public void ExceptWith(IEnumerable<T> other)
@@ -70,7 +73,7 @@ namespace Hsy.GyresMesh
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.objects.GetEnumerator();
         }
 
         public void IntersectWith(IEnumerable<T> other)
@@ -109,15 +112,21 @@ namespace Hsy.GyresMesh
             {
                 return false;
             }
-            // @SuppressWarnings(value = "element-type-mismatch
-            int id;
-            this.indices.TryGetValue(item.GetKey(), out id);
-            if (id == null)
+            else
             {
-                return false;
+                int id;
+                bool outcome = this.indices.TryGetValue(item.GetKey(), out id);
+                if (!outcome)
+                {
+                    return false;
+                }
+                else
+                {
+                    //Console.WriteLine("Remove:  " + id);
+                    this.removeAt(id);
+                    return true;
+                }
             }
-            removeAt(id);
-            return true;
         }
 
 
@@ -127,18 +136,42 @@ namespace Hsy.GyresMesh
             {
                 return null;
             }
-            T res = objects[id];
-            indices.Remove(res.GetKey());
-            T last = objects[objects.Count - 1];
-            objects.RemoveAt(objects.Count - 1);
-            //// skip filling the hole if last is removed
-            if (id < objects.Count)
+            else
             {
-                indices.Add(last.GetKey(), id);
-                objects.Insert(id, last);
+                T res = this.objects[id];
+                this.indices.Remove(res.GetKey());
+
+                T last = this.objects.remove(this.objects.Count- 1);
+
+                if (id < this.objects.size)
+                {
+                    this.indices.Remove(last.GetKey());
+                    this.indices.Add(last.GetKey(), id);
+                    this.objects.set(id, last);
+                }
+
+                return res;
             }
-            return res;
+
         }
+        //public T remove(FastList<T> l, int index)
+        //{
+        //    T previous = l[index];
+        //    int totalOffset = l.Count - index - 1;
+
+        //    T[] sourceArray = l.ToArray();
+        //    T[] destArray = sourceArray;
+        //    if (totalOffset > 0)
+        //    {
+        //        Array.Copy(sourceArray, index + 1, destArray, index, totalOffset);
+        //    }
+        //    l = destArray.ToList();
+        //    int len = l.Count;
+        //    l[len-1] = null;
+        //    return previous;
+        //}
+
+
         public T getWithIndex(int i)
         {
             return objects[i];
@@ -147,8 +180,8 @@ namespace Hsy.GyresMesh
         public T getWithKey(long key)
         {
             int i;
-            indices.TryGetValue(key, out i) ;
-            if (i == -1)
+            bool outcome = indices.TryGetValue(key, out i);
+            if (!outcome)
             {
                 return null;
             }
@@ -158,15 +191,15 @@ namespace Hsy.GyresMesh
         public int indexOf(T obj)
         {
             int v;
-            indices.TryGetValue(obj.GetKey(),out v);
+            bool outcome = indices.TryGetValue(obj.GetKey(), out v);
 
 
-            return v == null ? -1 : v;
+            return outcome ? -1 : v;
         }
 
         public T pollRandom(Random rnd)
         {
-            if (objects.Count==0)
+            if (objects.Count == 0)
             {
                 return null;
             }
@@ -193,14 +226,14 @@ namespace Hsy.GyresMesh
             return indices.ContainsKey(key);
         }
 
-    public IEnumerator<T> Enumerator()
+        public IEnumerator<T> Enumerator()
         {
             return objects.GetEnumerator();
         }
 
         public List<T> getObjects()
         {
-            return objects;
+            return objects.ToList();
         }
 
         //public T remove(int index)

@@ -35,27 +35,27 @@ namespace Hsy.GyresMesh
         }
 
 
-        private HashSet<GE_Halfedge> _halfedges;
-        private List<GE_Vertex> _vertices;
-        private List<GE_Face> _faces;
-        private HashSet<GE_Halfedge> unpairedHalfedges;
-        private HashSet<GE_Halfedge> edges;
+        private GE_RAS<GE_Halfedge> _halfedges;
+        private GE_RAS<GE_Vertex> _vertices;
+        private GE_RAS<GE_Face> _faces;
+        private GE_RAS<GE_Halfedge> unpairedHalfedges;
+        private GE_RAS<GE_Halfedge> edges;
         int[] triangles;
         Task executor;
         LinkedList<HS_Thread> tasks;
 
 
         /**
-         * Instantiates a new HE_Mesh.
+         * Instantiates a new GE_Mesh.
          *
          */
         public GE_Mesh() : base()
         {
-            _halfedges = new HashSet<GE_Halfedge>();
-            _vertices = new List<GE_Vertex>();
-            _faces = new List<GE_Face>();
-            unpairedHalfedges = new HashSet<GE_Halfedge>();
-            edges = new HashSet<GE_Halfedge>();
+            _halfedges = new GE_RAS<GE_Halfedge>();
+            _vertices = new GE_RAS<GE_Vertex>();
+            _faces = new GE_RAS<GE_Face>();
+            unpairedHalfedges = new GE_RAS<GE_Halfedge>();
+            edges = new GE_RAS<GE_Halfedge>();
             tasks = new LinkedList<HS_Thread>();
             executor = null;
             this.attribute.name = "Mesh";
@@ -71,11 +71,11 @@ namespace Hsy.GyresMesh
 
         public GE_Mesh(GEC_Creator creator) : this()
         {
-            _halfedges = new HashSet<GE_Halfedge>();
-            _vertices = new List<GE_Vertex>();
-            _faces = new List<GE_Face>();
-            unpairedHalfedges = new HashSet<GE_Halfedge>();
-            edges = new HashSet<GE_Halfedge>();
+            _halfedges = new GE_RAS<GE_Halfedge>();
+            _vertices = new GE_RAS<GE_Vertex>();
+            _faces = new GE_RAS<GE_Face>();
+            unpairedHalfedges = new GE_RAS<GE_Halfedge>();
+            edges = new GE_RAS<GE_Halfedge>();
             this.setNoCopy(creator.create());
             this.triangles = null;
             this.attribute.name = "Mesh";
@@ -119,9 +119,9 @@ namespace Hsy.GyresMesh
 
         public void clearHalfedges()
         {
-            this._halfedges = new HashSet<GE_Halfedge>();
-            this.edges = new HashSet<GE_Halfedge>();
-            this.unpairedHalfedges = new HashSet<GE_Halfedge>();
+            this._halfedges = new GE_RAS<GE_Halfedge>();
+            this.edges = new GE_RAS<GE_Halfedge>();
+            this.unpairedHalfedges = new GE_RAS<GE_Halfedge>();
         }
         public HS_AABB getAABB()
         {
@@ -182,7 +182,7 @@ namespace Hsy.GyresMesh
                 this.Add(he);
             }
         }
-        public void addVertices<T>(List<T>vertices)where T:GE_Vertex
+        public void addVertices<T>(ICollection<T>vertices)where T:GE_Vertex
         {
             var var3 = vertices.GetEnumerator();
 
@@ -194,7 +194,7 @@ namespace Hsy.GyresMesh
 
         }
 
-        public void addFaces<T>(List<T>faces)where T : GE_Face
+        public void addFaces<T>(ICollection<T>faces)where T : GE_Face
         {
             var var3 = faces.GetEnumerator();
             while (var3.MoveNext())
@@ -206,7 +206,7 @@ namespace Hsy.GyresMesh
         public void addDerivedElement(GE_Vertex v,params GE_Object[]el)
         {
             Add(v);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    boolean contains = false;
             //    for (int i = 0; i < el.length; i++)
@@ -244,11 +244,12 @@ namespace Hsy.GyresMesh
         }
         public void SetPair(GE_Halfedge he1, GE_Halfedge he2)
         {
-            this.removeNoSelectionCheck(he1);
-            this.removeNoSelectionCheck(he2);
 
             he1.SetPair(he2);
             he2.SetPair(he1);
+            this.removeNoSelectionCheck(he1);
+            this.removeNoSelectionCheck(he2);
+
             this.addDerivedElement(he1, he2);
             this.addDerivedElement(he2, he1);
             // he1.SetPair(he2);
@@ -342,7 +343,7 @@ namespace Hsy.GyresMesh
         public void remove(GE_Vertex v)
         {
             _vertices.Remove(v);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
             //}
@@ -350,7 +351,7 @@ namespace Hsy.GyresMesh
         public void remove(GE_Halfedge he)
         {
             _halfedges.Remove(he);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
             //}
@@ -374,7 +375,25 @@ namespace Hsy.GyresMesh
         {
             he.SetFace(f);
         }
-
+        public GE_Halfedge getHalfedgeWithIndex(int i)
+        {
+            if (i < 0 || i >= edges.size() + _halfedges.size()
+                    + unpairedHalfedges.size())
+            {
+                throw new IndexOutOfRangeException(
+                        "Requested halfedge index " + i + "not in range.");
+            }
+            if (i >= edges.size() + _halfedges.size())
+            {
+                return unpairedHalfedges
+                        .getWithIndex(i - edges.size() - _halfedges.size());
+            }
+            else if (i >= edges.size())
+            {
+                return _halfedges.getWithIndex(i - edges.size());
+            }
+            return edges.getWithIndex(i);
+        }
         public GE_FaceEnumerator fEtr()
         {
             List<GE_Face> fs = new List<GE_Face>(GetFaces());
@@ -399,12 +418,12 @@ namespace Hsy.GyresMesh
 
         public List<GE_Face> GetFaces()
         {
-            return this._faces;
+            return new List<GE_Face>(this._faces.getObjects());
         }
 
         public List<GE_Vertex> GetVertices()
         {
-            return this._vertices;
+            return new List<GE_Vertex>(this._vertices.getObjects());
         }
         public List<GE_Halfedge> GetHalfedges()
         {
