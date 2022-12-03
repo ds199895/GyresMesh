@@ -482,7 +482,7 @@ namespace Hsy.GyresMesh
             //GE_Vertex v;
             VertexInfo vi;
             ParallelOptions options = new ParallelOptions(); 
-            options.MaxDegreeOfParallelism = 10;
+            options.MaxDegreeOfParallelism =1;
             HS_ProgressCounter counter = new HS_ProgressCounter( unpairedHalfedges.Count, 10);
             tracker.setCounterStatus("GE_MeshOp", "Classifying unpaired halfedges.",counter);
 

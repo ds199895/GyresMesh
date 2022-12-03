@@ -25,7 +25,7 @@ namespace Examples
             Size(800, 600);
             cam = new CamController(this);
             render = new GE_Render(this);
-            int count =1000;
+            int count =500;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -78,7 +78,7 @@ namespace Examples
             cam.DrawSystem(this, 200);
             //Fill(255, 0, 0);
             //Stroke(0);
-            render.displayHeMeshWithDegree(mesh, cam.CurrentView);
+            render.displayHeMeshWithDegree(mesh, cam.CurrentView,detail);
             //NoStroke();
             Stroke(0);
             Fill(255, 0, 0);
@@ -99,6 +99,7 @@ namespace Examples
         Vector3 normal;
         double targetLength;
         double dis = 0;
+        bool detail = false;
         public override void KeyReleased()
         {
             if (key == "F")
@@ -119,6 +120,9 @@ namespace Examples
 
                 Print("times: " + times);
                 Print("target: " + cam.CurrentView.target);
+            }else if (key == "D")
+            {
+                detail = !detail;
             }
 
 

@@ -394,17 +394,6 @@ namespace Hsy.GyresMesh
                             
                             mesh.Add(hef);
                             GE_MeshOp.cycleHalfedges(mesh, faceEdges);
-
-                            //foreach(GE_Halfedge e in faceEdges)
-                            //{
-                               
-                            //}
-                            //foreach(GE_Halfedge h in faceEdges)
-                            //{
-                            //    GE_Halfedge hp = new GE_Halfedge();
-                            //    hp.SetVertex(h.GetEnd());
-
-                            //}
                             mesh.addHalfedges(faceEdges);
 
                         }
@@ -442,49 +431,67 @@ namespace Hsy.GyresMesh
                 //centers.Add(0, hes[0]);
                 //mids.Add(hes[0].GetCenter());
                 ParallelOptions options = new ParallelOptions();
-                options.MaxDegreeOfParallelism = 1;
-                System.Threading.Tasks.Parallel.For(1, hes.Count, options, i => {
-                    GE_Halfedge e = hes[i];
-                    HS_Point mid = (HS_Point)e.GetCenter();
-                    nei = cen.getNearestNeighbors(mid, 1);
-
-                    if (!(nei[0].d2 < HS_Epsilon.SQEPSILON))
-                    {
-                        cen.add(mid, i);
-                        //pairs[i] =null;
-                        //centers.Add(e.GetKey(), e);
-                    }
-                    else
-                    {
-                        //mesh.SetPair(hes[nei[0].value], e);
-                        //pairs[i] = hes[nei[0].value];
-                        mesh.SetPair(e, hes[nei[0].value]);
-                    }
-                    //mids.Add(mid);
-                });
-
-                //options.MaxDegreeOfParallelism = 1;
-                //System.Threading.Tasks.Parallel.For(1, hes.Count, options, i => {
+                options.MaxDegreeOfParallelism =3;
+                //for(int i=0;i<hes.Count;i++)
+                //{
                 //    GE_Halfedge e = hes[i];
-      
+                //    HS_Point mid = (HS_Point)e.GetCenter();
+                //    nei = cen.getNearestNeighbors(mid, 1);
 
-                //    if (pairs[i]!=null)
+                //    if (!(nei[0].d2 < HS_Epsilon.SQEPSILON))
                 //    {
-                //        mesh.SetPair(e, pairs[i]);
-   
-
-
+                //        cen.add(mid, i);
+                //        //pairs[i] =null;
                 //        //centers.Add(e.GetKey(), e);
+                //    }
+                //    else
+                //    {
+                //        //mesh.SetPair(hes[nei[0].value], e);
+                //        //pairs[i] = hes[nei[0].value];
+                //        mesh.SetPair(e, hes[nei[0].value]);
+                //    }
+                //}
+
+                //System.Threading.Tasks.Parallel.For(1, hes.Count, options, i =>
+                //{
+                //    GE_Halfedge e = hes[i];
+                //    HS_Point mid = (HS_Point)e.GetCenter();
+                //    nei = cen.getNearestNeighbors(mid, 1);
+
+                //    if (!(nei[0].d2 < HS_Epsilon.SQEPSILON))
+                //    {
+                //        cen.add(mid, i);
+                //        pairs[i] =null;
+                //        //centers.Add(e.GetKey(), e);
+                //    }
+                //    else
+                //    {
+                //        //mesh.SetPair(hes[nei[0].value], e);
+                //        pairs[i] = hes[nei[0].value];
+                //        //mesh.SetPair(e, hes[nei[0].value]);
                 //    }
                 //    //mids.Add(mid);
                 //});
 
+                //options.MaxDegreeOfParallelism = 1;
+                //System.Threading.Tasks.Parallel.For(1, hes.Count, options, i =>
+                //{
+                //    GE_Halfedge e = hes[i];
+
+                //    if (pairs[i] != null)
+                //    {
+                //        mesh.SetPair(e, pairs[i]);
+                //        //centers.Add(e.GetKey(), e);
+                //    }
+                //    //mids.Add(mid);
+                //});
+                GE_MeshOp.pairHalfedges(mesh);
                 Console.WriteLine("pairing线程总用   " + stopwatch.ElapsedMilliseconds + "ms");
 
-                //GE_MeshOp.pairHalfedges(mesh);
+               
                 if (this.cleanunused)
                 {
-                    //mesh.cleanUnusedElementsByface();
+                    mesh.cleanUnusedElementsByface();
                     GE_MeshOp.capHalfedges(mesh);
                 }
                 if (this.manifoldcheck)

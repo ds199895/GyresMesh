@@ -105,27 +105,9 @@ namespace Hsy.Render
                 var o = oEtr.Current;
                 if (o.name() == "Mesh")
                 {
-                    if (detail)
-                    {
-                        displayHeMeshWithDegree((GE_Mesh)o, cam);
-                    }
-                    else
-                    {
-                        home.PushStyle();
-                        home.NoFill();
-                        home.Stroke(0,80);
-         
-                        drawEdges((GE_Mesh)o);
-                        home.PopStyle();
-                       
-                        home.PushStyle();
-                        home.Fill(255, 255, 255);
-                        //home.Stroke(0, 0, 0);
-                        home.NoStroke();
-                        drawFaces((GE_Mesh)o);
-                        home.PopStyle();
-     
-                    }
+
+                        displayHeMeshWithDegree((GE_Mesh)o, cam,detail);
+           
 
                 }
                 else if (o.name() == "Point")
@@ -203,9 +185,30 @@ namespace Hsy.Render
             displayHalfEdges(mesh);
             displayHeVertices(mesh);
         }
-        public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam)
+        public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam,bool detail)
         {
-            displayHeMeshWithDegree(mesh, (cam.Position - cam.target).Length);
+            if (detail)
+            {
+                displayHeMeshWithDegree(mesh, (cam.Position - cam.target).Length);
+            }
+            else
+            {
+                home.PushStyle();
+                home.NoFill();
+                home.Stroke(0, 80);
+
+                drawEdges(mesh);
+                home.PopStyle();
+
+                home.PushStyle();
+                home.Fill(255, 255, 255);
+                //home.Stroke(0, 0, 0);
+                home.NoStroke();
+                drawFaces(mesh);
+                home.PopStyle();
+            }
+
+           
             //        displayHeFaces(mesh,color6);
 
         }

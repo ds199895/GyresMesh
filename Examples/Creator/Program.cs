@@ -217,7 +217,7 @@ namespace Examples
 
             //    PopStyle();
             //}
-            render.displayHeMeshWithDegree(mesh, cam.CurrentView);
+            render.displayHeMeshWithDegree(mesh, cam.CurrentView, detail);
             //DrawPolygonTriangles(vertices, triangles);
             //BeginShape(OpenTK.Graphics.OpenGL.PrimitiveType.TriangleFan);
             ////foreach (GE_Halfedge he in mesh.GetHalfedges())
@@ -252,28 +252,14 @@ namespace Examples
 
         }
 
-        public void DrawPolygonTriangles(HS_Vector[] vertices, int[] triangles)
+        bool detail = false;
+        public override void KeyReleased()
         {
-
-            for (int i = 0; i < triangles.Length; i += 3)
+            if (key == "D")
             {
-                int a = triangles[i];
-                int b = triangles[i + 1];
-                int c = triangles[i + 2];
-                HS_Vector va = vertices[a];
-                HS_Vector vb = vertices[b];
-                HS_Vector vc = vertices[c];
-                //Print(va);
-                //Print(vb);
-                BeginShape();
-                Vertex(va.xf, va.yf, va.zf);
-                Vertex(vb.xf, vb.yf, vb.zf);
-                Vertex(vc.xf, vc.yf, vc.zf);
-                //Line(va.xf, va.yf, va.zf, vb.xf, vb.yf, vb.zf);
-                //Line(vb.xf, vb.yf, vb.zf, vc.xf, vc.yf, vc.zf);
-                //Line(vc.xf, vc.yf, vc.zf, va.xf, va.yf, va.zf);
-                EndShape();
+                detail = !detail;
             }
+
 
         }
     }
