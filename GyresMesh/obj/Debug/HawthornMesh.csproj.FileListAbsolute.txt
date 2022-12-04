@@ -1,0 +1,6 @@
+C:\Users\Administrator\source\repos\HawthornMesh\src\HawthornMesh\bin\Debug\HawthornMesh.dll
+C:\Users\Administrator\source\repos\HawthornMesh\src\HawthornMesh\bin\Debug\HawthornMesh.pdb
+C:\Users\Administrator\source\repos\HawthornMesh\src\HawthornMesh\obj\Debug\HawthornMesh.csprojAssemblyReference.cache
+C:\Users\Administrator\source\repos\HawthornMesh\src\HawthornMesh\obj\Debug\HawthornMesh.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\HawthornMesh\src\HawthornMesh\obj\Debug\HawthornMesh.dll
+C:\Users\Administrator\source\repos\HawthornMesh\src\HawthornMesh\obj\Debug\HawthornMesh.pdb
