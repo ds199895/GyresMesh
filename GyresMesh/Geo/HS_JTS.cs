@@ -1,4 +1,5 @@
 ﻿using GeoAPI.Geometries;
+using Hsy.Core;
 using Hsy.GyresMesh;
 using Hsy.HsMath;
 using NetTopologySuite.Algorithm;
@@ -347,7 +348,7 @@ namespace Hsy.Geo
 
             public HS_Triangulation2D triangulatePolygon2D(HS_Polygon polygon, bool optimize)
             {
-                List<HS_Point> pts = new List<HS_Point>();
+                List<HS_Point> pts = new FastList<HS_Point>();
 
                 for (int i = 0; i< polygon.numberOfShellPoints; ++i)
                 {
@@ -355,11 +356,11 @@ namespace Hsy.Geo
                 }
 
                 int index = polygon.numberOfShellPoints;
-                List<HS_Point>[] hpts = new List<HS_Point>[polygon.numberOfContours - 1];
+                List<HS_Point>[] hpts = new FastList<HS_Point>[polygon.numberOfContours - 1];
 
                 for (int i = 0; i < polygon.numberOfContours - 1; ++i)
                 {
-                    hpts[i] = new List<HS_Point>();
+                    hpts[i] = new FastList<HS_Point>();
 
                     for (int j = 0; j < polygon.numberOfPointsPerContour[i + 1]; ++j)
                     {
@@ -445,7 +446,7 @@ namespace Hsy.Geo
                 Polygon inputPolygon = (Polygon)JTSgf.CreatePolygon(shell, holes);
                 int[] ears = this.triangulate(inputPolygon, optimize);
                 int[] E = extractEdgesTri(ears);
-                List<HS_Point> Points = new List<HS_Point>();
+                List<HS_Point> Points = new FastList<HS_Point>();
 
                 for (int i = 0; i < this.shellCoords.Count - 1; ++i)
                 {
@@ -481,7 +482,7 @@ namespace Hsy.Geo
                 }
 
                 int[] E = extractEdgesTri(ears);
-                List<HS_Point> Points = new List<HS_Point>();
+                List<HS_Point> Points = new FastList<HS_Point>();
 
                 for (int i = 0; i < this.shellCoords.Count - 1; ++i)
                 {
@@ -549,7 +550,7 @@ namespace Hsy.Geo
                 LinearRing shell = JTSgf.CreateLinearRing(coords) as LinearRing;
                 Polygon inputPolygon = JTSgf.CreatePolygon(shell) as Polygon;
                 int[] ears = this.triangulate(inputPolygon, optimize);
-                List<HS_Point> tripoints = new List<HS_Point>();
+                List<HS_Point> tripoints = new FastList<HS_Point>();
 
                 for (int j = 0; j < this.shellCoords.Count - 1; ++j)
                 {
@@ -601,7 +602,7 @@ namespace Hsy.Geo
                 LinearRing shell =JTSgf.CreateLinearRing(coords) as LinearRing;
                 Polygon inputPolygon = JTSgf.CreatePolygon(shell) as Polygon;
                 int[] ears = this.triangulate(inputPolygon, optimize);
-                List<HS_Point> tripoints = new List<HS_Point>();
+                List<HS_Point> tripoints = new FastList<HS_Point>();
 
                 for (int j = 0; j < this.shellCoords.Count - 1; ++j)
                 {
@@ -685,7 +686,7 @@ namespace Hsy.Geo
 
             private int[] triangulate(Polygon inputPolygon, bool improve)
             {
-                List<IndexedTriangle> earList = new List<IndexedTriangle>();
+                List<IndexedTriangle> earList = new FastList<IndexedTriangle>();
                 this.createshell(inputPolygon);
                 Geometry test = (Geometry)inputPolygon.Buffer(0.0D);
 
@@ -793,7 +794,7 @@ namespace Hsy.Geo
             protected void createshell(Polygon inputPolygon)
             {
                 Polygon poly = (Polygon)inputPolygon.Clone();
-                this.shellCoords = new List<Coordinate>();
+                this.shellCoords = new FastList<Coordinate>();
                 List<Geometry> orderedHoles = getOrderedHoles(poly);
                 Coordinate[] coords = poly.ExteriorRing.Coordinates;
                 this.shellCoords.AddRange(coords.ToList<Coordinate>());
@@ -900,7 +901,7 @@ namespace Hsy.Geo
                 int holeVertexIndex = getLowestVertex(hole);
                 Coordinate[] holeCoords = hole.Coordinates;
                 Coordinate ch = holeCoords[holeVertexIndex];
-                List<IndexedDouble> distanceList = new List<IndexedDouble>();
+                List<IndexedDouble> distanceList = new FastList<IndexedDouble>();
 
                 for (int i = Ns - 1; i >= 0; --i)
                 {
@@ -939,7 +940,7 @@ namespace Hsy.Geo
 
             private void doJoinHole(int shellVertexIndex, Coordinate[] holeCoords, int holeVertexIndex)
             {
-                List<Coordinate> newCoords = new List<Coordinate>();
+                List<Coordinate> newCoords = new FastList<Coordinate>();
                 newCoords.Add(new Coordinate(this.shellCoords[shellVertexIndex]));
                 int N = holeCoords.Length - 1;
                 int i = holeVertexIndex;
@@ -976,7 +977,7 @@ namespace Hsy.Geo
 
                 public EdgeFlipper(List<Coordinate> shellCoords)
                 {
-                    this.shellCoords = new List<Coordinate>();
+                    this.shellCoords = new FastList<Coordinate>();
                 }
 
                 public bool flip(HS_JTS.PolygonTriangulatorJTS.IndexedTriangle ear0, HS_JTS.PolygonTriangulatorJTS.IndexedTriangle ear1, int[] sharedVertices)

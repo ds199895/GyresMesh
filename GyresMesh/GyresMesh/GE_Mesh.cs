@@ -46,7 +46,7 @@ namespace Hsy.GyresMesh
 
 
         /**
-         * Instantiates a new HE_Mesh.
+         * Instantiates a new GE_Mesh.
          *
          */
         public GE_Mesh() : base()
@@ -206,7 +206,7 @@ namespace Hsy.GyresMesh
         public void addDerivedElement(GE_Vertex v,params GE_Object[]el)
         {
             Add(v);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    boolean contains = false;
             //    for (int i = 0; i < el.length; i++)
@@ -244,11 +244,12 @@ namespace Hsy.GyresMesh
         }
         public void SetPair(GE_Halfedge he1, GE_Halfedge he2)
         {
-            this.removeNoSelectionCheck(he1);
-            this.removeNoSelectionCheck(he2);
 
             he1.SetPair(he2);
             he2.SetPair(he1);
+            this.removeNoSelectionCheck(he1);
+            this.removeNoSelectionCheck(he2);
+
             this.addDerivedElement(he1, he2);
             this.addDerivedElement(he2, he1);
             // he1.SetPair(he2);
@@ -342,7 +343,7 @@ namespace Hsy.GyresMesh
         public void remove(GE_Vertex v)
         {
             _vertices.Remove(v);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
             //}
@@ -350,7 +351,7 @@ namespace Hsy.GyresMesh
         public void remove(GE_Halfedge he)
         {
             _halfedges.Remove(he);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
             //}
@@ -374,7 +375,25 @@ namespace Hsy.GyresMesh
         {
             he.SetFace(f);
         }
-
+        public GE_Halfedge getHalfedgeWithIndex(int i)
+        {
+            if (i < 0 || i >= edges.size() + _halfedges.size()
+                    + unpairedHalfedges.size())
+            {
+                throw new IndexOutOfRangeException(
+                        "Requested halfedge index " + i + "not in range.");
+            }
+            if (i >= edges.size() + _halfedges.size())
+            {
+                return unpairedHalfedges
+                        .getWithIndex(i - edges.size() - _halfedges.size());
+            }
+            else if (i >= edges.size())
+            {
+                return _halfedges.getWithIndex(i - edges.size());
+            }
+            return edges.getWithIndex(i);
+        }
         public GE_FaceEnumerator fEtr()
         {
             List<GE_Face> fs = new List<GE_Face>(GetFaces());

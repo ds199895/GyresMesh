@@ -20,16 +20,21 @@ namespace Examples
         CamController cam;
         GE_Render render;
         GE_Mesh mesh;
+        double lasttime;
         public override void SetUp()
         {
             Size(800, 600);
             cam = new CamController(this);
             render = new GE_Render(this);
+<<<<<<< HEAD
             int count =100;
+=======
+            int count =200;
+>>>>>>> f72593231533800c6986023c8b7fea889f638f3c
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-
+            lasttime = stopwatch.ElapsedMilliseconds;
             stopwatch.Start();
             for (int j = 0; j < count; j++)
             {
@@ -40,6 +45,7 @@ namespace Examples
                     index++;
                 }
             }
+       
 
             //create triangles from point grid
             HS_Triangle[] tris = new HS_Triangle[2 * (count - 1) * (count - 1)];
@@ -52,13 +58,13 @@ namespace Examples
                     tris[2 * (i + (count - 1) * j) + 1] = new HS_Triangle(points[i + 1 + count * j], points[i + count * j + count + 1], points[i + count * j + count]);
                 }
             }
-
+            Console.WriteLine("创建tri总用时   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
             GEC_FromTriangles creator = new GEC_FromTriangles();
 
             creator.setTriangles(tris);
             //alternatively tris can be any Collection<HS_Triangle>
             mesh = new GE_Mesh(creator);
-            Console.WriteLine("创建Mesh总用时   " + stopwatch.ElapsedMilliseconds + "ms");
+            Console.WriteLine("创建Mesh总用时   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
             Print(mesh);
             //foreach (GE_Vertex v in mesh.GetVertices())
             //{
@@ -68,6 +74,7 @@ namespace Examples
             //{
             //    Print(he);
             //}
+           
             aabb = mesh.getAABB();
             
         }

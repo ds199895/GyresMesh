@@ -117,6 +117,7 @@ namespace Hsy.GyresMesh
         protected internal override GE_Mesh createBase()
         {
             GE_Mesh mesh = new GE_Mesh();
+            double lasttime;
             if (faces != null && vertices != null)
             {
                 if (faces.Length == 0)
@@ -128,7 +129,7 @@ namespace Hsy.GyresMesh
                 GE_Vertex[] uniqueVertices = new GE_Vertex[vertices.Length];
                 bool[] duplicated = new bool[vertices.Length];
                 System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-
+                lasttime = stopwatch.ElapsedMilliseconds;
                 stopwatch.Start();
                 if (duplicate)
                 {
@@ -309,6 +310,99 @@ namespace Hsy.GyresMesh
                 bool useFaceTextures = faceTextures != null && faceTextureIds.Length == faces.Length;
                 int faceid = 0;
                 //Dictionary<HS_Point, GE_Halfedge> centers = new Dictionary<HS_Point, GE_Halfedge>();
+                ParallelOptions options = new ParallelOptions();
+                options.MaxDegreeOfParallelism = 3;
+                //System.Threading.Tasks.Parallel.ForEach(faces, options, face => {
+                //    int[] faceuvw = null;
+                //    if (useFaceUVW)
+                //    {
+                //        faceuvw = faceuvws[faceid];
+                //    }
+                //    if (face != null)
+                //    {
+                //        List<GE_Halfedge> faceEdges = new List<GE_Halfedge>();
+                //        GE_Face hef = new GE_Face();
+                //        hef.SetInternalLabel(id);
+                //        if (useFaceInfo)
+                //        {
+                //            //hef.setColor(faceColors[faceid]);
+                //            //hef.setTextureId(faceTextureIds[id]);
+                //            //hef.setVisible(faceVisibility[id]);
+                //            //hef.setUserLabel(faceLabels[id]);
+                //            //hef.setInternalLabel(faceInternalLabels[id]);
+                //        }
+                //        if (useFaceTextures)
+                //        {
+                //            //hef.setTextureId(faceTextureIds[id]);
+                //        }
+                //        id++;
+                //        int fl = face.Length;
+                //        int[] locface = new int[fl];
+                //        int[] locfaceuvw = new int[fl];
+                //        int li = 0;
+                //        locface[li] = face[0];
+                //        if (useFaceUVW)
+                //        {
+                //            locfaceuvw[li] = faceuvw[0];
+                //        }
+                //        li++;
+                //        for (int i = 1; i < fl - 1; i++)
+                //        {
+                //            if (uniqueVertices[face[i]] != uniqueVertices[face[i - 1]])
+                //            {
+                //                locface[li] = face[i];
+                //                if (useFaceUVW)
+                //                {
+                //                    locfaceuvw[li] = faceuvw[i];
+                //                }
+                //                li++;
+                //            }
+                //        }
+                //        if (uniqueVertices[face[fl - 1]] != uniqueVertices[face[fl - 2]] && uniqueVertices[face[fl - 1]] != uniqueVertices[face[0]])
+                //        {
+                //            locface[li] = face[fl - 1];
+                //            if (useFaceUVW)
+                //            {
+                //                locfaceuvw[li] = faceuvw[fl - 1];
+                //            }
+                //            li++;
+                //        }
+                //        if (li > 2)
+                //        {
+                //            for (int i = 0; i < li; i++)
+                //            {
+                //                he = new GE_Halfedge();
+                //                faceEdges.Add(he);
+                //                mesh.SetFace(he, hef);
+                //                if (hef.GetHalfedge() == null)
+                //                {
+                //                    mesh.SetHalfedge(hef, he);
+
+                //                }
+                //                mesh.SetVertex(he, uniqueVertices[locface[i]]);
+                //                if (useFaceUVW)
+                //                {
+                //                    he.SetUVW(uvws[locfaceuvw[i]]);
+                //                }
+                //                if (useVertexUVW)
+                //                {
+                //                    if (duplicated[locface[i]])
+                //                    {
+
+                //                    }
+                //                }
+                //                mesh.SetHalfedge(he.GetStart(), he);
+                //            }
+
+                //            mesh.Add(hef);
+                //            GE_MeshOp.cycleHalfedges(mesh, faceEdges);
+                //            mesh.addHalfedges(faceEdges);
+
+                //        }
+                //    }
+                //    faceid++;
+                //});
+                //{
                 foreach (int[] face in faces)
                 {
                     int[] faceuvw = null;
@@ -391,7 +485,7 @@ namespace Hsy.GyresMesh
                                 }
                                 mesh.SetHalfedge(he.GetStart(), he);
                             }
-                            
+
                             mesh.Add(hef);
                             GE_MeshOp.cycleHalfedges(mesh, faceEdges);
                             mesh.addHalfedges(faceEdges);
@@ -400,7 +494,9 @@ namespace Hsy.GyresMesh
                     }
                     faceid++;
                 }
-                Console.WriteLine("baseset总用   " + stopwatch.ElapsedMilliseconds + "ms");
+
+                Console.WriteLine("baseset总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+                lasttime = stopwatch.ElapsedMilliseconds;
                 //Dictionary<long, GE_Halfedge> centers = new Dictionary<long, GE_Halfedge>();
                 HS_KDTreeInteger<HS_Coord> cen = new HS_KDTreeInteger<HS_Coord>();
                 HS_KDEntryInteger<HS_Coord>[] nei;
@@ -430,8 +526,7 @@ namespace Hsy.GyresMesh
                 GE_Halfedge[] pairs = new GE_Halfedge[hes.Count];
                 //centers.Add(0, hes[0]);
                 //mids.Add(hes[0].GetCenter());
-                ParallelOptions options = new ParallelOptions();
-                options.MaxDegreeOfParallelism =3;
+
                 //for(int i=0;i<hes.Count;i++)
                 //{
                 //    GE_Halfedge e = hes[i];
@@ -486,9 +581,10 @@ namespace Hsy.GyresMesh
                 //    //mids.Add(mid);
                 //});
                 GE_MeshOp.pairHalfedges(mesh);
-                Console.WriteLine("pairing线程总用   " + stopwatch.ElapsedMilliseconds + "ms");
+                
+                Console.WriteLine("pairing线程总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+                lasttime = stopwatch.ElapsedMilliseconds;
 
-               
                 if (this.cleanunused)
                 {
                     mesh.cleanUnusedElementsByface();
