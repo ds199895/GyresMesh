@@ -2216,7 +2216,7 @@ namespace Hsy.IO
 
             }
 
-            public HS_PolyLine createIObject(Rhino3dmFile var1)
+            public override IObject createIObject(Rhino3dmFile var1)
             {
                 //HS_PolyLine var3 = new ICurve(var2, (HS_VectorI[])this.pline.toArray(new HS_Vector[this.pline.Count]));
                 //return var3;
