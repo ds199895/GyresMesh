@@ -35,11 +35,11 @@ namespace Hsy.GyresMesh
         }
 
 
-        private HashSet<GE_Halfedge> _halfedges;
-        private List<GE_Vertex> _vertices;
-        private List<GE_Face> _faces;
-        private HashSet<GE_Halfedge> unpairedHalfedges;
-        private HashSet<GE_Halfedge> edges;
+        private GE_RAS<GE_Halfedge> _halfedges;
+        private GE_RAS<GE_Vertex> _vertices;
+        private GE_RAS<GE_Face> _faces;
+        private GE_RAS<GE_Halfedge> unpairedHalfedges;
+        private GE_RAS<GE_Halfedge> edges;
         int[] triangles;
         Task executor;
         LinkedList<HS_Thread> tasks;
@@ -51,11 +51,11 @@ namespace Hsy.GyresMesh
          */
         public GE_Mesh() : base()
         {
-            _halfedges = new HashSet<GE_Halfedge>();
-            _vertices = new List<GE_Vertex>();
-            _faces = new List<GE_Face>();
-            unpairedHalfedges = new HashSet<GE_Halfedge>();
-            edges = new HashSet<GE_Halfedge>();
+            _halfedges = new GE_RAS<GE_Halfedge>();
+            _vertices = new GE_RAS<GE_Vertex>();
+            _faces = new GE_RAS<GE_Face>();
+            unpairedHalfedges = new GE_RAS<GE_Halfedge>();
+            edges = new GE_RAS<GE_Halfedge>();
             tasks = new LinkedList<HS_Thread>();
             executor = null;
             this.attribute.name = "Mesh";
@@ -71,11 +71,11 @@ namespace Hsy.GyresMesh
 
         public GE_Mesh(GEC_Creator creator) : this()
         {
-            _halfedges = new HashSet<GE_Halfedge>();
-            _vertices = new List<GE_Vertex>();
-            _faces = new List<GE_Face>();
-            unpairedHalfedges = new HashSet<GE_Halfedge>();
-            edges = new HashSet<GE_Halfedge>();
+            _halfedges = new GE_RAS<GE_Halfedge>();
+            _vertices = new GE_RAS<GE_Vertex>();
+            _faces = new GE_RAS<GE_Face>();
+            unpairedHalfedges = new GE_RAS<GE_Halfedge>();
+            edges = new GE_RAS<GE_Halfedge>();
             this.setNoCopy(creator.create());
             this.triangles = null;
             this.attribute.name = "Mesh";
@@ -119,9 +119,9 @@ namespace Hsy.GyresMesh
 
         public void clearHalfedges()
         {
-            this._halfedges = new HashSet<GE_Halfedge>();
-            this.edges = new HashSet<GE_Halfedge>();
-            this.unpairedHalfedges = new HashSet<GE_Halfedge>();
+            this._halfedges = new GE_RAS<GE_Halfedge>();
+            this.edges = new GE_RAS<GE_Halfedge>();
+            this.unpairedHalfedges = new GE_RAS<GE_Halfedge>();
         }
         public HS_AABB getAABB()
         {
@@ -173,7 +173,7 @@ namespace Hsy.GyresMesh
             _faces.Add(f);
         }
 
-        public void addHalfedges<T>(List<T>halfedges)where T:GE_Halfedge
+        public void addHalfedges<T>(ICollection<T>halfedges)where T:GE_Halfedge
         {
             var var3 = halfedges.GetEnumerator();
             while (var3.MoveNext())
@@ -182,7 +182,7 @@ namespace Hsy.GyresMesh
                 this.Add(he);
             }
         }
-        public void addVertices<T>(List<T>vertices)where T:GE_Vertex
+        public void addVertices<T>(ICollection<T>vertices)where T:GE_Vertex
         {
             var var3 = vertices.GetEnumerator();
 
@@ -194,7 +194,7 @@ namespace Hsy.GyresMesh
 
         }
 
-        public void addFaces<T>(List<T>faces)where T : GE_Face
+        public void addFaces<T>(ICollection<T>faces)where T : GE_Face
         {
             var var3 = faces.GetEnumerator();
             while (var3.MoveNext())
@@ -399,41 +399,41 @@ namespace Hsy.GyresMesh
 
         public List<GE_Face> GetFaces()
         {
-            return this._faces;
+            return new List<GE_Face>(this._faces.getObjects());
         }
 
         public List<GE_Vertex> GetVertices()
         {
-            return this._vertices;
+            return new List<GE_Vertex>(this._vertices.getObjects());
         }
         public List<GE_Halfedge> GetHalfedges()
         {
             List<GE_Halfedge> hes = new List<GE_Halfedge>();
-            hes.AddRange(_halfedges);
-            hes.AddRange(edges);
-            hes.AddRange(unpairedHalfedges);
+            hes.AddRange(_halfedges.getObjects());
+            hes.AddRange(edges.getObjects());
+            hes.AddRange(unpairedHalfedges.getObjects());
             return hes;
         }
         public int GetNumberOfVertices()
         {
-            return _vertices.Count;
+            return _vertices.size();
         }
 
 
         public int GetNumberOfFaces()
         {
-            return _faces.Count;
+            return _faces.size();
         }
 
         public int GetNumberOfHalfedges()
         {
-            return _halfedges.Count+edges.Count+unpairedHalfedges.Count;
+            return _halfedges.size()+edges.size()+unpairedHalfedges.size();
         }
 
         public List<GE_Halfedge> getUnpairedHalfedges()
         {
             List<GE_Halfedge> halfedges = new List<GE_Halfedge>();
-            halfedges.AddRange(this.unpairedHalfedges);
+            halfedges.AddRange(this.unpairedHalfedges.getObjects());
             return halfedges;
         }
 

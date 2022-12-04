@@ -9,8 +9,8 @@ namespace Hsy.GyresMesh
 {
     public class GE_RAS<T> : ISet<T> where T:GE_Object
     {
-        List<T> objects;
-        Dictionary<long, int> indices;
+        public List<T> objects;
+        public Dictionary<long, int> indices;
         public GE_RAS()
         {
             objects = new List<T>();
@@ -31,7 +31,7 @@ namespace Hsy.GyresMesh
         public int _size;
         public int Count { get { return _size; } set { _size = value; } }
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
 
         public bool Add(T item)
         {
@@ -50,7 +50,8 @@ namespace Hsy.GyresMesh
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.objects.Clear();
+            this.indices.Clear();
         }
 
         public bool Contains(T item)
@@ -70,7 +71,7 @@ namespace Hsy.GyresMesh
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.objects.GetEnumerator();
         }
 
         public void IntersectWith(IEnumerable<T> other)
@@ -109,15 +110,20 @@ namespace Hsy.GyresMesh
             {
                 return false;
             }
-            // @SuppressWarnings(value = "element-type-mismatch
-            int id;
-            this.indices.TryGetValue(item.GetKey(), out id);
-            if (id == null)
+            else
             {
-                return false;
+                int id;
+                bool outcome=this.indices.TryGetValue(item.GetKey(), out id);
+                if (!outcome)
+                {
+                    return false;
+                }
+                else
+                {
+                    this.removeAt(id);
+                    return true;
+                }
             }
-            removeAt(id);
-            return true;
         }
 
 
@@ -127,18 +133,41 @@ namespace Hsy.GyresMesh
             {
                 return null;
             }
-            T res = objects[id];
-            indices.Remove(res.GetKey());
-            T last = objects[objects.Count - 1];
-            objects.RemoveAt(objects.Count - 1);
-            //// skip filling the hole if last is removed
-            if (id < objects.Count)
+            else
             {
-                indices.Add(last.GetKey(), id);
-                objects.Insert(id, last);
+                T res = this.objects[id];
+                this.indices.Remove(res.GetKey());
+                this.objects.RemoveAt(id);
+                //T last = remove(this.objects,this.objects.Count- 1);
+
+                //if (id < this.objects.Count)
+                //{
+                //    this.indices.Add(last.GetKey(), id);
+                //    this.objects.Insert(id, last);
+                //}
+
+                return res;
             }
-            return res;
+      
         }
+        public T remove(List<T>l,int index)
+        {
+            T previous = l[index];
+            int totalOffset = l.Count - index - 1;
+            
+            T[] sourceArray=l.ToArray();
+            T[] destArray = sourceArray;
+            if (totalOffset > 0)
+            {
+                Array.Copy(sourceArray, index + 1, destArray, index, totalOffset);
+            }
+            l = destArray.ToList();
+            int len = l.Count;
+            l[--len] = null;
+            return previous;
+        }
+
+
         public T getWithIndex(int i)
         {
             return objects[i];
@@ -147,8 +176,8 @@ namespace Hsy.GyresMesh
         public T getWithKey(long key)
         {
             int i;
-            indices.TryGetValue(key, out i) ;
-            if (i == -1)
+            bool outcome=indices.TryGetValue(key, out i) ;
+            if (!outcome)
             {
                 return null;
             }
@@ -158,10 +187,10 @@ namespace Hsy.GyresMesh
         public int indexOf(T obj)
         {
             int v;
-            indices.TryGetValue(obj.GetKey(),out v);
+            bool outcome=indices.TryGetValue(obj.GetKey(),out v);
 
 
-            return v == null ? -1 : v;
+            return outcome ? -1 : v;
         }
 
         public T pollRandom(Random rnd)
