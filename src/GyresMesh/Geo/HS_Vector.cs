@@ -81,35 +81,30 @@ namespace Hsy.Geo
             this.xd = to.xd - from.xd;
             this.yd = to.yd - from.yd;
             this.zd = to.zd - from.zd;
-            this.attribute.name = "Point";
         }
         public HS_Vector(double x, double y) : base()
         {
             this.xd = x;
             this.yd = y;
             this.zd = 0.0;
-            this.attribute.name = "Point";
         }
         public HS_Vector(double x, double y, double z) : base()
         {
             this.xd = x;
             this.yd = y;
             this.zd = z;
-            this.attribute.name = "Point";
         }
         public HS_Vector(float x, float y, float z) : base()
         {
             this.xf = x;
             this.yf = y;
             this.zf = z;
-            this.attribute.name = "Point";
         }
         public HS_Vector(double[] x) : base()
         {
             this.xd = x[0];
             this.yd = x[1];
             this.zd = x[2];
-            this.attribute.name = "Point";
         }
         public HS_Vector add(double x, double y, double z)
         {

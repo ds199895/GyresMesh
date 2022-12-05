@@ -267,7 +267,7 @@ namespace Hsy.GyresMesh
             GE_Vertex v;
             for (int i = 0; i < mesh.GetNumberOfVertices(); i++)
             {
-                v = mesh.GetVertices()[i];
+                v = mesh.getVertexWithIndex(i);
                 result[0] = Math.Min(result[0], v.xd);
                 result[1] = Math.Min(result[1], v.yd);
                 result[2] = Math.Min(result[2], v.zd);
@@ -638,7 +638,8 @@ namespace Hsy.GyresMesh
             IEnumerator<GE_Face> fetr = mesh.fEtr();
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism =1;
-            System.Threading.Tasks.Parallel.ForEach(mesh.GetFaces(), options,f =>
+            var fs = mesh.GetFaces();
+            System.Threading.Tasks.Parallel.ForEach(fs, options,f =>
             {
                 he = f.GetHalfedge();
                 do
@@ -684,6 +685,7 @@ namespace Hsy.GyresMesh
             //    he = cleanedHalfedges[i];
                
             //}
+
             List<GE_Vertex> removev = new List<GE_Vertex>();
             var var10 = mesh.GetVertices().GetEnumerator();
             while (var10.MoveNext())

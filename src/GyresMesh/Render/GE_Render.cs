@@ -35,7 +35,15 @@ namespace Hsy.Render
 
             for (int i = 0; i < P.GetNumberOfContours(); ++i)
             {
-                this.home.BeginShape();
+                if (P.GetNumberOfContours() >= 2)
+                {
+                    this.home.BeginShape(PrimitiveType.Triangles);
+                }
+                else
+                {
+                    this.home.BeginShape();
+                }
+
 
                 for (int j = 0; j < npc[i]; ++j)
                 {
@@ -46,6 +54,19 @@ namespace Hsy.Render
             }
 
         }
+
+        public void drawPolyLine(HS_PolyLine P)
+        {
+            for (int i = 0; i < P.getNumberOfPoints() - 1; ++i)
+            {
+                this.line(P.getPoint(i), P.getPoint(i + 1));
+            }
+
+        }
+
+
+
+
         public void drawEdges(GE_Mesh mesh)
         {
             if (mesh != null)
@@ -80,7 +101,15 @@ namespace Hsy.Render
         }
         public void drawFace(GE_Face face)
         {
-            this.home.BeginShape();
+            if (face.GetFaceVertices().Count > 3)
+            {
+                this.home.BeginShape();
+            }
+            else
+            {
+                this.home.BeginShape(PrimitiveType.Triangles);
+            }
+
             var Etr = face.GetFaceVertices().GetEnumerator();
             while (Etr.MoveNext())
             {
@@ -103,17 +132,32 @@ namespace Hsy.Render
             while (oEtr.MoveNext())
             {
                 var o = oEtr.Current;
-                if (o.name() == "Mesh")
+                switch (o.name())
                 {
+                    case "Mesh":
+                        displayHeMeshWithDegree((GE_Mesh)o, cam, detail);
 
-                        displayHeMeshWithDegree((GE_Mesh)o, cam,detail);
-           
+                        break;
+                    case "Point":
+                        drawPoint((HS_Vector)o, 5);
+                        break;
+                    case "PolyLine":
+                        drawPolyLine((HS_PolyLine)o);
+                        break;
 
                 }
-                else if (o.name() == "Point")
-                {
-                    drawPoint((HS_Vector)o, 5);
-                }
+
+                //if (o.name() == "Mesh")
+                //{
+
+                //        displayHeMeshWithDegree((GE_Mesh)o, cam,detail);
+
+
+                //}
+                //else if (o.name() == "Point")
+                //{
+                //    drawPoint((HS_Vector)o, 5);
+                //}
             }
 
 
@@ -132,7 +176,7 @@ namespace Hsy.Render
                 average += eEtr.Current.GetLength();
 
             }
-           
+
             average /= mesh.GetNumberOfHalfedges();
             return average;
         }
@@ -185,7 +229,7 @@ namespace Hsy.Render
             displayHalfEdges(mesh);
             displayHeVertices(mesh);
         }
-        public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam,bool detail)
+        public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam, bool detail)
         {
             if (detail)
             {
@@ -193,22 +237,22 @@ namespace Hsy.Render
             }
             else
             {
-                home.PushStyle();
-                home.NoFill();
-                home.Stroke(0, 80);
+                //home.PushStyle();
+                //home.NoFill();
+                //home.Stroke(0, 80);
 
-                drawEdges(mesh);
-                home.PopStyle();
+                //drawEdges(mesh);
+                //home.PopStyle();
 
                 home.PushStyle();
                 home.Fill(255, 255, 255);
-                //home.Stroke(0, 0, 0);
-                home.NoStroke();
+                //home.NoFill();
+                home.Stroke(255, 0, 0,80);
                 drawFaces(mesh);
                 home.PopStyle();
             }
 
-           
+
             //        displayHeFaces(mesh,color6);
 
         }
@@ -265,7 +309,7 @@ namespace Hsy.Render
                     displaySingleHeFace(f, colormore);
                 }
             }
-         
+
             home.PopStyle();
         }
 

@@ -36,7 +36,7 @@ namespace Hsy.Geo
             this._p1 = p1;
             this._p2 = p2;
             this._p3 = p3;
-            update();
+            //update();
 
         }
 
@@ -100,11 +100,11 @@ namespace Hsy.Geo
             else
             {
                 HS_Map2D plane = geometryFactory.createEmbeddedPlane(P);
-                HS_Point pp1 = new HS_Point();
+                HS_Point pp1 = HS_Point.origin;
                 plane.mapPoint3D(_p1, pp1);
-                HS_Point pp2 = new HS_Point();
+                HS_Point pp2 = HS_Point.origin;
                 plane.mapPoint3D(_p2, pp2);
-                HS_Point pp3 = new HS_Point();
+                HS_Point pp3 = HS_Point.origin;
                 plane.mapPoint3D(_p3, pp3);
                 cosA = HS_Epsilon.isZero(b * c) ? double.NaN : ((pp2.xd - pp1.xd) * (pp3.xd - pp1.xd) + (pp2.yd - pp1.yd) * (pp3.yd - pp1.yd)) / b * c;
                 cosB = HS_Epsilon.isZero(a * c) ? double.NaN : ((pp1.xd - pp2.xd) * (pp3.xd - pp2.xd) + (pp1.yd - pp2.yd) * (pp3.yd - pp2.yd)) / a * c;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.Core
 {
-    public class FastList<T>: List<T>,ICollection<T>
+    public class FastList<T> : List<T>, ICollection<T>
     {
         private static readonly long serialVersionUID = 1L;
         private static readonly T[] DEFAULT_SIZED_EMPTY_ARRAY = new T[0];
@@ -51,7 +51,7 @@ namespace Hsy.Core
             this.size = this.items.Length;
         }
 
-        public static FastList<T> newList(FastList<T>fl)
+        public static FastList<T> newList(FastList<T> fl)
         {
             return new FastList<T>();
         }
@@ -824,6 +824,7 @@ namespace Hsy.Core
             }
 
             this.items[this.size++] = newItem;
+            //Console.WriteLine("Count: "+this.Count);
             return true;
         }
 
@@ -1278,12 +1279,12 @@ namespace Hsy.Core
 
         public void Add(T item)
         {
-            throw new NotImplementedException();
+            this.add(item);
         }
 
         //public void Clear()
         //{
-            
+
         //    throw new NotImplementedException();
         //}
 
@@ -1312,7 +1313,10 @@ namespace Hsy.Core
         {
             throw new NotImplementedException();
         }
-
+        public override string ToString()
+        {
+            return "Count = " + this.size;
+        }
         //        public void writeExternal(ObjectOutput out) throws IOException
         //        {
         //        out.writeInt(this.Count);
@@ -1335,4 +1339,4 @@ namespace Hsy.Core
 
 //    }
 
-    //}
+//}

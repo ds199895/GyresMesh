@@ -9,6 +9,10 @@ namespace Hsy.Geo
 {
     public class HS_Point:HS_Vector
     {
+        public new static HS_Point origin = new HS_Point(0.0D, 0.0D, 0.0D);
+        public new static HS_Point xaxis = new HS_Point(1.0D, 0.0D, 0.0D);
+        public new  static HS_Point yaxis = new HS_Point(0.0D, 1.0D, 0.0D);
+        public new static HS_Point zaxis = new HS_Point(0.0D, 0.0D, 1.0D);
         public HS_Point(HS_Coord hs_coord):base(hs_coord)
         {
         }

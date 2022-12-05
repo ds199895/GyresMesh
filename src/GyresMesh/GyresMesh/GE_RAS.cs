@@ -43,7 +43,7 @@ namespace Hsy.GyresMesh
             }
             if (!indices.ContainsKey(item.GetKey()))
             {
-                objects.add(item);
+                objects.Add(item);
                 indices.Add(item.GetKey(), objects.Count-1);
                 
                 return true;
@@ -72,10 +72,10 @@ namespace Hsy.GyresMesh
             throw new NotImplementedException();
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return this.objects.GetEnumerator();
-        }
+        //public IEnumerator<T> GetEnumerator()
+        //{
+        //    return this.objects.GetEnumerator();
+        //}
 
         public void IntersectWith(IEnumerable<T> other)
         {
@@ -234,6 +234,7 @@ namespace Hsy.GyresMesh
 
         public List<T> getObjects()
         {
+            //var it = objects.items;
             return objects.ToList();
         }
 
@@ -273,6 +274,11 @@ namespace Hsy.GyresMesh
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this.objects.GetEnumerator();
         }
     }
 }

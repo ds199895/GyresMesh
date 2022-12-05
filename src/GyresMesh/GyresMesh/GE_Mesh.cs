@@ -94,11 +94,11 @@ namespace Hsy.GyresMesh
         }
         private void replaceVertices(GE_Mesh mesh)
         {
-            if (this._vertices!=null)
+            if (this._vertices != null)
             {
                 this._vertices.Clear();
             }
-            
+
             this.addVertices(mesh._vertices);
         }
 
@@ -375,6 +375,15 @@ namespace Hsy.GyresMesh
         {
             he.SetFace(f);
         }
+        public GE_Vertex getVertexWithIndex(int i)
+        {
+            if (i < 0 || i >= _vertices.size())
+            {
+                throw new IndexOutOfRangeException(
+                        "Requested vertex index " + i + "not in range.");
+            }
+            return _vertices.getWithIndex(i);
+        }
         public GE_Halfedge getHalfedgeWithIndex(int i)
         {
             if (i < 0 || i >= edges.size() + _halfedges.size()
@@ -418,12 +427,14 @@ namespace Hsy.GyresMesh
 
         public List<GE_Face> GetFaces()
         {
-            return new List<GE_Face>(this._faces.getObjects());
+            var faces = this._faces.getObjects();
+            return new List<GE_Face>(faces);
         }
 
         public List<GE_Vertex> GetVertices()
         {
-            return new List<GE_Vertex>(this._vertices.getObjects());
+            var objs = this._vertices.getObjects();
+            return new List<GE_Vertex>(objs);
         }
         public List<GE_Halfedge> GetHalfedges()
         {

@@ -1697,11 +1697,16 @@ namespace Hsy.IO
 
                 List<HS_Vector> vertices = this.vertices;
                 List<HS_Point> pts = new List<HS_Point>();
+                //bool[] duplicate = new bool[vertices.Count];
+                //HashSet<HS_Coord> vset = new HashSet<HS_Coord>();
+
                 foreach (HS_Vector vertex in vertices)
                 {
                     HS_Point pt = new HS_Point(vertex.xd, vertex.yd, vertex.zd);
 
                     pts.Add(pt);
+                    //duplicate[i] = !vset.Add(vertex);
+
                 }
                 List<Rhino3dm.MeshFace> faces = this.faces;
                 List<int[]> faceList = new List<int[]>();
@@ -1714,11 +1719,13 @@ namespace Hsy.IO
                     //    //int id = vertices.IndexOf(iVers[i]);
                     //    faceVers[i] = id;
                     //}
+
                     faceList.Add(face.vertexIndex);
                 }
                 GEC_FromFaceList creator = new GEC_FromFaceList();
                 creator.setVertices(pts);
                 creator.setFaces(faceList);
+                creator.setDuplicate(new bool[0]);
                 GE_Mesh m = creator.create();
                 Console.WriteLine(m);
                 return m;
