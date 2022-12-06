@@ -147,42 +147,39 @@ namespace Hsy.GyresMesh
                 System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
                 lasttime = stopwatch.ElapsedMilliseconds;
                 stopwatch.Start();
+
+
                 if (duplicate)
                 {
-                    HS_KDTreeInteger<HS_Coord> kdtree = new HS_KDTreeInteger<HS_Coord>();
-                    HS_KDEntryInteger<HS_Coord>[] neighbors;
+                    ////    if (duplicated[i])
+                    ////    {
+                    ////        long kvalue = -1 ;
+                    ////        pkey.TryGetValue(vertices[i], out kvalue);
+                    ////        uniqueVertices[i] = vdic[kvalue];
+                    ////    }
+                    ////    else
+                    ////    {
+                    ////        v = new GE_Vertex(vertices[i]);
+                    ////        if (useVertexInfo)
+                    ////        {
 
-                    //for (int i = 0; i < vertices.Length; i++)
-                    //{
-                    //    if (duplicated[i])
-                    //    {
-                    //        long kvalue = -1 ;
-                    //        pkey.TryGetValue(vertices[i], out kvalue);
-                    //        uniqueVertices[i] = vdic[kvalue];
-                    //    }
-                    //    else
-                    //    {
-                    //        v = new GE_Vertex(vertices[i]);
-                    //        if (useVertexInfo)
-                    //        {
-
-                    //        }
-                    //        else
-                    //        {
-                    //            v.SetInternalLabel(i);
-                    //        }
-                    //        if (useVertexUVW)
-                    //        {
-                    //            v.SetUVW(vertexuvws[i]);
-                    //        }
-                    //        uniqueVertices[i] = v;
-                    //        pkey.Add(vertices[i], v.GetKey());
-                    //        vdic.Add(v.GetKey(), v);
-                    //    }
+                    ////        }
+                    ////        else
+                    ////        {
+                    ////            v.SetInternalLabel(i);
+                    ////        }
+                    ////        if (useVertexUVW)
+                    ////        {
+                    ////            v.SetUVW(vertexuvws[i]);
+                    ////        }
+                    ////        uniqueVertices[i] = v;
+                    ////        pkey.Add(vertices[i], v.GetKey());
+                    ////        vdic.Add(v.GetKey(), v);
+                    ////    }
 
 
-                    //    mesh.Add(uniqueVertices[i]);
-                    //}
+                    ////    mesh.Add(uniqueVertices[i]);
+                    ////}
 
                     //base on faces;
                     //Dictionary<HS_Coord, long> pkey;
@@ -194,9 +191,7 @@ namespace Hsy.GyresMesh
                     vdic = new Dictionary<long, GE_Vertex>();
                     for (int i = 0; i < faces.Length; i++)
                     {
-
                         GE_Vertex v;
-                        //HS_Coord ve = null;
 
                         for (int j = 0; j < faces[i].Length; j++)
                         {
@@ -206,23 +201,7 @@ namespace Hsy.GyresMesh
                                 long kvalue = -1;
                                 var ve = vertices[vid];
                                 int hashcode = HS_HashCode.calculateHashCode(ve);
-                                //Console.WriteLine("vertex: "+ve);
-                                //pkey.ContainsKey(ve);
-                                //foreach(HS_Coord coord in pkey.Keys)
-                                //{
-                                //    if (HS_Epsilon.isZero(HS_CoordOp3D.getSqDistance3D(coord, ve))){
-                                //        Console.WriteLine(coord);
-                                //        kvalue = pkey[coord];
-                                //    }
 
-                                //}
-
-                                //if (kvalue == 0)
-                                //{
-                                //    kvalue = pkey.Last().Value;
-                                //}
-                                //Console.WriteLine(" in or not:   " + pkey.ContainsKey(hashcode));
-                                //pkey.TryGetValue(ve, out kvalue);
                                 if (pvkey.ContainsKey(ve))
                                 {
                                     pvkey.TryGetValue(ve, out kvalue);
@@ -231,7 +210,7 @@ namespace Hsy.GyresMesh
                                 {
                                     phkey.TryGetValue(hashcode, out kvalue);
                                 }
-                                
+
                                 //Console.WriteLine(" kvalue:   " + kvalue);
                                 uniqueVertices[vid] = vdic[kvalue];
 
@@ -262,33 +241,11 @@ namespace Hsy.GyresMesh
                                 }
                                 pvkey.Add(vertices[vid], v.GetKey());
                                 vdic.Add(v.GetKey(), v);
-
                             }
                             mesh.Add(uniqueVertices[vid]);
-
-
-
-
                         }
                     }
 
-
-
-
-                    //    //neighbors = kdtree.getNearestNeighbors(v, 1);
-                    //    //if (neighbors[0].d2 < HS_Epsilon.SQEPSILON)
-                    //    //{
-                    //    //    uniqueVertices[i] = uniqueVertices[neighbors[0].value];
-                    //    //    duplicated[i] = true;
-                    //    //}
-                    //    //else
-                    //    //{
-                    //    //    kdtree.add(v, i);
-                    //    //    uniqueVertices[i] = v;
-                    //    //    mesh.Add(uniqueVertices[i]);
-                    //    //    duplicated[i] = false;
-                    //    //}
-                    //}
                 }
                 else
                 {
@@ -316,8 +273,91 @@ namespace Hsy.GyresMesh
                     }
                 }
 
-
-
+                //kdtree version
+                //if (duplicate)
+                //{
+                //    HS_KDTreeInteger<HS_Coord> kdtree = new HS_KDTreeInteger<HS_Coord>();
+                //    HS_KDEntryInteger<HS_Coord>[] neighbors;
+                //    GE_Vertex v = new GE_Vertex(vertices[0]);
+                //    if (useVertexInfo)
+                //    {
+                //        v.setColor(vertexColors[0]);
+                //        //v.setVisible(vertexVisibility[0]);
+                //        v.SetUserLabel(vertexLabels[0]);
+                //        v.SetInternalLabel(vertexInternalLabels[0]);
+                //    }
+                //    else
+                //    {
+                //        v.SetInternalLabel(0);
+                //    }
+                //    if (useVertexUVW)
+                //    {
+                //        v.SetUVW(vertexuvws[0]);
+                //    }
+                //    kdtree.add(v, 0);
+                //    uniqueVertices[0] = v;
+                //    duplicated[0] = false;
+                //    mesh.Add(v);
+                //    for (int i = 1; i < vertices.Length; i++)
+                //    {
+                //        v = new GE_Vertex(vertices[i]);
+                //        if (useVertexInfo)
+                //        {
+                //            v.setColor(vertexColors[i]);
+                //            //v.setVisible(vertexVisibility[i]);
+                //            v.SetUserLabel(vertexLabels[i]);
+                //            v.SetInternalLabel(vertexInternalLabels[i]);
+                //        }
+                //        else
+                //        {
+                //            v.SetInternalLabel(i);
+                //        }
+                //        if (useVertexUVW)
+                //        {
+                //            v.SetUVW(vertexuvws[i]);
+                //        }
+                //        neighbors = kdtree.getNearestNeighbors(v, 1);
+                //        if (neighbors[0].d2 < HS_Epsilon.SQEPSILON)
+                //        {
+                //            uniqueVertices[i] = uniqueVertices[neighbors[0].value];
+                //            duplicated[i] = true;
+                //        }
+                //        else
+                //        {
+                //            kdtree.add(v, i);
+                //            uniqueVertices[i] = v;
+                //            mesh.Add(uniqueVertices[i]);
+                //            duplicated[i] = false;
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    GE_Vertex v;
+                //    for (int i = 0; i < vertices.Length; i++)
+                //    {
+                //        v = new GE_Vertex(vertices[i]);
+                //        if (useVertexInfo)
+                //        {
+                //            v.setColor(vertexColors[i]);
+                //            //v.SetUsed(vertexVisibility[i]);
+                //            v.SetUserLabel(vertexLabels[i]);
+                //            v.SetInternalLabel(vertexInternalLabels[i]);
+                //        }
+                //        else
+                //        {
+                //            v.SetInternalLabel(i);
+                //        }
+                //        if (useVertexUVW)
+                //        {
+                //            v.SetUVW(vertexuvws[i]);
+                //        }
+                //        v.SetInternalLabel(i);
+                //        uniqueVertices[i] = v;
+                //        duplicated[i] = false;
+                //        mesh.Add(uniqueVertices[i]);
+                //    }
+                //}
 
                 Console.WriteLine("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
                 lasttime = stopwatch.ElapsedMilliseconds;
@@ -420,99 +460,8 @@ namespace Hsy.GyresMesh
                 bool useFaceTextures = faceTextures != null && faceTextureIds.Length == faces.Length;
                 int faceid = 0;
                 //Dictionary<HS_Point, GE_Halfedge> centers = new Dictionary<HS_Point, GE_Halfedge>();
-                ParallelOptions options = new ParallelOptions();
-                options.MaxDegreeOfParallelism = 3;
-                //System.Threading.Tasks.Parallel.ForEach(faces, options, face => {
-                //    int[] faceuvw = null;
-                //    if (useFaceUVW)
-                //    {
-                //        faceuvw = faceuvws[faceid];
-                //    }
-                //    if (face != null)
-                //    {
-                //        List<GE_Halfedge> faceEdges = new List<GE_Halfedge>();
-                //        GE_Face hef = new GE_Face();
-                //        hef.SetInternalLabel(id);
-                //        if (useFaceInfo)
-                //        {
-                //            //hef.setColor(faceColors[faceid]);
-                //            //hef.setTextureId(faceTextureIds[id]);
-                //            //hef.setVisible(faceVisibility[id]);
-                //            //hef.setUserLabel(faceLabels[id]);
-                //            //hef.setInternalLabel(faceInternalLabels[id]);
-                //        }
-                //        if (useFaceTextures)
-                //        {
-                //            //hef.setTextureId(faceTextureIds[id]);
-                //        }
-                //        id++;
-                //        int fl = face.Length;
-                //        int[] locface = new int[fl];
-                //        int[] locfaceuvw = new int[fl];
-                //        int li = 0;
-                //        locface[li] = face[0];
-                //        if (useFaceUVW)
-                //        {
-                //            locfaceuvw[li] = faceuvw[0];
-                //        }
-                //        li++;
-                //        for (int i = 1; i < fl - 1; i++)
-                //        {
-                //            if (uniqueVertices[face[i]] != uniqueVertices[face[i - 1]])
-                //            {
-                //                locface[li] = face[i];
-                //                if (useFaceUVW)
-                //                {
-                //                    locfaceuvw[li] = faceuvw[i];
-                //                }
-                //                li++;
-                //            }
-                //        }
-                //        if (uniqueVertices[face[fl - 1]] != uniqueVertices[face[fl - 2]] && uniqueVertices[face[fl - 1]] != uniqueVertices[face[0]])
-                //        {
-                //            locface[li] = face[fl - 1];
-                //            if (useFaceUVW)
-                //            {
-                //                locfaceuvw[li] = faceuvw[fl - 1];
-                //            }
-                //            li++;
-                //        }
-                //        if (li > 2)
-                //        {
-                //            for (int i = 0; i < li; i++)
-                //            {
-                //                he = new GE_Halfedge();
-                //                faceEdges.Add(he);
-                //                mesh.SetFace(he, hef);
-                //                if (hef.GetHalfedge() == null)
-                //                {
-                //                    mesh.SetHalfedge(hef, he);
-
-                //                }
-                //                mesh.SetVertex(he, uniqueVertices[locface[i]]);
-                //                if (useFaceUVW)
-                //                {
-                //                    he.SetUVW(uvws[locfaceuvw[i]]);
-                //                }
-                //                if (useVertexUVW)
-                //                {
-                //                    if (duplicated[locface[i]])
-                //                    {
-
-                //                    }
-                //                }
-                //                mesh.SetHalfedge(he.GetStart(), he);
-                //            }
-
-                //            mesh.Add(hef);
-                //            GE_MeshOp.cycleHalfedges(mesh, faceEdges);
-                //            mesh.addHalfedges(faceEdges);
-
-                //        }
-                //    }
-                //    faceid++;
-                //});
-                //{
+                //ParallelOptions options = new ParallelOptions();
+                //options.MaxDegreeOfParallelism = 3;
                 foreach (int[] face in faces)
                 {
                     int[] faceuvw = null;
@@ -599,17 +548,18 @@ namespace Hsy.GyresMesh
                             mesh.Add(hef);
                             GE_MeshOp.cycleHalfedges(mesh, faceEdges);
                             mesh.addHalfedges(faceEdges);
-
                         }
                     }
                     faceid++;
                 }
 
+
                 Console.WriteLine("baseset总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
                 lasttime = stopwatch.ElapsedMilliseconds;
+
                 //Dictionary<long, GE_Halfedge> centers = new Dictionary<long, GE_Halfedge>();
-                HS_KDTreeInteger<HS_Coord> cen = new HS_KDTreeInteger<HS_Coord>();
-                HS_KDEntryInteger<HS_Coord>[] nei;
+                //HS_KDTreeInteger<HS_Coord> cen = new HS_KDTreeInteger<HS_Coord>();
+                //HS_KDEntryInteger<HS_Coord>[] nei;
                 //var hes = mesh.GetHalfedges();
                 //cen.add(hes[0].GetCenter(), (int)hes[0].GetKey());
                 //centers.Add(hes[0].GetKey(), hes[0]);
@@ -631,9 +581,9 @@ namespace Hsy.GyresMesh
                 //    }
 
                 //}
-                var hes = mesh.GetHalfedges();
-                cen.add(hes[0].GetCenter(), 0);
-                GE_Halfedge[] pairs = new GE_Halfedge[hes.Count];
+                //var hes = mesh.GetHalfedges();
+                //cen.add(hes[0].GetCenter(), 0);
+                //GE_Halfedge[] pairs = new GE_Halfedge[hes.Count];
                 //centers.Add(0, hes[0]);
                 //mids.Add(hes[0].GetCenter());
 
@@ -690,6 +640,37 @@ namespace Hsy.GyresMesh
                 //    }
                 //    //mids.Add(mid);
                 //});
+
+                //Dictionary<string, GE_Halfedge> pairs = new Dictionary<string, GE_Halfedge>();
+                //List<GE_Halfedge> unpair = mesh.getUnpairedHalfedges();
+
+
+                //for (int i = 0; i < unpair.Count; i++)
+                //{
+                //    string k = unpair[i].GetStart().GetKey().ToString() + "," + unpair[i].GetNextInFace().GetStart().GetKey().ToString();
+                //    //int keys = HS_HashCode.calculateHashCode(unpair[i].GetStart().GetKey(), unpair[i].GetNextInFace().GetStart().GetKey());
+                //    pairs.Add(k, unpair[i]);
+                //}
+
+                //for (int i = 0; i < unpair.Count; i++)
+                //{
+                //    if (unpair[i].Pair() == null)
+                //    {
+                //        string k = unpair[i].GetNextInFace().GetStart().GetKey().ToString() + "," + unpair[i].GetStart().GetKey().ToString();
+                //        GE_Halfedge ev;
+                //        bool get= pairs.TryGetValue(k, out ev);
+                //        //bool inp=pairs.ContainsKey(k);
+                //        //if (inp)
+                //        //{
+                //        //    Console.WriteLine(k);
+                //        //}
+                //        if (get&&ev.Pair()==null)
+                //        {
+                //            mesh.SetPair(unpair[i], ev);
+                //        }
+                //    }
+                //}
+
                 GE_MeshOp.pairHalfedges(mesh);
 
                 Console.WriteLine("pairing线程总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
@@ -760,7 +741,7 @@ namespace Hsy.GyresMesh
             }
             return 0;
         }
-        //protected override HE_Mesh createBase()
+        //protected override GE_Mesh createBase()
         //{
         //    GE_Mesh mesh = new GE_Mesh();
         //    if (faces != null && vertices != null)
@@ -777,5 +758,16 @@ namespace Hsy.GyresMesh
 
         //    }
         //}
+    }
+
+    public class VertexInfo
+    {
+        public List<GE_Halfedge> In;
+        public List<GE_Halfedge> Out;
+        public VertexInfo()
+        {
+            this.Out = new List<GE_Halfedge>();
+            this.In = new List<GE_Halfedge>();
+        }
     }
 }

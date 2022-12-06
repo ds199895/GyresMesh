@@ -71,7 +71,7 @@ namespace Hsy.Geo
             mulSelf(f);
             return this;
         }
-        public HS_Point addSelf(HS_Coord p)
+        public new  HS_Point addSelf(HS_Coord p)
         {
             Set(xd + p.xd, yd+ p.yd, zd+ p.zd);
             return this;

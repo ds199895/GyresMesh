@@ -155,24 +155,7 @@ namespace Hsy.GyresMesh
             }
 
         }
-        //public T remove(FastList<T> l, int index)
-        //{
-        //    T previous = l[index];
-        //    int totalOffset = l.Count - index - 1;
-
-        //    T[] sourceArray = l.ToArray();
-        //    T[] destArray = sourceArray;
-        //    if (totalOffset > 0)
-        //    {
-        //        Array.Copy(sourceArray, index + 1, destArray, index, totalOffset);
-        //    }
-        //    l = destArray.ToList();
-        //    int len = l.Count;
-        //    l[len-1] = null;
-        //    return previous;
-        //}
-
-
+      
         public T getWithIndex(int i)
         {
             return objects[i];

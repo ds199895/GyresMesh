@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Hsy.GyresMesh
 {
-    public abstract class GE_Object :IObject
+    public abstract class GE_Object :IObject,IDisposable
     {
+        private bool disposed;
         private static long currentkey = 0;
         private protected long key;
         private protected int _internalLabel;
@@ -101,5 +102,20 @@ namespace Hsy.GyresMesh
         protected internal abstract void Clear();
 
         protected internal abstract void ClearPreComputed();
+
+        #region IDisposable Members
+
+
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+
+                GC.Collect();
+                disposed = true;
+            }
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

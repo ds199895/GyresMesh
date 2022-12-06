@@ -15,9 +15,9 @@ namespace Hsy.GyresMesh
     {
         protected internal readonly static HS_ProgressReporter.HS_ProgressTracker tracker = HS_ProgressReporter.HS_ProgressTracker.instance();
 
-        class CreatorThread:HS_Thread
+        class CreatorThread : HS_Thread
         {
-           
+
             GEC_Creator creator;
             GE_Mesh result;
             public CreatorThread(GEC_Creator creator)
@@ -31,7 +31,7 @@ namespace Hsy.GyresMesh
             {
                 this.result = creator.create();
             }
-            
+
         }
 
 
@@ -71,11 +71,6 @@ namespace Hsy.GyresMesh
 
         public GE_Mesh(GEC_Creator creator) : this()
         {
-            _halfedges = new GE_RAS<GE_Halfedge>();
-            _vertices = new GE_RAS<GE_Vertex>();
-            _faces = new GE_RAS<GE_Face>();
-            unpairedHalfedges = new GE_RAS<GE_Halfedge>();
-            edges = new GE_RAS<GE_Halfedge>();
             this.setNoCopy(creator.create());
             this.triangles = null;
             this.attribute.name = "Mesh";
@@ -86,7 +81,6 @@ namespace Hsy.GyresMesh
             this.replaceVertices(target);
             this.replaceFaces(target);
             this.replaceHalfedges(target);
-
         }
         public void createThreaded(GEC_Creator creator)
         {
@@ -94,51 +88,41 @@ namespace Hsy.GyresMesh
         }
         private void replaceVertices(GE_Mesh mesh)
         {
-            if (this._vertices != null)
-            {
-                this._vertices.Clear();
-            }
-
+            clearVertices();
             this.addVertices(mesh._vertices);
-        }
-
-        private void replaceFaces(GE_Mesh mesh)
-        {
-            this._faces.Clear();
-            this.addFaces(mesh._faces);
         }
         private void replaceHalfedges(GE_Mesh mesh)
         {
             clearHalfedges();
-            GE_HalfedgeEnumerator heEtr = mesh.heEtr();
-            while (heEtr.MoveNext())
-            {
-                this.Add(heEtr.Current);
-            }
+            this.addHalfedges(mesh.GetHalfedges());
         }
 
+        private void replaceFaces(GE_Mesh mesh)
+        {
+            clearFaces();
+            this.addFaces(mesh._faces);
+        }
+        public void clearFaces()
+        { 
+            _faces = new GE_RAS<GE_Face>();
+        }
         public void clearHalfedges()
         {
             this._halfedges = new GE_RAS<GE_Halfedge>();
             this.edges = new GE_RAS<GE_Halfedge>();
             this.unpairedHalfedges = new GE_RAS<GE_Halfedge>();
         }
+        public void clearVertices()
+        {
+            _vertices = new GE_RAS<GE_Vertex>();
+        }
+
+
+
         public HS_AABB getAABB()
         {
             return GE_MeshOp.getAABB(this);
         }
-        //public void clearVertices()
-        //{
-        //    this._vertices = new List<GE_Vertex>();
-        //    var var2 = _vertices.GetEnumerator();
-
-        //    while (var2.MoveNext())
-        //    {
-        //        GE_Vertex v = var2.Current;
-        //        sel.clearVertices();
-        //    }
-
-        //}
 
         public void Set(GE_Mesh mesh)
         {
@@ -157,7 +141,8 @@ namespace Hsy.GyresMesh
             if (he.Pair() == null)
             {
                 unpairedHalfedges.Add(he);
-            }else if (he.isEdge())
+            }
+            else if (he.isEdge())
             {
                 edges.Add(he);
             }
@@ -165,7 +150,7 @@ namespace Hsy.GyresMesh
             {
                 _halfedges.Add(he);
             }
-            
+
         }
 
         public void Add(GE_Face f)
@@ -173,37 +158,67 @@ namespace Hsy.GyresMesh
             _faces.Add(f);
         }
 
-        public void addHalfedges<T>(List<T>halfedges)where T:GE_Halfedge
+        public void addHalfedges<T>(List<T> halfedges) where T : GE_Halfedge
         {
-            var var3 = halfedges.GetEnumerator();
-            while (var3.MoveNext())
+            //var var3 = halfedges.GetEnumerator();
+            //while (var3.MoveNext())
+            //{
+            //    GE_Halfedge he = var3.Current;
+            //    this.Add(he);
+            //}
+            //System.Threading.Tasks.Parallel.ForEach(halfedges, e => {  });
+            foreach (GE_Halfedge e in halfedges)
             {
-                GE_Halfedge he = (GE_Halfedge)var3.Current;
-                this.Add(he);
+                this.Add(e);
             }
         }
-        public void addVertices<T>(ICollection<T>vertices)where T:GE_Vertex
+        public void addHalfedges<T>(FastList<T> halfedges) where T : GE_Halfedge
         {
-            var var3 = vertices.GetEnumerator();
-
-            while (var3.MoveNext())
+            //var var3 = halfedges.GetEnumerator();
+            //while (var3.MoveNext())
+            //{
+            //    GE_Halfedge he = var3.Current;
+            //    this.Add(he);
+            //}
+            //System.Threading.Tasks.Parallel.ForEach(halfedges, e => {  });
+            foreach (GE_Halfedge e in halfedges.ToArray())
             {
-                GE_Vertex v = (GE_Vertex)var3.Current;
+
+                this.Add(e);
+                                
+            }
+        }
+        public void addVertices<T>(ICollection<T> vertices) where T : GE_Vertex
+        {
+
+            //var var3 = vertices.GetEnumerator();
+
+            //while (var3.MoveNext())
+            //{
+            //    GE_Vertex v = (GE_Vertex)var3.Current;
+            //    this.Add(v);
+            //}
+            foreach(GE_Vertex v in vertices)
+            {
                 this.Add(v);
             }
 
         }
 
-        public void addFaces<T>(ICollection<T>faces)where T : GE_Face
+        public void addFaces<T>(ICollection<T> faces) where T : GE_Face
         {
-            var var3 = faces.GetEnumerator();
-            while (var3.MoveNext())
+            //var var3 = faces.GetEnumerator();
+            //while (var3.MoveNext())
+            //{
+            //    GE_Face f = (GE_Face)var3.Current;
+            //    this.Add(f);
+            //}
+            foreach(GE_Face f in faces)
             {
-                GE_Face f = (GE_Face)var3.Current;
                 this.Add(f);
             }
         }
-        public void addDerivedElement(GE_Vertex v,params GE_Object[]el)
+        public void addDerivedElement(GE_Vertex v, params GE_Object[] el)
         {
             Add(v);
             //for (GE_Selection sel : selections.values())
@@ -224,7 +239,7 @@ namespace Hsy.GyresMesh
             //}
         }
 
-        public void addDerivedElement(GE_Halfedge he,params GE_Object[] el)
+        public void addDerivedElement(GE_Halfedge he, params GE_Object[] el)
         {
             Add(he);
             //for()
@@ -238,7 +253,7 @@ namespace Hsy.GyresMesh
         {
             v.SetHalfedge(he);
         }
-        public void SetHalfedge( GE_Face f, GE_Halfedge he)
+        public void SetHalfedge(GE_Face f, GE_Halfedge he)
         {
             f.SetHalfedge(he);
         }
@@ -279,7 +294,6 @@ namespace Hsy.GyresMesh
             if (he.Pair() == null)
             {
                 return;
-
             }
             GE_Halfedge hep = he.Pair();
             removeNoSelectionCheck(he);
@@ -312,37 +326,39 @@ namespace Hsy.GyresMesh
             return GE_MeshOp.cleanUnusedElementsByFace(this);
         }
 
-        public void removeVertices<T>(List<T> vertices)where T:GE_Vertex
+        public void removeVertices<T>(List<T> vertices) where T : GE_Vertex
         {
-            var var3 = vertices.GetEnumerator();
-            while (var3.MoveNext())
-            {
-                GE_Vertex v = var3.Current;
-                this.remove(v);
-            }
-            //foreach(GE_Vertex v in vertices)
+            //var var3 = vertices.GetEnumerator();
+            //while (var3.MoveNext())
             //{
-            //    remove(v);
+            //    GE_Vertex v = var3.Current;
+            //    this.remove(v);
             //}
+            foreach (GE_Vertex v in vertices)
+            {
+                remove(v);
+            }
         }
 
         public void removeHalfedges<T>(List<T> halfedges) where T : GE_Halfedge
         {
-            var var3 = halfedges.GetEnumerator();
-            while (var3.MoveNext())
-            {
-                GE_Halfedge v = var3.Current;
-                this.remove(v);
-            }
-            //foreach(GE_Vertex v in vertices)
+            //var var3 = halfedges.GetEnumerator();
+            //while (var3.MoveNext())
             //{
-            //    remove(v);
+            //    GE_Halfedge v = var3.Current;
+            //    this.remove(v);
             //}
+            foreach (GE_Halfedge e in halfedges)
+            {
+                remove(e);
+                
+            }
         }
 
         public void remove(GE_Vertex v)
         {
             _vertices.Remove(v);
+            v.Dispose();
             //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
@@ -351,6 +367,7 @@ namespace Hsy.GyresMesh
         public void remove(GE_Halfedge he)
         {
             _halfedges.Remove(he);
+            he.Dispose();
             //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
@@ -359,12 +376,12 @@ namespace Hsy.GyresMesh
 
         public void removeNoSelectionCheck(GE_Halfedge he)
         {
-               edges.Remove(he);
+            edges.Remove(he);
 
-                _halfedges.Remove(he);
+            _halfedges.Remove(he);
 
-                unpairedHalfedges.Remove(he);
- 
+            unpairedHalfedges.Remove(he);
+
         }
         public void SetNext(GE_Halfedge he, GE_Halfedge nxt)
         {
@@ -457,7 +474,7 @@ namespace Hsy.GyresMesh
 
         public int GetNumberOfHalfedges()
         {
-            return _halfedges.Count+edges.Count+unpairedHalfedges.Count;
+            return _halfedges.Count + edges.Count + unpairedHalfedges.Count;
         }
 
         public List<GE_Halfedge> getUnpairedHalfedges()

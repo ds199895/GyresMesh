@@ -9,9 +9,9 @@ namespace Hsy.Geo
 {
     public class HS_Triangle:HS_GeometryFactory3D
     {
-        HS_Coord _p1;
-        HS_Coord _p2;
-        HS_Coord _p3;
+        private HS_Coord _p1;
+        private HS_Coord _p2;
+        private HS_Coord _p3;
         public HS_Coord p1 { get { return this._p1; }set { this._p1 = value; } }
         public HS_Coord p2 { get { return this._p2; } set { this._p2 = value; } }
         public HS_Coord p3 { get { return this._p3; } set { this._p3 = value; } }

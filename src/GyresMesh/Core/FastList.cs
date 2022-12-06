@@ -237,7 +237,7 @@ namespace Hsy.Core
             return array;
         }
 
-        public T[] ToArray()
+        public new T[] ToArray()
         {
             return this.copyItemsWithNewCapacity(this.size);
         }
@@ -1277,7 +1277,7 @@ namespace Hsy.Core
             return hashCode;
         }
 
-        public void Add(T item)
+        public new void Add(T item)
         {
             this.add(item);
         }

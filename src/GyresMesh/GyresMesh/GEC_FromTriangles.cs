@@ -75,6 +75,7 @@ namespace Hsy.GyresMesh
                     faces[i][1] = 3 * i + 1;
                     faces[i][2] = 3 * i + 2;
                 }
+                vset.Clear();
                 GEC_FromFaceList ffl = new GEC_FromFaceList().setVertices(vertices).setFaces(faces).setDuplicate(duplicate);
                 return ffl.createBase();
             }

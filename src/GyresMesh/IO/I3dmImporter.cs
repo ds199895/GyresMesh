@@ -47,8 +47,6 @@ namespace Hsy.IO
                     //Console.WriteLine("3DM FILE VERSION = " + var5.ToCharArray()[0].ToString());
                     version = int.Parse(var5);
                     this.file.version = version;
-
-
                 }
 
                 Console.WriteLine("3DM FILE VERSION = " + version);

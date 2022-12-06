@@ -28,7 +28,7 @@ namespace Examples
             cam = new CamController(this);
             render = new GE_Render(this);
 
-            int count =500;
+            int count =400;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -59,13 +59,13 @@ namespace Examples
                 }
             }
             Console.WriteLine("创建tri总用时   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
-
+            lasttime = stopwatch.ElapsedMilliseconds;
             GEC_FromTriangles creator = new GEC_FromTriangles();
 
             creator.setTriangles(tris);
             //alternatively tris can be any Collection<HS_Triangle>
             mesh = new GE_Mesh(creator);
-            Console.WriteLine("创建Mesh总用时   " + (stopwatch.ElapsedMilliseconds - starttime) + "ms");
+            Console.WriteLine("create mesh in:   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
             lasttime = stopwatch.ElapsedMilliseconds;
             Print(mesh);
             //foreach (GE_Vertex v in mesh.GetVertices())
