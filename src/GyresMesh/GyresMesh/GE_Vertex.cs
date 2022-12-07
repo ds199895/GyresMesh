@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hsy.Core;
 using Hsy.Geo;
 using Hsy.HsMath;
 
@@ -65,8 +66,8 @@ namespace Hsy.GyresMesh
         }
         public GE_Halfedge GetHalfedge(GE_Face f)
         {
-            GE_Halfedge he = _halfedge;
-            if (he == null)
+            GE_Halfedge GE = _halfedge;
+            if (GE == null)
             {
                 return null;
             }
@@ -74,25 +75,25 @@ namespace Hsy.GyresMesh
             {
                 do
                 {
-                    if (he.GetFace() == null)
+                    if (GE.GetFace() == null)
                     {
-                        return he;
+                        return GE;
                     }
-                    he = he.GetNextInVertex(); 
-                } while (he!=_halfedge);
+                    GE = GE.GetNextInVertex(); 
+                } while (GE!=_halfedge);
 
             }
             else
             {
                 do
                 {
-                    if (he.GetFace() == f)
+                    if (GE.GetFace() == f)
                     {
-                        return he;
+                        return GE;
                     }
-                    he = he.GetNextInVertex();
+                    GE = GE.GetNextInVertex();
 
-                } while (he!=_halfedge);
+                } while (GE!=_halfedge);
             }
             return null;
         }
@@ -100,13 +101,13 @@ namespace Hsy.GyresMesh
         public List<GE_Halfedge> GetHalfedgeRing()
         {
             List<GE_Halfedge> edge_star = new List<GE_Halfedge>();
-            GE_Halfedge he = _halfedge;
+            GE_Halfedge GE = _halfedge;
             do
             {
-                edge_star.Add(he);
-                he = he.GetNextInVertex();
+                edge_star.Add(GE);
+                GE = GE.GetNextInVertex();
                
-            } while (he != _halfedge);
+            } while (GE != _halfedge);
             return edge_star;
         }
 
@@ -117,33 +118,55 @@ namespace Hsy.GyresMesh
             {
                 return vertex_star;
             }
-            GE_Halfedge he = _halfedge;
+            GE_Halfedge GE = _halfedge;
             do
             {
-                GE_Halfedge hen = he.GetNextInFace();
-                if (hen.GetStart() != this && !vertex_star.Contains(hen.GetStart()))
+                GE_Halfedge GEn = GE.GetNextInFace();
+                if (GEn.GetStart() != this && !vertex_star.Contains(GEn.GetStart()))
                 {
-                    vertex_star.Add(he.GetStart());
+                    vertex_star.Add(GE.GetStart());
                 }
                 
-                he=he.GetNextInVertex();
+                GE=GE.GetNextInVertex();
 
-            } while (he != _halfedge);
+            } while (GE != _halfedge);
             return vertex_star;
         }
 
         public List<GE_Face> GetFaceRing()
         {
             List<GE_Face> face_star = new List<GE_Face>();
-            GE_Halfedge he = _halfedge;
+            GE_Halfedge GE = _halfedge;
             do
             {
-                face_star.Add(he.GetFace());
-                he = he.GetNextInVertex();
-            } while (he != _halfedge);
+                face_star.Add(GE.GetFace());
+                GE = GE.GetNextInVertex();
+            } while (GE != _halfedge);
             return face_star;
         }
-       
+        public GE_Halfedge GetHalfedge()
+        {
+            return _halfedge;
+        }
+
+        public List<GE_Halfedge> GetHalfedgeStar()
+        {
+            List<GE_Halfedge> vGE = new FastList<GE_Halfedge>();
+            if (GetHalfedge()== null)
+            {
+                return vGE;
+            }
+            GE_Halfedge GE = GetHalfedge();
+            do
+            {
+                if (!vGE.Contains(GE))
+                {
+                    vGE.Add(GE);
+                }
+                GE = GE.GetNextInVertex();
+            } while (GE != GetHalfedge());
+            return vGE;
+        }
         public int GetVertexDegree()
         {
             return GetVertexRing().Count;
@@ -151,15 +174,15 @@ namespace Hsy.GyresMesh
 
         public bool isBoundary()
         {
-            GE_Halfedge he = _halfedge;
+            GE_Halfedge GE = _halfedge;
             do
             {
-                if (he.GetFace() == null)
+                if (GE.GetFace() == null)
                 {
                     return true;
                 }
-                he = he.GetNextInVertex();
-            } while (he != _halfedge);
+                GE = GE.GetNextInVertex();
+            } while (GE != _halfedge);
             return false;
         }
         public bool isIsolated()
@@ -173,25 +196,25 @@ namespace Hsy.GyresMesh
             {
                 return false;
             }
-            GE_Halfedge he = _halfedge;
+            GE_Halfedge GE = _halfedge;
             do
             {
-                if (he.GetEnd() == v)
+                if (GE.GetEnd() == v)
                 {
                     return true;
                 }
-                he = he.GetNextInVertex();
-            } while (he != _halfedge);
+                GE = GE.GetNextInVertex();
+            } while (GE != _halfedge);
             return false;
         }
         public GE_Vertex GetNextInFace(GE_Face f)
         {
-            GE_Halfedge he  = GetHalfedge(f);
-            if (he == null)
+            GE_Halfedge GE  = GetHalfedge(f);
+            if (GE == null)
             {
                 return null;
             }
-            return he.GetNextInFace().GetStart();
+            return GE.GetNextInFace().GetStart();
         }
 
         public void SetUVW(HS_Coord uvw)
@@ -200,7 +223,7 @@ namespace Hsy.GyresMesh
             //{
             //    return;
             //}
-            //this.uvw = new HE_TextureCoordinate(uvw);
+            //this.uvw = new GE_TextureCoordinate(uvw);
         }
       
 

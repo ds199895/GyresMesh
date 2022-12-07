@@ -22,13 +22,14 @@ namespace Examples
         GE_Mesh mesh;
         double starttime;
         double lasttime;
+        int MaxVertexCount = 10000;
         public override void SetUp()
         {
             Size(800, 600);
             cam = new CamController(this);
             render = new GE_Render(this);
 
-            int count =400;
+            int count =4;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -85,22 +86,8 @@ namespace Examples
         {
             Background(255);
             cam.DrawSystem(this, 200);
-            //Fill(255, 0, 0);
-            //Stroke(0);
+
             render.displayHeMeshWithDegree(mesh, cam.CurrentView,detail);
-            //NoStroke();
-            Stroke(0);
-            Fill(255, 0, 0);
-            //foreach (GE_Face f in mesh.GetFaces())
-            //{
-            //    render.drawFace(f);
-            //}
-            //PushStyle();
-            //NoFill();
-            //Stroke(0, 0, 255);
-            //StrokeWeight(4);
-            //render.drawAABB(mesh.getAABB());
-            //PopStyle();
         }
         HS_AABB aabb;
         
@@ -113,7 +100,7 @@ namespace Examples
         {
             if (key == "F")
             {
-                Focus(aabb.getLimits(), false);
+                cam.Focus(aabb.getLimits(), false);
             }
             if (key == "Q")
             {
@@ -133,112 +120,142 @@ namespace Examples
             {
                 detail = !detail;
             }
-
+            else if (key == "P")
+            {
+                Print("SplitPreMesh=............" + mesh.GetNumberOfFaces());
+                SplitAllLongEdges(20);
+                Print("SplitAfterMesh=............" + mesh.GetNumberOfFaces());
+            }
+            else if (key == "R")
+            {
+                Print("FlipPreMesh=............" + mesh.GetNumberOfFaces());
+                flipEdgeControl();
+                Print("FlipAfterMesh=............" + mesh.GetNumberOfFaces());
+            }
 
         }
 
-
-        public void Focus(double[] limits, bool fit = true)
+        public void SplitAllLongEdges(double target)
         {
-
-            double dis = 0;
-            Vector3 cen = new Vector3((float)(0.5 * (limits[0] + limits[3])), (float)(0.5 * (limits[1] + limits[4])), (float)(0.5 * (limits[2] + limits[5])));
-            double lw = (limits[3] - limits[0]);
-            double lh = (limits[4] - limits[1]);
-            double ld = (limits[5] - limits[2]);
-
-
-            double diagonalLength2 = Math.Sqrt(lw * lw + lh * lh);
-            double diagonalLength3 = Math.Sqrt(lw * lw + lh * lh + ld * ld);
-
-
-            Vector3 normal;
-            if (fit)
+            bool done = false;
+            while (!done)
             {
-                if (cam.CurrentView.perspective)
+                done = true;
+                foreach (GE_Halfedge he in mesh.GetHalfedges())
                 {
-
-                    //dis = diagonalLength2 / 0.9D / cam.CurrentView.AspectRatio;
-                    dis = Math.Max(cam.CurrentView.near * diagonalLength2 / (2 * this.window.Height), cam.CurrentView.near * diagonalLength3 / (2 * this.window.Width));
-
-                    normal = new Vector3((float)-lw, (float)-lh, (float)ld).Normalized();
-                    cam.CurrentView.Position = cen + (float)dis * normal;
-                    cam.CurrentView.target = cen;
-                    cam.CurrentView.iniCoordinateSystem(cam.CurrentView.Position, cam.CurrentView.target);
-                }
-                else
-                {
-                    if (!cam.CurrentView.is2D)
+                    if (mesh.GetNumberOfVertices() < MaxVertexCount && he.GetLength() > 4 / 3f* target)
                     {
+                        if (!he.IsOuterBoundary() && !he.IsInnerBoundary())
+                        {      //判断半边是否是边界
+                            if (he.GetLength() > he.GetNextInFace().GetLength()
+                                    && he.GetLength() > he.GetPrevInFace().GetLength()
+                                    && he.Pair().GetLength() > he.Pair().GetNextInFace().GetLength()
+                                    && he.Pair().GetLength() > he.Pair().GetPrevInFace().GetLength())
+                            {
 
-                        dis = Math.Max(cam.CurrentView.near * diagonalLength2 / (2 * this.window.Height), cam.CurrentView.near * diagonalLength3 / (2 * this.window.Width));
-                        normal = new Vector3((float)-lw, (float)-lh, (float)ld).Normalized();
-                        cam.CurrentView.Position = cen + (float)dis * normal;
-                        cam.CurrentView.target = cen;
-                        cam.CurrentView.iniCoordinateSystem(cam.CurrentView.Position, cam.CurrentView.target);
+                                GE_Face f1 = he.GetFace();             //f1：半边的相邻面
+                                GE_Face f2 = he.Pair().GetFace();             //f2：相邻半边的相邻面
+
+                                GE_Vertex v1_opp = he.GetPrevInFace().GetStart();              // v1_opp：半边相邻三角面分裂边的另一个顶点
+                                GE_Vertex v2_opp = he.Pair().GetPrevInFace().GetStart();      // v2_opp：半边相邻三角面分裂边的另一个顶点
+
+                                //                        println("mesh vertices size: "+mesh.getVertices().size()+", vertices size: "+vertices.size());
+                                //int index1 = vertices.indexOf(he.GetStart());
+                                //int index2 = vertices.indexOf(he.GetEnd());
+                                ////                        System.out.println("index1="+index1+".............index2="+index2);
+                                //double newVgrowthIntensity = (GrowthIntensity.get(index1) + GrowthIntensity.get(index2)) / 2;
+                                ////                        println(newVgrowthIntensity);
+
+                                GE_MeshOp.splitEdge(mesh, he);        //长边从中点分割一半
+                                GE_Vertex v1 = he.GetEnd();           //新的端点（半边的中点）位置更新,注意不能写成简单 GE_Vertex v1=new GE_Vertex(mid);得把网格中的vertex赋予v1
+
+                                //vertices.add(v1);
+                                //GrowthIntensity.add(newVgrowthIntensity);
+
+                                GE_MeshOp.splitFace(mesh, f1, v1, v1_opp);
+                                GE_MeshOp.splitFace(mesh, f2, v1, v2_opp);
+                            }
+
+                        }
+                        else if (he.IsInnerBoundary())
+                        {
+                            if (he.GetLength() > he.GetNextInFace().GetLength() && he.GetLength() > he.GetPrevInFace().GetLength())
+                            {
+                                GE_Face f1 = he.GetFace();             //f1：半边的相邻面
+
+
+                                GE_Vertex v1_opp = he.GetPrevInFace().GetStart();              // v1_opp：半边相邻三角面分裂边的另一个顶点
+                                                                                                //                        println("mesh vertices size: "+mesh.getVertices().size()+", vertices size: "+vertices.size());
+                                //int index1 = vertices.indexOf(he.GetStart());
+                                //int index2 = vertices.indexOf(he.GetEnd());
+                                ////                        System.out.println("index1="+index1+".............index2="+index2);
+                                //double newVgrowthIntensity = (GrowthIntensity.get(index1) + GrowthIntensity.get(index2)) / 2;
+                                ////                        println("new vertex growthIntensity: "+newVgrowthIntensity);
+                                GE_MeshOp.splitEdge(mesh, he);        //长边从中点分割一半
+                                GE_Vertex v1 = he.GetEnd();           //新的端点（半边的中点）位置更新,注意不能写成简单 GE_Vertex v1=new GE_Vertex(mid);得把网格中的vertex赋予v1
+
+                                //vertices.add(v1);
+                                //GrowthIntensity.add(newVgrowthIntensity);
+
+                                GE_MeshOp.splitFace(mesh, f1, v1, v1_opp);
+                            }
+
+                        }
+                        else if (he.IsOuterBoundary())
+                        {
+                            continue;
+                        }
 
                     }
-                    else
+                }
+                foreach (GE_Halfedge he in mesh.GetHalfedges())
+                {
+                    if (he.GetLength() > 4 / 3f* target)
                     {
-                        dis = Math.Max((float)(cam.CurrentView.near * lw / (this.window.Width - 100)), (float)(cam.CurrentView.near * lh / (this.window.Height - 100)));
-                        dis = Math.Max((float)(cam.CurrentView.near * lw / (2 * this.window.Height)), (float)(cam.CurrentView.near * lh / (this.window.Width)));
-                        normal = new Vector3(0, 0, 1);
-                        cam.CurrentView.Position = cen + (float)dis * normal;
-                        cam.CurrentView.target = cen;
+                        done = false;
                     }
                 }
             }
-            else
-            {
-
-
-                //            dis=max((float) (996*aabb.getWidth()/(width-100)),(float) (996*aabb.getHeight()/(height-100)));
-                if (cam.CurrentView.is2D)
-                {
-                    dis = Math.Max((float)(800 * lw / (this.window.Width - 50)), (float)(800 * lh / (this.window.Height - 50)));
-                }
-                else
-                {
-                    dis = (float)(996 * diagonalLength3 / (this.window.Width - 100));
-                }
-                //            dis=max((float) (996*diagonal/(width-100)),(float) (996*diagonal/(height-100)));
-                if (cam.CurrentView.perspective)
-                {
-
-                    //this = new thisController(this, dis);
-                    double zAxis = Math.Max((float)dis, (float)limits[5]);
-                    Vector3 newPos = new Vector3(cen.X, cen.Y, (float)zAxis);
-
-                    cam.CurrentView.Position = new Vector3(newPos.X - (float)(dis * Math.Sin(Math.PI / 3)), newPos.Y - (float)(dis * Math.Cos(Math.PI / 3)), (float)dis);
-                    cam.CurrentView.target = new Vector3(newPos.X, newPos.Y, cen.Z + 5);
-                    cam.CurrentView.iniCoordinateSystem(cam.CurrentView.Position, cam.CurrentView.target);
-                }
-                else
-                {
-                    if (!cam.CurrentView.is2D)
-                    {
-                        //this = new thisController(this, dis);
-                        double zAxis = Math.Max((float)dis, (float)limits[5]);
-                        Vector3 newPos = new Vector3(cen.X, cen.Y, (float)zAxis);
-                        cam.CurrentView.Position = new Vector3(newPos.X - (float)(dis * Math.Sin(Math.PI / 3)), newPos.Y - (float)(dis * Math.Cos(Math.PI / 3)), (float)dis);
-                        cam.CurrentView.target = new Vector3(newPos.X, newPos.Y, cen.Z + 5);
-                        cam.CurrentView.iniCoordinateSystem(cam.CurrentView.Position, cam.CurrentView.target);
-                    }
-                    else
-                    {
-
-                        //this = new thisController(this, dis);
-                        //this.Top();
-                        Vector3 newPos = new Vector3(cen.X, cen.Y, (float)dis);
-
-                        cam.CurrentView.Position = newPos;
-                        cam.CurrentView.target = new Vector3(newPos.X, newPos.Y, 0);
-                        cam.CurrentView.iniCoordinateSystem(cam.CurrentView.Position, cam.CurrentView.target);
-                    }
-                }
-            }
-
         }
+
+        public void flipEdgeControl()
+        {
+            foreach (GE_Halfedge he in mesh.GetHalfedges())
+            {
+                double angle1 = getHalfEdgeAngle(he);    //半边对应角度
+                double angle2 = getHalfEdgeAngle(he.Pair());     //半边对边对应角度
+                double angle3 = getHalfEdgeAngle(he.Pair().GetNextInFace());
+                double angle4 = getHalfEdgeAngle(he.Pair().GetNextInFace().GetNextInFace());
+                if (!he.IsOuterBoundary() && !he.IsInnerBoundary())
+                {      //判断半边是否是边界
+                    if (angle1 > 0.5 * PI && angle2 > 0.5 * PI)
+                    {
+                        //FlipEdge(mesh, he);
+                        GE_MeshOp.flipEdge(mesh, he);
+                    }
+                    else if (angle1 > 0.6 * PI && angle2 < 0.5 * PI && angle3 < 0.5 * PI && angle4 < 0.5 * PI)
+                    {
+                        GE_MeshOp.flipEdge(mesh, he);
+                    }
+                }
+            }
+        }
+
+        public double getHalfEdgeAngle(GE_Halfedge _he)
+        {
+            HS_Vector v1 = _he.GetNextInFace().GetStartPosition();  //下一条半边顶点
+            HS_Vector v2 = _he.GetNextInFace().GetEndPosition();  //下一条半边终点
+
+            HS_Vector v3 = _he.GetNextInFace().GetNextInFace().GetStartPosition();  //下下一条半边顶点
+            HS_Vector v4 = _he.GetNextInFace().GetNextInFace().GetEndPosition();  //下下一条半边终点
+
+            HS_Vector vP = HS_Vector.sub(v1, v2);
+            HS_Vector vQ = HS_Vector.sub(v4, v3);
+            double angle = HS_Vector.angle(vP, vQ);    //半边对应角度
+
+            return angle;
+        }
+
 
     }
 }

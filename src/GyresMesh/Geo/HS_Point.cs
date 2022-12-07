@@ -76,6 +76,16 @@ namespace Hsy.Geo
             Set(xd + p.xd, yd+ p.yd, zd+ p.zd);
             return this;
         }
+        public new HS_Point subSelf(HS_Coord p)
+        {
+            Set(xd - p.xd, yd - p.yd, zd - p.zd);
+            return this;
+        }
+        public double getDistance(HS_Coord p)
+        {
+            return HS_CoordOp3D.getDistance3D(xd, yd, zd, p.xd, p.yd,p.zd);
+        }
+
         //public void Set(HS_Coord c)
         //{
         //    this.x = c.X();

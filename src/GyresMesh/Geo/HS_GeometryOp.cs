@@ -13,5 +13,7 @@ namespace Hsy.Geo
         {
             return Math.Sqrt((q.xd - p.xd) * (q.xd - p.xd) + (q.yd - p.yd) * (q.yd - p.yd)+ (q.zd - p.zd) * (q.zd - p.zd));
         }
+
+
     }
 }

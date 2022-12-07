@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Examples.Creator.TestRead</StartupObject>
+    <StartupObject>Examples.FromTriangles</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">

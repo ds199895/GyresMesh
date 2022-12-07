@@ -244,6 +244,28 @@ namespace Hsy.GyresMesh
             Add(he);
             //for()
         }
+        public void addDerivedElement(GE_Face f,params GE_Object[] el)
+        {
+           Add(f);
+            //for (HE_Selection sel : selections.values())
+            //{
+            //    boolean contains = false;
+            //    for (int i = 0; i < el.length; i++)
+            //    {
+            //        contains |= sel.contains(el[i]);
+            //        if (contains)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    if (contains)
+            //    {
+            //        sel.add(f);
+            //    }
+            //}
+        }
+
+
         public void SetVertex(GE_Halfedge he, GE_Vertex v)
         {
             he.SetVertex(v);
@@ -366,14 +388,24 @@ namespace Hsy.GyresMesh
         }
         public void remove(GE_Halfedge he)
         {
+            edges.Remove(he);
             _halfedges.Remove(he);
+            unpairedHalfedges.Remove(he);
             he.Dispose();
             //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
             //}
         }
-
+        public void remove(GE_Face f)
+        {
+            _faces.Remove(f);
+            f.Dispose();
+            //for (GE_Selection sel : selections.values())
+            //{
+            //    sel.remove(v);
+            //}
+        }
         public void removeNoSelectionCheck(GE_Halfedge he)
         {
             edges.Remove(he);
@@ -382,6 +414,10 @@ namespace Hsy.GyresMesh
 
             unpairedHalfedges.Remove(he);
 
+        }
+        public bool Contains(GE_Face f)
+        {
+            return _faces.contains(f);
         }
         public void SetNext(GE_Halfedge he, GE_Halfedge nxt)
         {

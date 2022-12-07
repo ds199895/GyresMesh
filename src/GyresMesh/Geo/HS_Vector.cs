@@ -164,7 +164,11 @@ namespace Hsy.Geo
             Set(f * xd, f * yd, f * zd);
             return this;
         }
-
+        public HS_Vector subSelf(HS_Coord p)
+        {
+            Set(xd - p.xd, yd - p.yd, zd - p.zd);
+            return this;
+        }
         public HS_Vector addMulSelf(double f, HS_Coord p)
         {
             return new HS_Vector(this.xd + f * p.xd, this.yd + f * p.yd, this.zd + f * p.zd);
@@ -413,6 +417,11 @@ namespace Hsy.Geo
         {
             return Math.Abs(this.zd - vz) <= tolerance;
         }
+        public static double angle(HS_Coord q, HS_Coord p)
+        {
+            return HS_CoordOp3D.getAngleBetween(q.xd, q.yd, q.zd, p.xd,p.yd, p.zd);
+        }
+
 
         public double angle(HS_Vector v)
         {

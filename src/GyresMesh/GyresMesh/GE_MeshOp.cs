@@ -1,5 +1,6 @@
 ﻿using Hsy.Core;
 using Hsy.Geo;
+using Hsy.HsMath;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -242,8 +243,107 @@ namespace Hsy.GyresMesh
             //          return out;
         }
 
-
-
+        public static void splitFace(GE_Mesh mesh, GE_Face face,
+             GE_Vertex vi, GE_Vertex vj)
+        {
+            //GE_Selection out = GE_Selection.getSelection(mesh);
+            GE_Halfedge hei = vi.GetHalfedge(face);
+            GE_Halfedge hej = vj.GetHalfedge(face);
+            //GE_TextureCoordinate ti = hei.hasUVW() ? hei.getUVW() : null;
+            //GE_TextureCoordinate tj = hej.hasUVW() ? hej.getUVW() : null;
+            double d = vi.GetPosition().getDistance(vj);
+            bool degenerate = false;
+            if (HS_Epsilon.isZero(d))
+            {// happens when a collinear (part of a) face
+             // is cut. Do not add a new edge connecting
+             // these two points,rather collapse them into
+             // each other and remove two-edge faces
+                degenerate = true;
+            }
+            if (hei.GetNextInFace() != hej || hei.GetPrevInFace() != hej)
+            {
+                GE_Halfedge heiPrev;
+                GE_Halfedge hejPrev;
+                GE_Face faceNew;
+                if (!degenerate)
+                {
+                    GE_Halfedge he0new;
+                    GE_Halfedge he1new;
+                    heiPrev = hei.GetPrevInFace();
+                    hejPrev = hej.GetPrevInFace();
+                    he0new = new GE_Halfedge();
+                    he1new = new GE_Halfedge();
+                    mesh.SetVertex(he0new, vj);
+                    //if (tj != null)
+                    //{
+                    //    he0new.SetUVW(tj);
+                    //}
+                    mesh.SetVertex(he1new, vi);
+                    //if (ti != null)
+                    //{
+                    //    he1new.setUVW(ti);
+                    //}
+                    mesh.SetNext(he0new, hei);
+                    mesh.SetNext(he1new, hej);
+                    mesh.SetNext(heiPrev, he1new);
+                    mesh.SetNext(hejPrev, he0new);
+                    mesh.SetPair(he0new, he1new);
+                    he0new.SetInternalLabel(1);
+                    he1new.SetInternalLabel(1);
+                    mesh.SetFace(he0new, face);
+                    faceNew = new GE_Face();
+                    mesh.SetHalfedge(face, hei);
+                    mesh.SetHalfedge(faceNew, hej);
+                    faceNew.Clone(face);
+                    assignFaceToLoop(mesh, faceNew, hej);
+                    mesh.addDerivedElement(he0new, face);
+                    mesh.addDerivedElement(he1new, face);
+                    mesh.addDerivedElement(faceNew, face);
+				//out.addEdge(he0new.isEdge() ? he0new : he1new);
+				//out.add(faceNew);
+    //                return out;
+                }
+                else
+                {
+                    heiPrev = hei.GetPrevInFace();
+                    hejPrev = hej.GetPrevInFace();
+                    foreach(GE_Halfedge hejs in vj.GetHalfedgeStar())
+                    {
+                        mesh.SetVertex(hejs, vi);
+                    }
+                    mesh.SetNext(heiPrev, hej);
+                    mesh.SetNext(hejPrev, hei);
+                    faceNew = new GE_Face();
+                    mesh.SetHalfedge(face, hei);
+                    mesh.SetHalfedge(faceNew, hej);
+                    faceNew.Clone(face);
+                    assignFaceToLoop(mesh, faceNew, hej);
+                    mesh.addDerivedElement(faceNew, face);
+                    mesh.remove(vj);
+				//out.add(faceNew);
+                    if (face.GetFaceDegree() == 2)
+                    {
+                        GET_Fixer.deleteTwoEdgeFace(mesh, face);
+                    }
+                    if (faceNew.GetFaceDegree() == 2)
+                    {
+                        GET_Fixer.deleteTwoEdgeFace(mesh, faceNew);
+					//out.remove(faceNew);
+                    }
+                    //return out;
+                }
+            }
+            //return null;
+        }
+        public static void assignFaceToLoop(GE_Mesh mesh,GE_Face face, GE_Halfedge halfedge)
+        {
+            GE_Halfedge he = halfedge;
+            do
+            {
+                mesh.SetFace(he, face);
+                he = he.GetNextInFace();
+            } while (he != halfedge);
+        }
         public static HS_AABB getAABB(GE_Mesh mesh)
         {
             double[] result = getLimits(mesh);
@@ -335,6 +435,231 @@ namespace Hsy.GyresMesh
                 _normal.united();
                 return _normal;
             }
+        }
+        public static HS_Coord getHalfedgeCenter(GE_Halfedge he)
+        {
+            if (he.GetNextInFace() != null && he.GetStart() != null
+                    && he.GetNextInFace().GetStart()!= null)
+            {
+                return gf.createMidpoint(he.GetNextInFace().GetStart(),
+                        he.GetStart());
+            }
+            return null;
+        }
+        public static HS_Coord getEdgeNormal(GE_Halfedge he)
+        {
+            if (he.Pair() == null)
+            {
+                return null;
+            }
+            GE_Halfedge he1, he2;
+            if (he.isEdge())
+            {
+                he1 = he;
+                he2 = he.Pair();
+            }
+            else
+            {
+                he1 = he.Pair();
+                he2 = he;
+            }
+            if (he1.GetFace() == null && he2.GetFace() == null)
+            {
+                return null;
+            }
+            HS_Coord n1 = he1.GetFace() != null
+                    ? GE_MeshOp.getFaceNormal(he1.GetFace())
+                    : new HS_Vector(0, 0, 0);
+            HS_Coord n2 = he2.GetFace() != null
+                    ? GE_MeshOp.getFaceNormal(he2.GetFace())
+                    : new HS_Vector(0, 0, 0);
+            HS_Vector n = new HS_Vector(n1.xd + n2.xd, n1.yd + n2.yd,
+                    n1.zd + n2.zd);
+            n.unit();
+            return n;
+        }
+        public static double getEdgeDihedralAngle(GE_Halfedge he)
+        {
+            if (he.Pair() == null)
+            {
+                return 0.0;
+            }
+            GE_Halfedge he1, he2;
+            if (he.isEdge())
+            {
+                he1 = he;
+                he2 = he.Pair();
+            }
+            else
+            {
+                he1 = he.Pair();
+                he2 = he;
+            }
+            if (he1.GetFace() == null || he2.GetFace() == null)
+            {
+                return 0.0;
+            }
+            else
+            {
+                HS_Coord n1 = GE_MeshOp.getFaceNormal(he1.GetFace());
+                HS_Coord n2 = GE_MeshOp.getFaceNormal(he2.GetFace());
+                return HS_GeometryOp3D.getDihedralAngleNorm(n1, n2);
+            }
+        }
+
+
+
+        public static bool flipEdge(GE_Mesh mesh, GE_Halfedge he)
+        {
+            // boundary edge
+            if (he.GetFace() == null)
+            {
+                return false;
+            }
+            // not a triangle
+            if (he.GetFace().GetFaceDegree() != 3)
+            {
+                return false;
+            }
+            // unpaired edge
+            if (he.Pair() == null)
+            {
+                return false;
+            }
+            // boundary edge
+            if (he.Pair().GetFace() == null)
+            {
+                return false;
+            }
+            // not a triangle
+            if (he.Pair().GetFace().GetFaceDegree() != 3)
+            {
+                return false;
+            }
+            // not planar
+            if (Math.PI - getEdgeDihedralAngle(he) > HS_Epsilon.EPSILON)
+            {
+                return false;
+            }
+            // flip would result in overlapping triangles, this detected by
+            // comparing the areas of the two triangles before and after.
+            HS_Plane P = new HS_Plane(getHalfedgeCenter(he), getEdgeNormal(he));
+            HS_Coord a = HS_GeometryOp3D.projectOnPlane(he.GetStart(), P);
+            HS_Coord b = HS_GeometryOp3D
+                    .projectOnPlane(he.GetNextInFace().GetStart(), P);
+            HS_Coord c = HS_GeometryOp3D.projectOnPlane(
+                    he.GetNextInFace().GetNextInFace().GetStart(), P);
+            HS_Coord d = HS_GeometryOp3D.projectOnPlane(
+                    he.Pair().GetNextInFace().GetNextInFace().GetStart(), P);
+            double Ai = HS_GeometryOp3D.getArea(a, b, c);
+            Ai += HS_GeometryOp3D.getArea(a, d, b);
+            double Af = HS_GeometryOp3D.getArea(a, d, c);
+            Af += HS_GeometryOp3D.getArea(c, d, b);
+            double ratio = Ai / Af;
+            if (ratio > 1.000001 || ratio < 0.99999)
+            {
+                return false;
+            }
+            // get the 3 edges of triangle t1 and t2, he1t1 and he1t2 is the edge to
+            // be flipped
+            GE_Halfedge he1t1 = he;
+            GE_Halfedge he1t2 = he.Pair();
+            GE_Halfedge he2t1 = he1t1.GetNextInFace();
+            GE_Halfedge he2t2 = he1t2.GetNextInFace();
+            GE_Halfedge he3t1 = he2t1.GetNextInFace();
+            GE_Halfedge he3t2 = he2t2.GetNextInFace();
+            GE_Face t1 = he1t1.GetFace();
+            GE_Face t2 = he1t2.GetFace();
+            // Fix vertex assignment
+            // First make sure the original vertices get assigned another halfedge
+            mesh.SetHalfedge(he1t1.GetStart(), he2t2);
+            mesh.SetHalfedge(he1t2.GetStart(), he2t1);
+            // Now assign the new vertices to the flipped edges
+            mesh.SetVertex(he1t1, he3t1.GetStart());
+            mesh.SetVertex(he1t2, he3t2.GetStart());
+            // Reconstruct triangle t1
+            mesh.SetNext(he2t1, he1t1);
+            mesh.SetNext(he1t1, he3t2);
+            mesh.SetNext(he3t2, he2t1);
+            mesh.SetFace(he3t2, t1);
+            mesh.SetHalfedge(t1, he1t1);
+            // reconstruct triangle t2
+            mesh.SetNext(he2t2, he1t2);
+            mesh.SetNext(he1t2, he3t1);
+            mesh.SetNext(he3t1, he2t2);
+            mesh.SetFace(he3t1, t2);
+            mesh.SetHalfedge(t2, he1t2);
+            return true;
+        }
+
+        //my version
+        public static void FlipEdge(GE_Mesh mesh, GE_Halfedge h0)
+        {
+            GE_Halfedge h1 = h0.GetNextInFace();
+            GE_Halfedge h2 = h1.GetNextInFace();
+            GE_Halfedge h3 = h0.Pair();
+            GE_Halfedge h4 = h3.GetNextInFace();
+            GE_Halfedge h5 = h4.GetNextInFace();
+            GE_Halfedge h6 = h1.Pair();
+            GE_Halfedge h7 = h2.Pair();
+            GE_Halfedge h8 = h4.Pair();
+            GE_Halfedge h9 = h5.Pair();
+
+            GE_Vertex v0 = h0.GetStart();
+            GE_Vertex v1 = h3.GetStart();
+            GE_Vertex v2 = h8.GetStart();
+            GE_Vertex v3 = h6.GetStart();
+
+            GE_Face f0 = h0.GetFace();
+            GE_Face f1 = h3.GetFace();
+
+
+            //重新设置翻转半边起点
+            mesh.SetVertex(h0, v2);
+            mesh.SetVertex(h3, v3);
+
+            mesh.SetVertex(h5, v2);
+            mesh.SetVertex(h4, v0);
+            mesh.SetVertex(h2, v3);
+            mesh.SetVertex(h1, v1);
+
+            mesh.SetVertex(h6, v3);
+            mesh.SetVertex(h9, v1);
+            mesh.SetVertex(h8, v2);
+            mesh.SetVertex(h7, v0);
+
+
+            //重设半边连接顺序关系
+            mesh.SetNext(h0, h2);
+            mesh.SetNext(h2, h4);
+            mesh.SetNext(h4, h0);
+
+            mesh.SetNext(h1, h3);
+            mesh.SetNext(h3, h5);
+            mesh.SetNext(h5, h1);
+            //重新设置半边之间pair关系
+            mesh.SetPair(h0, h3);
+            mesh.SetPair(h1, h6);
+            mesh.SetPair(h5, h9);
+            mesh.SetPair(h2, h7);
+            mesh.SetPair(h4, h8);
+            //重设半边与面的关系
+            mesh.SetFace(h4, f0);
+            mesh.SetFace(h0, f0);
+            mesh.SetFace(h2, f0);
+
+            mesh.SetFace(h1, f1);
+            mesh.SetFace(h5, f1);
+            mesh.SetFace(h3, f1);
+            //重设半边索引到的面
+            mesh.SetHalfedge(f0, h0);
+            mesh.SetHalfedge(f1, h3);
+
+
+            mesh.SetHalfedge(v0, h7);
+            mesh.SetHalfedge(v1, h9);
+            mesh.SetHalfedge(v2, h8);
+            mesh.SetHalfedge(v3, h6);
         }
         public static GE_Mesh ReverseFaces(GE_Mesh mesh)
         {
@@ -563,7 +888,7 @@ namespace Hsy.GyresMesh
 
             GE_Halfedge he2;
             //counter = new HS_ProgressCounter(vertexLists.Count, 10);
-            //tracker.setCounterStatus("HE_MeshOp", "Pairing unpaired halfedges per vertex.", counter);
+            //tracker.setCounterStatus("GE_MeshOp", "Pairing unpaired halfedges per vertex.", counter);
             var vitr = vertexLists.GetEnumerator();
             VertexInfo vInfo;
             List<GE_Halfedge> mismatchedHalfedges = new List<GE_Halfedge>();

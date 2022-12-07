@@ -245,9 +245,9 @@ namespace Hsy.Render
                 //home.PopStyle();
 
                 home.PushStyle();
-                home.Fill(255, 255, 255);
+                home.Fill(255, 0, 0);
                 //home.NoFill();
-                home.Stroke(255, 0, 0,80);
+                home.Stroke(0);
                 drawFaces(mesh);
                 home.PopStyle();
             }

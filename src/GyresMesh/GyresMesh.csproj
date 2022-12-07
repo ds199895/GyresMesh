@@ -101,6 +101,7 @@
     <Compile Include="GyresMesh\GE_FaceEnumerator.cs" />
     <Compile Include="GyresMesh\GE_HalfedgeEnumerator.cs" />
     <Compile Include="GyresMesh\GE_VertexEnumerator.cs" />
+    <Compile Include="GyresMesh\HET_Fixer.cs" />
     <Compile Include="HsMath\HS_Matrix44.cs" />
     <Compile Include="Geo\HS_PlanarMap.cs" />
     <Compile Include="Geo\HS_Swizzle.cs" />

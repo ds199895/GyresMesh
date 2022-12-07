@@ -189,6 +189,12 @@ namespace Hsy.GyresMesh
             }
             return null;
         }
+        public HS_Point GetStartPosition()
+        {
+            return _vertex.GetPosition();
+        }
+
+
         public HS_Coord getHalfedgeDirection()
         {
             return GE_MeshOp.getHalfedgeTangent(this);
