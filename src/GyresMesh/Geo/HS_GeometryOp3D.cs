@@ -15,6 +15,155 @@ namespace Hsy.Geo
         {
 
         }
+        public static HS_IntersectionResult getIntersection3D(HS_Segment S,HS_Plane P)
+        {
+            HS_Vector ab = HS_Vector.subToVector3D(S.getEndpoint(),
+                    S.getOrigin());
+            double denom = P.getNormal().dot(ab);
+            if (!HS_Epsilon.isZero(denom))
+            {
+                double t = (-P.d() - P.getNormal().dot(S.getOrigin()))
+                        / P.getNormal().dot(ab);
+                if (t >= -HS_Epsilon.EPSILON && t <= 1.0 + HS_Epsilon.EPSILON)
+                {
+                    t = HS_Epsilon.clampEpsilon(t, 0, 1);
+                    HS_IntersectionResult i = new HS_IntersectionResult();
+                    i.intersection = true;
+                    i.t1 = t;
+                    i.t2 = t;
+                    i.obj = S.getParametricPoint(t);
+                    i.dimension = 0;
+                    i.sqDist = 0;
+                    return i;
+                }
+                return NOINTERSECTION(t, t);
+            }
+            return NOINTERSECTION();
+        }
+
+        public static HS_IntersectionResult getIntersection3D(HS_Coord a, HS_Coord b, HS_Plane P)
+        {
+            HS_Vector ab = new HS_Vector(a,b);
+            double denom = P.getNormal().dot(ab);
+            if (!HS_Epsilon.isZero(denom))
+            {
+                double t = (-P.d() - P.getNormal().dot(a))/ P.getNormal().dot(ab);
+                if (t >= -HS_Epsilon.EPSILON && t <= 1.0 + HS_Epsilon.EPSILON)
+                {
+                    t = HS_Epsilon.clampEpsilon(t, 0, 1);
+                    HS_IntersectionResult i = new HS_IntersectionResult();
+                    i.intersection = true;
+                    i.t1 = t;
+                    i.t2 = t;
+                    i.obj = new HS_Point(a.xd + t * (b.xd - a.xd),
+                    a.yd + t * (b.yd - a.yd),
+                    a.zd + t * (b.zd - a.zd));
+                    i.dimension = 0;
+                    i.sqDist = 0;
+                    return i;
+                }
+                return NOINTERSECTION(t, t);
+            }
+            return NOINTERSECTION();
+        }
+
+        // RAY-PLANE
+        /**
+         *
+         *
+         * @param R
+         * @param P
+         * @return
+         */
+        public static HS_IntersectionResult getIntersection3D(HS_Ray R,
+                HS_Plane P)
+        {
+            HS_Coord ab = R.getDirection();
+             double denom = P.getNormal().dot(ab);
+            if (!HS_Epsilon.isZero(denom))
+            {
+                double t = (-P.d() - P.getNormal().dot(R.getOrigin())) / denom;
+                if (t >= -HS_Epsilon.EPSILON)
+                {
+                    t = HS_Epsilon.clampEpsilon(t, 0, Double.PositiveInfinity);
+                    HS_IntersectionResult i = new HS_IntersectionResult();
+                    i.intersection = true;
+                    i.t1 = t;
+                    i.t2 = t;
+                    i.obj = R.getPoint(t);
+                    i.dimension = 0;
+                    i.sqDist = 0;
+                    return i;
+                }
+                return NOINTERSECTION(t, t);
+            }
+            return NOINTERSECTION();
+        }
+
+
+        /**
+         *
+         *
+         * @param t1
+         * @param t2
+         * @return
+         */
+        private static HS_IntersectionResult NOINTERSECTION(double t1,double t2)
+        {
+            HS_IntersectionResult i = new HS_IntersectionResult();
+            i.intersection = false;
+            i.sqDist = double.PositiveInfinity;
+            i.t1 = t1;
+            i.t2 = t2;
+            return i;
+        }
+
+
+        /**
+         *
+         *
+         * @return
+         */
+        private static HS_IntersectionResult NOINTERSECTION()
+        {
+            HS_IntersectionResult i = new HS_IntersectionResult();
+            i.intersection = false;
+            i.sqDist = double.PositiveInfinity;
+            i.t1 = Double.NaN;
+            i.t2 = Double.NaN;
+            return i;
+        }
+
+
+        /**
+         *
+         *
+         * @param p
+         * @param P
+         * @return
+         */
+        public static HS_Point getClosestPoint3D( HS_Coord p,
+                 HS_Plane P)
+        {
+             HS_Vector n = P.getNormal();
+             double t = n.dot(p) + P.d();
+            return new HS_Point(p.xd - t * n.xd, p.yd - t * n.yd,
+                    p.zd - t * n.zd);
+        }
+
+        /**
+         *
+         *
+         * @param P
+         * @param p
+         * @return
+         */
+        public static HS_Point getClosestPoint3D( HS_Plane P,
+                 HS_Coord p)
+        {
+            return getClosestPoint3D(P, p);
+        }
+
         public static double getSqDistanceToLine2D(HS_Coord p,
         HS_Coord a, HS_Coord b)
         {
@@ -25,6 +174,20 @@ namespace Hsy.Geo
             return ac.dot2D(ac) - e * e / f;
         }
 
+        /**
+         *
+         *
+         * @param p
+         * @param q
+         * @return
+         */
+        public static double getSqDistanceToPoint3D(HS_Coord p,
+                HS_Coord q)
+        {
+            return (q.xd - p.xd) * (q.xd - p.xd)
+                    + (q.yd - p.yd) * (q.yd - p.yd)
+                    + (q.zd - p.zd) * (q.zd - p.zd);
+        }
 
         public static double getSqDistance3D(HS_Coord p, HS_Line L)
         {
@@ -143,11 +306,12 @@ namespace Hsy.Geo
             return Math.Acos(getCosDihedralAngleNorm(n1, n2));
         }
 
-        public static double getCosDihedralAngleNorm(HS_Coord n1,
-        HS_Coord n2)
+        public static double getCosDihedralAngleNorm(HS_Coord n1,HS_Coord n2)
         {
             return -HS_Math.clamp(HS_Vector.dot(n1, n2), -1, 1);
         }
+
+       
 
     }
 }

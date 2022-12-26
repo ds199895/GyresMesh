@@ -38,7 +38,10 @@ namespace Hsy.Geo
         {
             get;set;
         }
-
+        public double wd
+        {
+            get;
+        }
         public double getd(int i);
          
     }

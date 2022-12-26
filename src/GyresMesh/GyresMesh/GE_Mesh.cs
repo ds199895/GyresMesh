@@ -247,7 +247,7 @@ namespace Hsy.GyresMesh
         public void addDerivedElement(GE_Face f,params GE_Object[] el)
         {
            Add(f);
-            //for (HE_Selection sel : selections.values())
+            //for (GE_Selection sel : selections.values())
             //{
             //    boolean contains = false;
             //    for (int i = 0; i < el.length; i++)
@@ -437,6 +437,18 @@ namespace Hsy.GyresMesh
             }
             return _vertices.getWithIndex(i);
         }
+        public HS_Point getPositionWithIndex(int i)
+        {
+            if (i < 0 || i >= _vertices.size())
+            {
+                throw new IndexOutOfRangeException(
+                        "Requested vertex index " + i + "not in range.");
+            }
+            return _vertices.getWithIndex(i).GetPosition();
+        }
+
+
+
         public GE_Halfedge getHalfedgeWithIndex(int i)
         {
             if (i < 0 || i >= edges.size() + _halfedges.size()
@@ -456,6 +468,51 @@ namespace Hsy.GyresMesh
             }
             return edges.getWithIndex(i);
         }
+
+
+        /**
+         * Collect all boundary halfedges.
+         *
+         * @return boundary halfedges
+         */
+        public List<GE_Halfedge> getAllBoundaryHalfedges()
+        {
+             List<GE_Halfedge> boundaryHalfedges = new FastList<GE_Halfedge>();
+            GE_Halfedge he;
+             IEnumerator<GE_Halfedge> heItr = heEtr();
+            while (heItr.MoveNext())
+            {
+                he = heItr.Current;
+                if (he.GetFace() == null)
+                {
+                    boundaryHalfedges.Add(he);
+                }
+            }
+            return boundaryHalfedges;
+        }
+
+        /**
+         * Collect all boundary vertices.
+         *
+         * @return boundary vertices
+         */
+        public List<GE_Vertex> getAllBoundaryVertices()
+        {
+             List<GE_Vertex> boundaryVertices = new FastList<GE_Vertex>();
+            GE_Halfedge he;
+             IEnumerator<GE_Halfedge> heItr = heEtr();
+            while (heItr.MoveNext())
+            {
+                he = heItr.Current;
+                if (he.GetFace() == null)
+                {
+                    boundaryVertices.Add(he.GetStart());
+                }
+            }
+            return boundaryVertices;
+        }
+
+
         public GE_FaceEnumerator fEtr()
         {
             List<GE_Face> fs = new List<GE_Face>(GetFaces());

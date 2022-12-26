@@ -584,10 +584,7 @@ namespace Hsy.Geo
             //}
             //else
             //{
-                return snormal;
-            //}
-
-            Console.WriteLine("first : " + points[0]);
+            return snormal;
 
             
         }
@@ -661,7 +658,7 @@ namespace Hsy.Geo
             }
         }
 
-        public int getNumberOfPoints()
+        public new int getNumberOfPoints()
         {
             return points.Count;
         }

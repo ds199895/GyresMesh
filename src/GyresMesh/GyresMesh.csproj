@@ -56,7 +56,7 @@
       <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Release\Lucene.Net.dll</HintPath>
+      <HintPath>bin\Debug\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="NetTopologySuite, Version=1.15.3.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.Core.1.15.3\lib\net45\NetTopologySuite.dll</HintPath>
@@ -82,7 +82,10 @@
   <ItemGroup>
     <Compile Include="Core\HS_HashCode.cs" />
     <Compile Include="Core\MutableList.cs" />
+    <Compile Include="Geo\HS_IntersectionResult.cs" />
+    <Compile Include="Geo\HS_Ray.cs" />
     <Compile Include="Geo\HS_Segment.cs" />
+    <Compile Include="Geo\HS_Transform2D.cs" />
     <Compile Include="GyresMesh\GE_RAS.cs" />
     <Compile Include="Core\HS_ProgressReporter.cs" />
     <Compile Include="Core\HS_Thread.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="GyresMesh\GE_HalfedgeEnumerator.cs" />
     <Compile Include="GyresMesh\GE_VertexEnumerator.cs" />
     <Compile Include="GyresMesh\HET_Fixer.cs" />
+    <Compile Include="HsMath\HS_Matrix33.cs" />
     <Compile Include="HsMath\HS_Matrix44.cs" />
     <Compile Include="Geo\HS_PlanarMap.cs" />
     <Compile Include="Geo\HS_Swizzle.cs" />

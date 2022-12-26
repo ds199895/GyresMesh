@@ -1063,12 +1063,10 @@ namespace Hsy.IO
             if (var0 == null)
             {
                 throw new Exception("input chunk is null");
-                return null;
             }
             else if (var0.content == null)
             {
                 throw new Exception("no content in the input chunk");
-                return null;
             }
             else
             {

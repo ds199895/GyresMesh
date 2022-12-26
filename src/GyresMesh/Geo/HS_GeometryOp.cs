@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.Geo
 {
-    public class HS_GeometryOp
+    public class HS_GeometryOp:HS_GeometryOp3D
     {
 
         public static double GetDistance3D(HS_Coord p, HS_Coord q)

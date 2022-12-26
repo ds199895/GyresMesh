@@ -101,7 +101,7 @@ namespace Hsy.Core
             return result;
         }
 
-        public void Clear()
+        public new void Clear()
         {
             Array.Clear(this.items, 0, this.size);
             this.size = 0;
@@ -1288,23 +1288,23 @@ namespace Hsy.Core
         //    throw new NotImplementedException();
         //}
 
-        public bool Contains(T item)
+        public new bool Contains(T item)
         {
             throw new NotImplementedException();
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public new void CopyTo(T[] array, int arrayIndex)
         {
             //array = new T[this.items.Length];
             Array.ConstrainedCopy(this.items, 0, array, 0, this.size);
         }
 
-        public bool Remove(T item)
+        public new bool Remove(T item)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public new IEnumerator<T> GetEnumerator()
         {
             return this.items.ToList().GetEnumerator();
         }

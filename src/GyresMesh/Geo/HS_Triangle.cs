@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.Geo
 {
-    public class HS_Triangle:HS_GeometryFactory3D
+    public class HS_Triangle:HS_Geometry
     {
         private HS_Coord _p1;
         private HS_Coord _p2;

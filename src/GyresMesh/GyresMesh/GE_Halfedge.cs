@@ -189,6 +189,10 @@ namespace Hsy.GyresMesh
             }
             return null;
         }
+        public HS_Point GetPosition()
+        {
+            return _vertex.GetPosition();
+        }
         public HS_Point GetStartPosition()
         {
             return _vertex.GetPosition();

@@ -20,6 +20,8 @@ namespace Hsy.GyresMesh
         public double xd { get { return this.pos._xd; } set { this.pos._xd = value; this.pos._xf = (float)value; } }
         public double yd { get { return this.pos._yd; } set { this.pos._yd = value; this.pos._yf = (float)value; } }
         public double zd { get { return this.pos._zd; } set { this.pos._zd = value; this.pos._zf = (float)value; } }
+        public double wd { get { return 1; }  }
+
         public GE_Vertex()
         {
             pos = new HS_Point();
@@ -172,6 +174,34 @@ namespace Hsy.GyresMesh
             return GetVertexRing().Count;
         }
 
+        /**
+         * Get neighboring vertices.
+         *
+         * @return neighbors
+         */
+        public List<GE_Vertex> getVertexStar()
+        {
+             List<GE_Vertex> vv = new FastList<GE_Vertex>();
+            if (GetHalfedge() == null)
+            {
+                return vv;
+            }
+            GE_Halfedge he = GetHalfedge();
+            do
+            {
+                 GE_Halfedge hen = he.GetNextInFace();
+                if (hen.GetStart() != this && !vv.Contains(hen.GetStart()))
+                {
+                    vv.Add(hen.GetStart());
+                }
+                he = he.GetNextInVertex();
+            } while (he != GetHalfedge());
+            return vv;
+        }
+        public List<GE_Vertex> getNeighborVertices()
+        {
+            return getVertexStar();
+        }
         public bool isBoundary()
         {
             GE_Halfedge GE = _halfedge;
@@ -277,7 +307,10 @@ namespace Hsy.GyresMesh
             }
             return true;
         }
-
+        public override int GetHashCode()
+        {
+            return HS_HashCode.calculateHashCode(this.xd, this.yd, this.zd);
+        }
         public void Clone(GE_Vertex ob)
         {
             base.Clone(ob);
@@ -345,6 +378,11 @@ namespace Hsy.GyresMesh
         public double getd(int i)
         {
             return pos.getd(i);
+        }
+
+        public void Set(double x, double y)
+        {
+            this.pos.Set(x, y);
         }
     }
 }

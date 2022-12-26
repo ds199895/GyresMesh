@@ -27,7 +27,7 @@ namespace Hsy.Geo
             invT = Trans.invT.get();
         }
 
-        public HS_Transform3D(HS_Coord sourceOrigin,HS_Coord sourceDirection,HS_Coord targetOrigin,HS_Coord targetDirection)
+        public HS_Transform3D(HS_Coord sourceOrigin, HS_Coord sourceDirection, HS_Coord targetOrigin, HS_Coord targetDirection)
         {
             T = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
             invT = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -36,7 +36,8 @@ namespace Hsy.Geo
             HS_Vector v2 = geometryFactory.createNormalizedVector(targetDirection);
             HS_Vector axis = v1.cross(v2);
             double l = axis.len();
-            if (HS_Epsilon.isZero(l)){
+            if (HS_Epsilon.isZero(l))
+            {
                 if (v1.dot(v2) < 0.0D)
                 {
                     axis = geometryFactory.createNormalizedVector(sourceDirection);
@@ -52,7 +53,7 @@ namespace Hsy.Geo
             addTranslate(targetOrigin);
         }
 
-        public HS_Transform3D(HS_Coord sourceDirection,HS_Coord targetDirection)
+        public HS_Transform3D(HS_Coord sourceDirection, HS_Coord targetDirection)
         {
             T = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
             invT = new HS_Matrix44(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -91,14 +92,14 @@ namespace Hsy.Geo
             return this;
         }
 
-        public HS_Transform3D addTranslate(double f,HS_Coord v)
+        public HS_Transform3D addTranslate(double f, HS_Coord v)
         {
             T = new HS_Matrix44(1, 0, 0, f * v.xd, 0, 1, 0, f * v.yd, 0, 0, 1, f * v.zd, 0, 0, 0, 1) * T;
             invT = invT * new HS_Matrix44(1, 0, 0, -f * v.xd, 0, 1, 0, -f * v.yd, 0, 0, 1, -f * v.zd, 0, 0, 0, 1);
             return this;
         }
 
-        public HS_Transform3D addRotateAboutAxis( double angle,  HS_Coord p,  HS_Coord axis)
+        public HS_Transform3D addRotateAboutAxis(double angle, HS_Coord p, HS_Coord axis)
         {
             addTranslate(-1, p);
             addRotateAboutOrigin(angle, axis);
@@ -106,7 +107,7 @@ namespace Hsy.Geo
             return this;
         }
 
-        public HS_Transform3D addRotateAboutOrigin(double angle,HS_Coord axis)
+        public HS_Transform3D addRotateAboutOrigin(double angle, HS_Coord axis)
         {
             HS_Vector a = new HS_Vector(axis);
             a = a.united();
@@ -114,25 +115,66 @@ namespace Hsy.Geo
             double c = Math.Cos(angle);
             HS_Matrix44 tmp = new HS_Matrix44(
                 a.xd * a.xd + (1 - a.xd * a.xd) * c,
-                a.xd * a.yd * (1 - c) - a.zd * s, 
-                a.xd * a.zd * (1 - c) + a.yd * s, 
-                0, 
-                a.xd * a.yd * (1 - c) + a.zd * s, 
-                a.yd * a.yd + (1 - a.yd * a.yd) * c, 
-                a.yd * a.zd * (1 - c) - a.xd * s, 
+                a.xd * a.yd * (1 - c) - a.zd * s,
+                a.xd * a.zd * (1 - c) + a.yd * s,
+                0,
+                a.xd * a.yd * (1 - c) + a.zd * s,
+                a.yd * a.yd + (1 - a.yd * a.yd) * c,
+                a.yd * a.zd * (1 - c) - a.xd * s,
                 0,
                 a.xd * a.zd * (1 - c) - a.yd * s,
                 a.yd * a.zd * (1 - c) + a.xd * s,
                 a.zd * a.zd + (1 - a.zd * a.zd) * c,
-                0, 
                 0,
-                0, 
-                0, 
+                0,
+                0,
+                0,
                 1
                 );
             T = tmp * T;
             invT = invT * tmp.getTranspose();
             return this;
+        }
+
+
+        /**
+         * Apply transform to point.
+         *
+         * @param p
+         *            point
+         * @return new HS_XYZ
+         */
+        public HS_Point applyAsPoint(HS_Coord p)
+        {
+             double xp = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd + T.m14;
+             double yp = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd + T.m24;
+             double zp = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd + T.m34;
+            double wp = T.m41 * p.xd + T.m42 * p.yd + T.m43 * p.zd + T.m44;
+            if (HS_Epsilon.isZero(wp))
+            {
+                return new HS_Point(xp, yp, zp);
+            }
+            wp = 1.0 / wp;
+            return new HS_Point(xp * wp, yp * wp, zp * wp);
+        }
+
+
+
+
+        /**
+         * Apply transform to point.
+         *
+         * @param p
+         *            point
+         */
+        public void applyAsPointSelf(HS_MutableCoord p)
+        {
+            double x = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd + T.m14;
+            double y = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd + T.m24;
+            double z = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd + T.m34;
+            double wp = T.m41 * p.xd + T.m42 * p.yd + T.m43 * p.zd + T.m44;
+            wp = 1.0 / wp;
+            p.Set(x * wp, y * wp, z * wp);
         }
 
 
@@ -156,55 +198,74 @@ namespace Hsy.Geo
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
 
-        public void applyAsVectorSelf( HS_MutableCoord p)
+
+        /**
+         * Apply transform to vector.
+         *
+         * @param p
+         *            vector
+         * @return new HS_Vector
+         */
+        public HS_Vector applyAsVector( HS_Coord p)
         {
-             double x = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd;
-             double y = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
-             double z = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd;
+             double xp = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd;
+             double yp = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
+             double zp = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd;
+            return new HS_Vector(xp, yp, zp);
+        }
+
+
+
+
+        public void applyAsVectorSelf(HS_MutableCoord p)
+        {
+            double x = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd;
+            double y = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
+            double z = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd;
             p.Set(x, y, z);
         }
 
 
-        public void applyInvAsPointInto(HS_Coord p,HS_MutableCoord result)
+        public void applyInvAsPointInto(HS_Coord p, HS_MutableCoord result)
         {
             //Console.WriteLine("prev: "+p.xd + " " +p.yd+ " " +p.zd);
             //Console.WriteLine(invT.m21 +" " + invT.m22 +" " + invT.m23+" "  + invT.m24);
             _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd + invT.m14;
-            _yt= invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd + invT.m24;
-            _zt=invT.m31* p.xd + invT.m32 * p.yd + invT.m33 * p.zd + invT.m34;
-            double wp= invT.m41 * p.xd + invT.m42 * p.yd + invT.m43 * p.zd + invT.m44;
+            _yt = invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd + invT.m24;
+            _zt = invT.m31 * p.xd + invT.m32 * p.yd + invT.m33 * p.zd + invT.m34;
+            double wp = invT.m41 * p.xd + invT.m42 * p.yd + invT.m43 * p.zd + invT.m44;
             //Console.WriteLine("wp: "+wp);
             wp = 1.0D / wp;
             //Console.WriteLine("post: " + _xt + " " + _yt + " " + _zt);
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
 
-        public void applyInvAsPointInto(double x,double y,double z, HS_MutableCoord result)
+        public void applyInvAsPointInto(double x, double y, double z, HS_MutableCoord result)
         {
-            _xt = invT.m11 * x + invT.m12 * y+ invT.m13 * z + invT.m14;
-            _yt = invT.m21 *x + invT.m22 * y + invT.m23 * z + invT.m24;
-            _zt = invT.m31 * x + invT.m32 * y + invT.m33 *z + invT.m34;
+            _xt = invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14;
+            _yt = invT.m21 * x + invT.m22 * y + invT.m23 * z + invT.m24;
+            _zt = invT.m31 * x + invT.m32 * y + invT.m33 * z + invT.m34;
             double wp = invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44;
             wp = 1.0D / wp;
             result.Set(_xt * wp, _yt * wp, _zt * wp);
         }
         public void applyAsVectorInto(HS_Coord p, HS_MutableCoord result)
         {
-            _xt = T.m11 * p.xd +T.m12 * p.yd + T.m13 * p.zd;
-            _yt =T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
+            _xt = T.m11 * p.xd + T.m12 * p.yd + T.m13 * p.zd;
+            _yt = T.m21 * p.xd + T.m22 * p.yd + T.m23 * p.zd;
             _zt = T.m31 * p.xd + T.m32 * p.yd + T.m33 * p.zd;
             result.Set(_xt, _yt, _zt);
         }
 
-        public void applyAsVectorInto(double x,double y,double z, HS_MutableCoord result)
+        public void applyAsVectorInto(double x, double y, double z, HS_MutableCoord result)
         {
-            _xt = T.m11 * x + T.m12 * y+ T.m13 * z;
+            _xt = T.m11 * x + T.m12 * y + T.m13 * z;
             _yt = T.m21 * x + T.m22 * y + T.m23 * z;
             _zt = T.m31 * x + T.m32 * y + T.m33 * z;
             result.Set(_xt, _yt, _zt);
         }
 
-        public void applyInvAsVectorInto(HS_Coord p,HS_MutableCoord result)
+        public void applyInvAsVectorInto(HS_Coord p, HS_MutableCoord result)
         {
             _xt = invT.m11 * p.xd + invT.m12 * p.yd + invT.m13 * p.zd;
             _yt = invT.m21 * p.xd + invT.m22 * p.yd + invT.m23 * p.zd;
@@ -218,6 +279,158 @@ namespace Hsy.Geo
             _zt = invT.m31 * x + invT.m32 * y + invT.m33 * z;
             result.Set(_xt, _yt, _zt);
         }
+
+
+        /**
+         * Apply as normal.
+         *
+         * @param p
+         *
+         * @return
+         */
+        public HS_Vector applyAsNormal(HS_Coord p)
+        {
+            double nx = invT.m11 * p.xd + invT.m21 * p.yd + invT.m31 * p.zd;
+            double ny = invT.m12 * p.xd + invT.m22 * p.yd + invT.m32 * p.zd;
+            double nz = invT.m13 * p.xd + invT.m23 * p.yd + invT.m33 * p.zd;
+            return new HS_Vector(nx, ny, nz);
+        }
+
+        /**
+         * Apply transform to normal.
+         *
+         * @param n
+         *            normal
+         */
+        public void applyAsNormalSelf(HS_MutableCoord n)
+        {
+            double x = invT.m11 * n.xd + invT.m21 * n.yd + invT.m31 * n.zd;
+            double y = invT.m12 * n.xd + invT.m22 * n.yd + invT.m32 * n.zd;
+            double z = invT.m13 * n.xd + invT.m23 * n.yd + invT.m33 * n.zd;
+            n.Set(x, y, z);
+        }
+
+        /**
+         *
+         *
+         * @param n
+         * @param result
+         */
+        public void applyAsNormalInto(HS_Coord n, HS_MutableCoord result)
+        {
+            _xt = invT.m11 * n.xd + invT.m21 * n.yd + invT.m31 * n.zd;
+            _yt = invT.m12 * n.xd + invT.m22 * n.yd + invT.m32 * n.zd;
+            _zt = invT.m13 * n.xd + invT.m23 * n.yd + invT.m33 * n.zd;
+            result.Set(_xt, _yt, _zt);
+        }
+
+        /**
+         * Apply as normal.
+         *
+         * @param x
+         *
+         * @param y
+         *
+         * @param z
+         *
+         * @return
+         */
+        public HS_Vector applyAsNormal(double x, double y, double z)
+        {
+            double nx = invT.m11 * x + invT.m21 * y + invT.m31 * z;
+            double ny = invT.m12 * x + invT.m22 * y + invT.m32 * z;
+            double nz = invT.m13 * x + invT.m23 * y + invT.m33 * z;
+            return new HS_Vector(nx, ny, nz);
+        }
+
+        /**
+         *
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param result
+         */
+        public void applyAsNormalInto(double x, double y, double z, HS_MutableCoord result)
+        {
+            _xt = invT.m11 * x + invT.m21 * y + invT.m31 * z;
+            _yt = invT.m12 * x + invT.m22 * y + invT.m32 * z;
+            _zt = invT.m13 * x + invT.m23 * y + invT.m33 * z;
+            result.Set(_xt, _yt, _zt);
+        }
+
+        /**
+         *
+         *
+         * @param n
+         */
+        public HS_Vector applyInvAsNormal(HS_Coord n)
+        {
+            _xt = T.m11 * n.xd + T.m21 * n.yd + T.m31 * n.zd;
+            _yt = T.m12 * n.xd + T.m22 * n.yd + T.m32 * n.zd;
+            _zt = T.m13 * n.xd + T.m23 * n.yd + T.m33 * n.zd;
+            return new HS_Vector(_xt, _yt, _zt);
+        }
+
+        /**
+         *
+         *
+         * @param n
+         */
+        public void applyInvAsNormalSelf(HS_MutableCoord n)
+        {
+            _xt = T.m11 * n.xd + T.m21 * n.yd + T.m31 * n.zd;
+            _yt = T.m12 * n.xd + T.m22 * n.yd + T.m32 * n.zd;
+            _zt = T.m13 * n.xd + T.m23 * n.yd + T.m33 * n.zd;
+            n.Set(_xt, _yt, _zt);
+        }
+
+        /**
+         *
+         *
+         * @param n
+         * @param result
+         */
+        public void applyInvAsNormalInto(HS_Coord n, HS_MutableCoord result)
+        {
+            _xt = T.m11 * n.xd + T.m21 * n.yd + T.m31 * n.zd;
+            _yt = T.m12 * n.xd + T.m22 * n.yd + T.m32 * n.zd;
+            _zt = T.m13 * n.xd + T.m23 * n.yd + T.m33 * n.zd;
+            result.Set(_xt, _yt, _zt);
+        }
+
+        /**
+         *
+         *
+         * @param x
+         * @param y
+         * @param z
+         */
+        public HS_Vector applyInvAsNormal(double x, double y, double z)
+        {
+            _xt = T.m11 * x + T.m21 * y + T.m31 * z;
+            _yt = T.m12 * x + T.m22 * y + T.m32 * z;
+            _zt = T.m13 * x + T.m23 * y + T.m33 * z;
+            return new HS_Vector(_xt, _yt, _zt);
+        }
+
+        /**
+         *
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param result
+         */
+        public void applyInvAsNormalInto(double x, double y, double z, HS_MutableCoord result)
+        {
+            _xt = T.m11 * x + T.m21 * y + T.m31 * z;
+            _yt = T.m12 * x + T.m22 * y + T.m32 * z;
+            _zt = T.m13 * x + T.m23 * y + T.m33 * z;
+            result.Set(_xt, _yt, _zt);
+        }
+
+
 
         public HS_Transform3D addFromCSToWorld(HS_CoordinateSystem CS)
         {
@@ -298,4 +511,4 @@ namespace Hsy.Geo
 
     }
 
-    }
+}

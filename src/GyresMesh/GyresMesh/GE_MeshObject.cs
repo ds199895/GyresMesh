@@ -8,12 +8,12 @@ namespace Hsy.GyresMesh
 {
     public abstract class GE_MeshObject : GE_Object
     {
-        private bool used=false;
-        private bool visible=true;
+        private bool used = false;
+        private new bool visible = true;
         private int color;
 
         public GE_MeshObject()
-        { 
+        {
             used = false;
             visible = true;
             color = -1;
@@ -57,7 +57,7 @@ namespace Hsy.GyresMesh
             visible = b;
         }
 
-        public bool isVisible()
+        public new bool isVisible()
         {
             return visible;
         }
@@ -79,7 +79,11 @@ namespace Hsy.GyresMesh
             }
             return ((GE_MeshObject)other).GetKey() == key;
         }
+        public override int GetHashCode()
+        {
+            return (int)(key ^ key >> 32);
 
+        }
         public void Clone(GE_MeshObject ob)
         {
             base.Clone(ob);

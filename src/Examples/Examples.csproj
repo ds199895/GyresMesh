@@ -33,17 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Examples.FromTriangles</StartupObject>
+    <StartupObject>Examples.Creator.TestRead</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flowing">
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Release\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Debug\OpenTK.dll</HintPath>
+      <HintPath>..\..\..\Flowing\Flowing\Flowing\bin\Release\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

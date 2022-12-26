@@ -1,4 +1,5 @@
-﻿using Hsy.HsMath;
+﻿using Hsy.Core;
+using Hsy.HsMath;
 using Hsy.IO;
 using System;
 
@@ -13,26 +14,28 @@ namespace Hsy.Geo
 {
     public class HS_Vector : IObject, HS_MutableCoord
     {
-        public static  HS_Vector origin = new HS_Vector(0.0D, 0.0D, 0.0D);
-        public static  HS_Vector xaxis = new HS_Vector(1.0D, 0.0D, 0.0D);
-        public static  HS_Vector yaxis = new HS_Vector(0.0D, 1.0D, 0.0D);
-        public static  HS_Vector zaxis = new HS_Vector(0.0D, 0.0D, 1.0D);
+        public static HS_Vector origin = new HS_Vector(0.0D, 0.0D, 0.0D);
+        public static HS_Vector xaxis = new HS_Vector(1.0D, 0.0D, 0.0D);
+        public static HS_Vector yaxis = new HS_Vector(0.0D, 1.0D, 0.0D);
+        public static HS_Vector zaxis = new HS_Vector(0.0D, 0.0D, 1.0D);
         internal double _xd;
         internal double _yd;
         internal double _zd;
         internal float _xf;
         internal float _yf;
         internal float _zf;
-        public float xf { 
-            get 
-            { 
-                return this._xf; } 
-            set 
+        public float xf
+        {
+            get
+            {
+                return this._xf;
+            }
+            set
             {
                 this._xf = value;
                 this._xd = value;
             }
-            }
+        }
         public float yf
         {
             get
@@ -42,7 +45,7 @@ namespace Hsy.Geo
             set
             {
                 this._yf = value;
-                this._yd =value;
+                this._yd = value;
             }
         }
         public float zf
@@ -57,9 +60,10 @@ namespace Hsy.Geo
                 this._zd = value;
             }
         }
-        public double xd { get { return this._xd; } set {  this._xd = value; this._xf =(float)value; } }
+        public double xd { get { return this._xd; } set { this._xd = value; this._xf = (float)value; } }
         public double yd { get { return this._yd; } set { this._yd = value; this._yf = (float)value; } }
         public double zd { get { return this._zd; } set { this._zd = value; this._zf = (float)value; } }
+        public double wd { get { return 0; } }
         public HS_Vector()
         {
             this.xd = 0.0D;
@@ -76,7 +80,7 @@ namespace Hsy.Geo
             this.attribute.name = "Point";
         }
 
-        public HS_Vector(HS_Coord from,HS_Coord to):base()
+        public HS_Vector(HS_Coord from, HS_Coord to) : base()
         {
             this.xd = to.xd - from.xd;
             this.yd = to.yd - from.yd;
@@ -111,9 +115,23 @@ namespace Hsy.Geo
             this.xd += x;
             this.yd += y;
             this.zd += z;
-            
+
             return this;
         }
+
+        /**
+         *
+         *
+         * @param p
+         * @param q
+         * @return
+         */
+        public static HS_Vector add( HS_Coord p,  HS_Coord q)
+        {
+            return new HS_Vector(q.xd + p.xd, q.yd + p.yd, q.zd + p.zd);
+        }
+
+
         public HS_Vector get()
         {
             return this;
@@ -125,13 +143,13 @@ namespace Hsy.Geo
         }
 
 
-        public HS_Vector dup()
+        public new HS_Vector dup()
         {
             return new HS_Vector(this.xd, this.yd, this.zd);
         }
         public HS_Vector add(HS_Vector v)
         {
-            return new HS_Vector(this.xd+v.xd,this.yd+v.yd,this.zd+v.zd);
+            return new HS_Vector(this.xd + v.xd, this.yd + v.yd, this.zd + v.zd);
         }
         public HS_Vector add(HS_Coord v)
         {
@@ -139,24 +157,68 @@ namespace Hsy.Geo
         }
         public HS_Vector sub(double x, double y, double z)
         {
-            return new HS_Vector(this.xd - x, this.yd - y, this.zd -z);
+            return new HS_Vector(this.xd - x, this.yd - y, this.zd - z);
         }
 
         public HS_Vector sub(HS_Vector v)
         {
-            return new HS_Vector(this.xd - v.xd, this.yd- v.yd, this.zd -v.zd);
+            return new HS_Vector(this.xd - v.xd, this.yd - v.yd, this.zd - v.zd);
         }
-        public static HS_Vector sub(HS_Coord v1,HS_Coord v2)
+        public static HS_Vector sub(HS_Coord v1, HS_Coord v2)
         {
             return new HS_Vector(v1.xd - v2.xd, v1.yd - v2.yd, v1.zd - v2.zd);
         }
+
+
+        /**
+         *
+         *
+         * @param p
+         * @param q
+         * @return
+         */
+        public static HS_Vector subToVector2D(HS_Coord p, HS_Coord q)
+        {
+            return new HS_Vector(p.xd - q.xd, p.yd - q.yd);
+        }
+
+        /**
+         *
+         *
+         * @param p
+         * @param q
+         * @return
+         */
+        public static HS_Vector subToVector3D(HS_Coord p, HS_Coord q)
+        {
+            return new HS_Vector(p.xd - q.xd, p.yd - q.yd, p.zd - q.zd);
+        }
+
+        public static HS_Vector subToVector2D(HS_Coord p, double x,
+                double y)
+        {
+            return new HS_Vector(p.xd - x, p.yd - y);
+        }
+
+        public static HS_Vector subToVector3D(HS_Coord p, double x,
+                double y, double z)
+        {
+            return new HS_Vector(p.xd - x, p.yd - y, p.zd - z);
+        }
+
+
         public HS_Vector mul(double v)
         {
-            return new HS_Vector(this.xd * v, this.yd *v, this.zd *v) ;
+            return new HS_Vector(this.xd * v, this.yd * v, this.zd * v);
+        }
+
+        public static HS_Vector mul(HS_Vector ve,double v)
+        {
+            return new HS_Vector(ve.xd * v, ve.yd * v,ve.zd * v);
         }
         public HS_Vector addSelf(HS_Coord p)
         {
-            Set(xd+p.xd,yd+p.yd, zd+p.zd);
+            Set(xd + p.xd, yd + p.yd, zd + p.zd);
             return this;
         }
         public HS_Vector mulSelf(double f)
@@ -175,13 +237,22 @@ namespace Hsy.Geo
         }
         public HS_Vector addMul(double f, HS_Coord p)
         {
-            
+
             return new HS_Vector(this.xd + f * p.xd, this.yd + f * p.yd, this.zd + f * p.zd);
         }
 
+        public HS_Vector crossSelf(HS_Coord p)
+        {
+            Set(yd * p.zd - this.zd * p.yd,
+                    this.zd * p.xd - this.xd * p.zd,
+                    this.xd * p.yd - yd * p.xd);
+            return this;
+        }
+
+
         public HS_Vector div(double v)
         {
-            return new HS_Vector(this.xd / v, this.yd/ v, this.zd / v);
+            return new HS_Vector(this.xd / v, this.yd / v, this.zd / v);
         }
 
         public HS_Vector negtive()
@@ -212,7 +283,7 @@ namespace Hsy.Geo
 
         public HS_Vector add(HS_Vector v, double f)
         {
-            return new HS_Vector(this.xd + f*v.xd, this.yd + f*v.yd, this.zd +f*v.zd);
+            return new HS_Vector(this.xd + f * v.xd, this.yd + f * v.yd, this.zd + f * v.zd);
         }
 
         public HS_Vector add(double f, HS_Vector v)
@@ -228,15 +299,15 @@ namespace Hsy.Geo
         {
             return this.xd * v.xd + this.yd * v.yd;
         }
-        public static double dot(HS_Coord v1,HS_Coord v2)
+        public static double dot(HS_Coord v1, HS_Coord v2)
         {
             return v1.xd * v2.xd + v1.yd * v2.yd + v1.zd * v2.zd;
         }
         public double dot(HS_Coord v)
         {
             double k0 = this.xd * v.xd;
-            double k1 = this.yd* v.yd;
-            double k2 = this.zd* v.zd;
+            double k1 = this.yd * v.yd;
+            double k2 = this.zd * v.zd;
             double exp0 = HS_Math.getExp(k0);
             double exp1 = HS_Math.getExp(k1);
             double exp2 = HS_Math.getExp(k2);
@@ -283,12 +354,17 @@ namespace Hsy.Geo
 
         public double cross2D(HS_Vector v)
         {
-            return this.xd * v.yd - this.yd * v.xd ;
+            return this.xd * v.yd - this.yd * v.xd;
         }
+        public static HS_Vector cross(HS_Coord v1, HS_Coord v2)
+        {
+            return new HS_Vector(v1.yd * v2.zd - v1.zd * v2.yd, v1.zd * v2.xd - v1.xd * v2.zd, v1.xd * v2.yd - v1.yd * v2.xd);
+        }
+
         public HS_Vector icross(HS_Vector v)
         {
             double xt = this.yd * v.zd - this.zd * v.yd;
-            double yt = this.zd * v.xd - this.xd* v.zd;
+            double yt = this.zd * v.xd - this.xd * v.zd;
             double zt = this.xd * v.yd - this.yd * v.xd;
             this.xd = xt;
             this.yd = yt;
@@ -346,9 +422,9 @@ namespace Hsy.Geo
             double l = this.len();
             if (l != 0.0D)
             {
-                vn.xd= this.xd /l;
-                vn.yd=this.yd /l;
-                vn.zd=this.zd /l;
+                vn.xd = this.xd / l;
+                vn.yd = this.yd / l;
+                vn.zd = this.zd / l;
             }
 
             return vn;
@@ -419,9 +495,12 @@ namespace Hsy.Geo
         }
         public static double angle(HS_Coord q, HS_Coord p)
         {
-            return HS_CoordOp3D.getAngleBetween(q.xd, q.yd, q.zd, p.xd,p.yd, p.zd);
+            return HS_CoordOp3D.getAngleBetween(q.xd, q.yd, q.zd, p.xd, p.yd, p.zd);
         }
-
+        public static double getLen2(HS_Coord v)
+        {
+            return HS_CoordOp3D.getSqLength3D(v.xd, v.yd, v.zd);
+        }
 
         public double angle(HS_Vector v)
         {
@@ -559,32 +638,32 @@ namespace Hsy.Geo
             }
             else
             {
-                double[,] mat = new double[3,3];
+                double[,] mat = new double[3, 3];
                 HS_Vector ax = axis.dup().united();
                 double Sin = Math.Sin(angle);
                 double Cos = Math.Cos(angle);
                 double iCos = 1.0D - Cos;
-                mat[0,0] = ax.xd * ax.xd * iCos + Cos;
-                mat[0,1] = ax.xd * ax.yd * iCos - ax.zd * Sin;
-                mat[0,2] = ax.xd * ax.zd * iCos + ax.yd * Sin;
-                mat[1,0] = ax.yd * ax.xd * iCos + ax.zd * Sin;
-                mat[1,1] = ax.yd * ax.yd * iCos + Cos;
-                mat[1,2] = ax.yd * ax.zd * iCos - ax.xd * Sin;
-                mat[2,0] = ax.zd * ax.xd * iCos - ax.yd * Sin;
-                mat[2,1] = ax.zd * ax.yd * iCos + ax.xd * Sin;
-                mat[2,2] = ax.zd * ax.zd * iCos + Cos;
+                mat[0, 0] = ax.xd * ax.xd * iCos + Cos;
+                mat[0, 1] = ax.xd * ax.yd * iCos - ax.zd * Sin;
+                mat[0, 2] = ax.xd * ax.zd * iCos + ax.yd * Sin;
+                mat[1, 0] = ax.yd * ax.xd * iCos + ax.zd * Sin;
+                mat[1, 1] = ax.yd * ax.yd * iCos + Cos;
+                mat[1, 2] = ax.yd * ax.zd * iCos - ax.xd * Sin;
+                mat[2, 0] = ax.zd * ax.xd * iCos - ax.yd * Sin;
+                mat[2, 1] = ax.zd * ax.yd * iCos + ax.xd * Sin;
+                mat[2, 2] = ax.zd * ax.zd * iCos + Cos;
                 double xt = this.xd;
                 double yt = this.yd;
-                this.xd = mat[0,0] * xt + mat[0,1] * yt + mat[0,2] * this.zd;
-                this.yd = mat[1,0] * xt + mat[1,1] * yt + mat[1,2] * this.zd;
-                this.zd = mat[2,0] * xt + mat[2,1] * yt + mat[2,2] * this.zd;
+                this.xd = mat[0, 0] * xt + mat[0, 1] * yt + mat[0, 2] * this.zd;
+                this.yd = mat[1, 0] * xt + mat[1, 1] * yt + mat[1, 2] * this.zd;
+                this.zd = mat[2, 0] * xt + mat[2, 1] * yt + mat[2, 2] * this.zd;
                 return this;
             }
         }
 
         public HS_Vector rot(double axisX, double axisY, double axisZ, double angle)
         {
-            double[,] mat = new double[3,3];
+            double[,] mat = new double[3, 3];
             double len = Math.Sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
             if (len == 0.0D)
             {
@@ -598,20 +677,20 @@ namespace Hsy.Geo
                 double Sin = Math.Sin(angle);
                 double Cos = Math.Cos(angle);
                 double iCos = 1.0D - Cos;
-                mat[0,0] = axisX * axisX * iCos + Cos;
-                mat[0,1] = axisX * axisY * iCos - axisZ * Sin;
-                mat[0,2] = axisX * axisZ * iCos + axisY * Sin;
-                mat[1,0] = axisY * axisX * iCos + axisZ * Sin;
-                mat[1,1] = axisY * axisY * iCos + Cos;
-                mat[1,2] = axisY * axisZ * iCos - axisX * Sin;
-                mat[2,0] = axisZ * axisX * iCos - axisY * Sin;
-                mat[2,1] = axisZ * axisY * iCos + axisX * Sin;
-                mat[2,2] = axisZ * axisZ * iCos + Cos;
+                mat[0, 0] = axisX * axisX * iCos + Cos;
+                mat[0, 1] = axisX * axisY * iCos - axisZ * Sin;
+                mat[0, 2] = axisX * axisZ * iCos + axisY * Sin;
+                mat[1, 0] = axisY * axisX * iCos + axisZ * Sin;
+                mat[1, 1] = axisY * axisY * iCos + Cos;
+                mat[1, 2] = axisY * axisZ * iCos - axisX * Sin;
+                mat[2, 0] = axisZ * axisX * iCos - axisY * Sin;
+                mat[2, 1] = axisZ * axisY * iCos + axisX * Sin;
+                mat[2, 2] = axisZ * axisZ * iCos + Cos;
                 double xt = this.xd;
                 double yt = this.yd;
-                this.xd = mat[0,0] * xt + mat[0,1] * yt + mat[0,2] * this.zd;
-                this.yd = mat[1,0] * xt + mat[1,1] * yt + mat[1,2] * this.zd;
-                this.zd = mat[2,0] * xt + mat[2,1] * yt + mat[2,2] * this.zd;
+                this.xd = mat[0, 0] * xt + mat[0, 1] * yt + mat[0, 2] * this.zd;
+                this.yd = mat[1, 0] * xt + mat[1, 1] * yt + mat[1, 2] * this.zd;
+                this.zd = mat[2, 0] * xt + mat[2, 1] * yt + mat[2, 2] * this.zd;
                 return this;
             }
         }
@@ -625,11 +704,11 @@ namespace Hsy.Geo
             this.yd = Sin * xt + Cos * this.yd;
             return this;
         }
-        public HS_Vector rotateAboutAxis( double angle,  HS_Coord p,
+        public HS_Vector rotateAboutAxis(double angle, HS_Coord p,
           HS_Coord a)
         {
-             HS_Vector result = new HS_Vector(this);
-             HS_Transform3D raa = new HS_Transform3D();
+            HS_Vector result = new HS_Vector(this);
+            HS_Transform3D raa = new HS_Transform3D();
             raa.addRotateAboutAxis(angle, p, a);
             raa.applyAsVectorSelf(result);
             return result;
@@ -684,48 +763,49 @@ namespace Hsy.Geo
             return this.sub(centerX, centerY, centerZ).scale(f).add(centerX, centerY, centerZ);
         }
 
-        public HS_Vector Ref (HS_Vector planeDir) 
-       {
-        return this.add(planeDir.dup().mul(this.dot(planeDir) / planeDir.len2() * -2.0D));
+        public HS_Vector Ref(HS_Vector planeDir)
+        {
+            return this.add(planeDir.dup().mul(this.dot(planeDir) / planeDir.len2() * -2.0D));
         }
 
 
-        public HS_Vector Ref (double planeX, double planeY, double planeZ) 
-       {
+        public HS_Vector Ref(double planeX, double planeY, double planeZ)
+        {
             double d = this.dot(planeX, planeY, planeZ) / (planeX * planeX + planeY * planeY + planeZ * planeZ) * -2.0D;
-            this.xd += planeX* d;
-            this.yd += planeY* d;
-            this.zd += planeZ* d;
+            this.xd += planeX * d;
+            this.yd += planeY * d;
+            this.zd += planeZ * d;
             return this;
         }
 
-        public HS_Vector Ref (HS_Vector center, HS_Vector planeDir) {
-            return center == this ? this : this.sub(center).Ref (planeDir).add(center);
+        public HS_Vector Ref(HS_Vector center, HS_Vector planeDir)
+        {
+            return center == this ? this : this.sub(center).Ref(planeDir).add(center);
         }
 
-        public HS_Vector Ref (double centerX, double centerY, double centerZ, double planeX, double planeY, double planeZ) 
+        public HS_Vector Ref(double centerX, double centerY, double centerZ, double planeX, double planeY, double planeZ)
         {
-            return this.sub(centerX, centerY, centerZ).Ref (planeX, planeY, planeZ).add(centerX, centerY, centerZ);
+            return this.sub(centerX, centerY, centerZ).Ref(planeX, planeY, planeZ).add(centerX, centerY, centerZ);
         }
 
         public HS_Vector mirror(HS_Vector planeDir)
         {
-            return this.Ref (planeDir);
+            return this.Ref(planeDir);
         }
 
         public HS_Vector mirror(double planeX, double planeY, double planeZ)
         {
-            return this.Ref (planeX, planeY, planeZ);
+            return this.Ref(planeX, planeY, planeZ);
         }
 
         public HS_Vector mirror(HS_Vector center, HS_Vector planeDir)
         {
-            return this.Ref (center, planeDir);
+            return this.Ref(center, planeDir);
         }
 
         public HS_Vector mirror(double centerX, double centerY, double centerZ, double planeX, double planeY, double planeZ)
         {
-            return this.Ref (centerX, centerY, centerZ, planeX, planeY, planeZ);
+            return this.Ref(centerX, centerY, centerZ, planeX, planeY, planeZ);
         }
 
 
@@ -741,7 +821,7 @@ namespace Hsy.Geo
             for (int i = 0; i < cood.Length; ++i)
             {
                 Random random = new Random();
-                cood[i] =random.NextDouble() - 0.5D;
+                cood[i] = random.NextDouble() - 0.5D;
             }
 
             return (new HS_Vector(cood[0], cood[1], cood[2])).united().mul(len);
@@ -906,10 +986,15 @@ namespace Hsy.Geo
         {
             this._xd = z.xd;
             this._yd = z.yd;
-            this._zd=z.zd;
+            this._zd = z.zd;
         }
-
-        public void Set(double x,double y,double z)
+        public void Set(double x, double y)
+        {
+            this._xd = x;
+            this._yd = y;
+            this._zd = 0;
+        }
+        public void Set(double x, double y, double z)
         {
             this._xd = x;
             this._yd = y;
@@ -935,10 +1020,232 @@ namespace Hsy.Geo
             return 0;
         }
 
+
+
+
+        public HS_Vector apply2D(HS_Transform2D T)
+        {
+            return T.applyAsVector2D(this);
+        }
+
+
+        public HS_Point applyAsPoint2D(HS_Transform2D T)
+        {
+            return T.applyAsPoint2D(this);
+        }
+
+
+        public HS_Vector applyAsVector2D(HS_Transform2D T)
+        {
+            return T.applyAsVector2D(this);
+        }
+
+
+        public HS_Vector applyAsNormal2D(HS_Transform2D T)
+        {
+            return T.applyAsNormal2D(this);
+        }
+
+
+        public HS_Vector translate2D(double px, double py)
+        {
+            return new HS_Vector(this.xd + px, this.yd + py);
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_CoordinateTransform2D#translate2D(HSlut.geom.HS_Coord)
+         */
+
+        public HS_Vector translate2D(HS_Coord p)
+        {
+            return new HS_Vector(this.xd + p.xd, this.yd + p.yd);
+        }
+
+
+        public HS_Vector apply2DSelf(HS_Transform2D T)
+        {
+            T.applyAsVector2DSelf(this);
+            return this;
+        }
+
+
+        public HS_Vector applyAsPoint2DSelf(HS_Transform2D T)
+        {
+            T.applyAsPoint2DSelf(this);
+            return this;
+        }
+
+
+        public HS_Vector applyAsVector2DSelf(HS_Transform2D T)
+        {
+            T.applyAsVector2DSelf(this);
+            return this;
+        }
+
+
+        public HS_Vector applyAsNormal2DSelf(HS_Transform2D T)
+        {
+            T.applyAsNormal2DSelf(this);
+            return this;
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_MutableCoordinateTransform3D#translate2DSelf(double,
+         * double)
+         */
+
+        public HS_Vector translate2DSelf(double px, double py)
+        {
+            Set(xd + px, yd + py, 0);
+            return this;
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see
+         * HSlut.geom.HS_MutableCoordinateTransform3D#translate2DSelf(HSlut.geom.
+         * HS_Coord)
+         */
+
+        public HS_Vector translate2DSelf(HS_Coord p)
+        {
+            Set(xd + p.xd, yd + p.yd, 0);
+            return this;
+        }
+
+
+        public HS_Vector apply(HS_Transform3D T)
+        {
+            return T.applyAsVector(this);
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see
+         * HSlut.geom.HS_CoordinateTransform#applyAsPoint(HSlut.geom.HS_Transform)
+         */
+
+        public HS_Point applyAsPoint(HS_Transform3D T)
+        {
+            return T.applyAsPoint(this);
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see
+         * HSlut.geom.HS_CoordinateTransform#applyAsNormal(HSlut.geom.HS_Transform)
+         */
+
+        public HS_Vector applyAsNormal(HS_Transform3D T)
+        {
+            return T.applyAsNormal(this);
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see
+         * HSlut.geom.HS_CoordinateTransform#applyAsVector(HSlut.geom.HS_Transform)
+         */
+
+        public HS_Vector applyAsVector(HS_Transform3D T)
+        {
+            return T.applyAsVector(this);
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_CoordinateTransform3D#translate(double, double)
+         */
+
+        public HS_Vector translate(double px, double py,
+                 double pz)
+        {
+            return new HS_Vector(this.xd + px, this.yd + py, this.zd + pz);
+        }
+
+        /*
+         * 
+         * @see HSlut.geom.HS_CoordinateTransform3D#translate(HSlut.geom.HS_Coord)
+         */
+
+        public HS_Vector translate(HS_Coord p)
+        {
+            return new HS_Vector(xd + p.xd, yd + p.yd, zd + p.zd);
+        }
+
+
+
+        public HS_Vector applySelf(HS_Transform3D T)
+        {
+            return applyAsVectorSelf(T);
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_MutableCoordinateMath#applyAsPointSelf(HSlut.geom.
+         * HS_Transform )
+         */
+
+        public HS_Vector applyAsPointSelf(HS_Transform3D T)
+        {
+            T.applyAsPointSelf(this);
+            return this;
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_MutableCoordinateMath#applyAsVectorSelf(HSlut.geom.
+         * HS_Transform )
+         */
+
+        public HS_Vector applyAsVectorSelf(HS_Transform3D T)
+        {
+            T.applyAsVectorSelf(this);
+            return this;
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_MutableCoordinateMath#applyAsNormalSelf(HSlut.geom.
+         * HS_Transform )
+         */
+
+        public HS_Vector applyAsNormalSelf(HS_Transform3D T)
+        {
+            T.applyAsNormalSelf(this);
+            return this;
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_MutableCoordinateTransform3D#translateSelf(double,
+         * double, double)
+         */
+
+        public HS_Vector translateSelf(double px, double py,
+                 double pz)
+        {
+            Set(xd + px, yd + py, zd + pz);
+            return this;
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see HSlut.geom.HS_MutableCoordinateTransform3D#translateSelf(HSlut.geom.
+         * HS_Coord)
+         */
+
+        public HS_Vector translateSelf(HS_Coord p)
+        {
+            Set(xd + p.xd, yd + p.yd, zd + p.zd);
+            return this;
+        }
         override
         public string ToString()
         {
-            return "HS_Vector : (" + xd + " , " + yd + " , " + zd+")";
+            return "HS_Vector : (" + xd + " , " + yd + " , " + zd + ")";
         }
 
         public double getd(int i)
@@ -947,20 +1254,31 @@ namespace Hsy.Geo
             {
                 throw new IndexOutOfRangeException("Index should larger than 0 and less than 3");
             }
-            switch (i){
+            switch (i)
+            {
 
                 case 0:
                     return this._xd;
-                    break;
+                    //break;
                 case 1:
                     return this._yd;
-                    break;
+                    //break;
                 case 2:
                     return this._zd;
-                    break;
+                    //break;
             }
             return double.NaN;
 
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HS_HashCode.calculateHashCode(this.xd, this.yd);
         }
 
         public static HS_Vector operator +(HS_Vector left, HS_Vector right)
@@ -1035,7 +1353,7 @@ namespace Hsy.Geo
         public static bool operator !=(HS_Vector left, HS_Vector right)
         {
 
-            return !(HS_Epsilon.isZero(left.xd- right.xd) && HS_Epsilon.isZero(left.yd - right.yd) && HS_Epsilon.isZero(left.zd - right.zd));
+            return !(HS_Epsilon.isZero(left.xd - right.xd) && HS_Epsilon.isZero(left.yd - right.yd) && HS_Epsilon.isZero(left.zd - right.zd));
         }
 
 

@@ -36,7 +36,7 @@ namespace Hsy.IO
             if (!Directory.Exists(dic))
             {
                 throw new Exception("the input file doesn't exist : " + dic);
-                return null;
+             
             }
             else
             {

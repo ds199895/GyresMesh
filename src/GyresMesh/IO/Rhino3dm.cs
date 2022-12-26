@@ -1344,7 +1344,7 @@ namespace Hsy.IO
         }
         public class TextureMapping : RhinoObject
         {
-            public static readonly String uuid = "32EC997A-C3BF-4ae5-AB19-FD572B8AD554";
+            public new static readonly String uuid = "32EC997A-C3BF-4ae5-AB19-FD572B8AD554";
 
             public TextureMapping()
             {
@@ -1377,7 +1377,7 @@ namespace Hsy.IO
                 }
             }
 
-            public UUID getClassUUID()
+            public new  UUID getClassUUID()
             {
                 return new UUID("32EC997A-C3BF-4ae5-AB19-FD572B8AD554");
             }
@@ -2284,7 +2284,7 @@ namespace Hsy.IO
 
         public class ArcCurve : Curve
         {
-            public static readonly String uuid = "CF33BE2A-09B4-11d4-BFFB-0010830122F0";
+            public new static readonly String uuid = "CF33BE2A-09B4-11d4-BFFB-0010830122F0";
             public Arc arc;
             public Interval t;
             public int dim;
@@ -2293,7 +2293,7 @@ namespace Hsy.IO
             {
             }
 
-            public UUID getClassUUID()
+            public new UUID getClassUUID()
             {
                 return new UUID("CF33BE2A-09B4-11d4-BFFB-0010830122F0");
             }
@@ -2315,7 +2315,7 @@ namespace Hsy.IO
                 }
             }
 
-            public void read(Rhino3dmFile var1, Stream var2)
+            public override void read(Rhino3dmFile var1, Stream var2)
             {
                 int[] var3 = I3dmImporter.readChunkVersion(var2);
                 int var4 = var3[0];
@@ -3097,7 +3097,7 @@ namespace Hsy.IO
 
         public class PlaneSurface : Surface
         {
-            public static readonly String uuid = "4ED7D4DF-E947-11d3-BFE5-0010830122F0";
+            public new static readonly String uuid = "4ED7D4DF-E947-11d3-BFE5-0010830122F0";
             public Plane plane;
             public Interval[] Domain;
             public Interval[] extents;
@@ -5646,7 +5646,7 @@ namespace Hsy.IO
                 }
             }
 
-            public int hashCode()
+            public override int GetHashCode()
             {
                 return this.data1;
             }
@@ -5780,7 +5780,7 @@ namespace Hsy.IO
         }
         public class Layer : RhinoObject
         {
-            public static readonly String uuid = "95809813-E985-11d3-BFE5-0010830122F0";
+            public new static readonly String uuid = "95809813-E985-11d3-BFE5-0010830122F0";
             public int layerIndex;
             public UUID layerId;
             public UUID parentLayerId;
@@ -5846,7 +5846,7 @@ namespace Hsy.IO
                 this.ilayer = var1;
             }
 
-            public void read(Rhino3dmFile var1, Stream var2)
+            public override void read(Rhino3dmFile var1, Stream var2)
             {
                 int[] var3 = I3dmImporter.readChunkVersion(var2);
                 int var4 = var3[0];
@@ -5968,7 +5968,7 @@ namespace Hsy.IO
             //    IRhino3dmExporter.writeUUID(var2, this.displayMaterialId, var3);
             //}
 
-            public ILayer createIObject(Rhino3dmFile var1)
+            public new ILayer createIObject(Rhino3dmFile var1)
             {
                 if (this.name == null)
                 {
@@ -6099,13 +6099,13 @@ namespace Hsy.IO
 
         public class UserData : RhinoObject
         {
-            public static readonly String uuid = "850324A7-050E-11d4-BFFA-0010830122F0";
+            public new static readonly String uuid = "850324A7-050E-11d4-BFFA-0010830122F0";
 
             public UserData()
             {
             }
 
-            public UUID getClassUUID()
+            public new UUID getClassUUID()
             {
                 return new UUID("850324A7-050E-11d4-BFFA-0010830122F0");
             }

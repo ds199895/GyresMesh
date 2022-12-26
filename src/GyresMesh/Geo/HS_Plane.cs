@@ -11,7 +11,7 @@ namespace Hsy.Geo
     {
         public static HS_Plane XY { get; } = new HS_Plane(0, 0, 0, 0, 0, 1);
         public static HS_Plane XZ { get; }
-        public static HS_Plane YZ { get; }
+        public  static HS_Plane YZ { get; }
         private HS_Vector n;
         private HS_Vector u,v,w;
         private HS_Point origin;
@@ -150,6 +150,47 @@ namespace Hsy.Geo
             this.u=u.united();
             this.v = this.n.cross(this.u);
 
+        }
+
+
+        /**
+         *
+         *
+         * @return
+         */
+        public double a()
+        {
+            return n.xd;
+        }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public double b()
+        {
+            return n.yd;
+        }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public double c()
+        {
+            return n.zd;
+        }
+
+        /**
+         *
+         *
+         * @return
+         */
+        public double d()
+        {
+            return -n.dot(origin);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Hsy.Geo
 		 *
 		 * @return
 		 */
-        public static HS_Segment Y()
+        public new static HS_Segment Y()
         {
             return new HS_Segment(0, 0, 0, 0, 1, 0);
         }
@@ -50,7 +50,7 @@ namespace Hsy.Geo
 		 *
 		 * @return
 		 */
-        public static HS_Segment Z()
+        public new static HS_Segment Z()
         {
             return new HS_Segment(0, 0, 0, 0, 0, 1);
         }
