@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Examples
+namespace Examples.Creator
 {
     class FromTriangles : IApp
     {
@@ -46,7 +46,7 @@ namespace Examples
             cam = new CamController(this);
             render = new GE_Render(this);
 
-            int count = 4;
+            int count = 80;
             HS_Point[] points = new HS_Point[count * count];
             int index = 0;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -119,8 +119,11 @@ namespace Examples
                 }
             }
             getGrowthIntensity();
-
-
+            Print("halfedges num: " + mesh.GetHalfedges().Count);
+            Print("edges num: " + mesh.GetEdges().Count);
+            Print("edges array test: " + mesh.GetEdgesAsArray().Length);
+            Print("test: "+mesh.getVertexWithIndex(1));
+            Print("index: " + mesh.GetIndex(mesh.getVertexWithIndex(1)));
         }
 
         public override void Draw()
