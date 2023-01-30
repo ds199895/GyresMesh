@@ -53,9 +53,6 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\..\Flowing\Flowing\bin\Release\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="RhinoCommon">
-      <HintPath>..\..\..\..\..\..\..\Volumes\Works\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Creator\FromTriangles.cs" />
