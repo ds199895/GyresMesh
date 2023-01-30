@@ -18,6 +18,8 @@ namespace Hsy.Core
 	 */
 		public unsafe static int calculateHashCode( double x,  double y)
 		{
+			x = x + 10000;
+			y = y + 10000;
 			int result = 17;
 
 			 long a = *(long*)&x;
@@ -37,13 +39,17 @@ namespace Hsy.Core
 		 */
 		public unsafe static int calculateHashCode( double x,  double y,  double z)
 		{
-			int result = 17;
-			 long a = *(long*)&x;
-			result += 31 * result + (int)(a ^ a >> 32);
-			 long b = *(long*)&y;
-			result += 31 * result + (int)(b ^ b >> 32);
-			 long c = *(long*)&z;
-			result += 31 * result + (int)(c ^ c >> 32);
+			x = x + 10000;
+			y = y + 10000;
+			z = z + 10000;
+			int result = 31;
+			long a = *(long*)&x;
+			result += 71 * result + (int)(a ^ a >> 32);
+			long b = *(long*)&y;
+			result += 71 * result + (int)(b ^ b >> 32);
+			long c = *(long*)&z;
+			result += 71 * result + (int)(c ^ c >> 32);
+
 			return result;
 		}
 		/**
@@ -56,17 +62,18 @@ namespace Hsy.Core
  */
 		public unsafe static int calculateHashCode(HS_Coord p)
 		{
-			double x = p.xd;
-			double y = p.yd;
-			double z = p.zd;
-			int result = 7;
-			long a = *(long*)&x;
-			result += 71 * result + (int)(a ^ a >> 32);
-			long b = *(long*)&y;
-			result += 71 * result + (int)(b ^ b >> 32);
-			long c = *(long*)&z;
-			result += 71 * result + (int)(c ^ c >> 32);
-			return result;
+			double x = p.xd+10000;
+			double y = p.yd+10000;
+			double z = p.zd+10000;
+      int result = 31;
+      long a = *(long*)&x;
+      result += 71 * result + (int)(a ^ a >> 32);
+      long b = *(long*)&y;
+      result += 71 * result + (int)(b ^ b >> 32);
+      long c = *(long*)&z;
+      result += 71 * result + (int)(c ^ c >> 32);
+
+      return result;
 		}
 
 		/**
@@ -79,9 +86,9 @@ namespace Hsy.Core
 */
 		public unsafe static int calculateHashCode(HS_Coord p,int id)
 		{
-			double x = p.xd;
-			double y = p.yd;
-			double z = p.zd;
+			double x = p.xd + 10000;
+			double y = p.yd + 10000;
+			double z = p.zd + 10000;
 			double w = id;
             unchecked
             {
@@ -110,6 +117,10 @@ namespace Hsy.Core
 		 */
 		public unsafe static int calculateHashCode( double x,  double y,  double z,  double w)
 		{
+			x = x + 10000;
+			y = y + 10000;
+			z = z + 10000;
+			w = w + 10000;
 			int result = 17;
 			 long a = *(long*)&x;
 			result += 31 * result + (int)(a ^ a >> 32);

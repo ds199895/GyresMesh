@@ -21,7 +21,7 @@ namespace Hsy.Core
         {
 
         }
-        public HS_ProgressReporter(int depth, String path, bool append):base()
+        public HS_ProgressReporter(int depth, String path, bool Enqueue):base()
         {
             
             tracker.setMaxLevel(depth);
@@ -29,9 +29,9 @@ namespace Hsy.Core
             try
             {
 
-                //if (append)
+                //if (Enqueue)
                 //{
-                output = new StreamWriter(path, append, Encoding.UTF8);
+                output = new StreamWriter(path, Enqueue, Encoding.UTF8);
                 //}
                 //            else
                 //            {
@@ -203,7 +203,8 @@ namespace Hsy.Core
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
                     Console.WriteLine(caller.GetType().Name + " " + status);
-                    statuses.Append(new HS_ProgressStatus("\u250C",caller.GetType().Name + key, status, level, DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus("\u250C",caller.GetType().Name + key, status, level, DateTime.Now.ToString(sdf)));
+                    
                 }
                 level = Math.Max(0, level + INCLVL);
             }
@@ -218,7 +219,7 @@ namespace Hsy.Core
                     {
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
-                    statuses.Append(new HS_ProgressStatus("\u2514",caller.GetType().Name + key, status, level,DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus("\u2514",caller.GetType().Name + key, status, level,DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -231,7 +232,7 @@ namespace Hsy.Core
                     {
                         key = " (key: " + ((GE_Object)caller).GetKey() + ")";
                     }
-                    statuses.Append(new HS_ProgressStatus("|",caller.GetType().Name + key, status, level, DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus("|",caller.GetType().Name + key, status, level, DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -240,7 +241,7 @@ namespace Hsy.Core
             {
                 if (level <= maxLevel)
                 {
-                    statuses.Append(new HS_ProgressStatus("\u250C", caller, status,level, DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus("\u250C", caller, status,level, DateTime.Now.ToString(sdf)));
                 }
                 level = Math.Max(0, level + INCLVL);
             }
@@ -250,7 +251,7 @@ namespace Hsy.Core
                 level = Math.Max(0, level + DECLVL);
                 if (level <= maxLevel)
                 {
-                    statuses.Append(new HS_ProgressStatus("\u2514", caller, status,level, DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus("\u2514", caller, status,level, DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -259,7 +260,7 @@ namespace Hsy.Core
             {
                 if (level <= maxLevel)
                 {
-                    statuses.Append(new HS_ProgressStatus("|", caller, status, level,DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus("|", caller, status, level,DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -277,7 +278,7 @@ namespace Hsy.Core
                     counter.text = status;
                     if (level <= maxLevel)
                     {
-                        statuses.Append(new HS_ProgressStatus("|",caller.GetType().Name + key, status,counter, level, DateTime.Now.ToString(sdf)));
+                        statuses.Enqueue(new HS_ProgressStatus("|",caller.GetType().Name + key, status,counter, level, DateTime.Now.ToString(sdf)));
                     }
                 }
             }
@@ -289,7 +290,7 @@ namespace Hsy.Core
                 {
                     if (level <= maxLevel)
                     {
-                        statuses.Append(new HS_ProgressStatus("|", caller, status, counter, level, DateTime.Now.ToString(sdf)));
+                        statuses.Enqueue(new HS_ProgressStatus("|", caller, status, counter, level, DateTime.Now.ToString(sdf)));
                     }
                 }
             }
@@ -298,7 +299,7 @@ namespace Hsy.Core
             {
                 if (level <= maxLevel)
                 {
-                    statuses.Append(new HS_ProgressStatus(caller, level, DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus(caller, level, DateTime.Now.ToString(sdf)));
                 }
             }
 
@@ -306,7 +307,7 @@ namespace Hsy.Core
             {
                 if (level <= maxLevel)
                 {
-                    statuses.Append(new HS_ProgressStatus(caller.GetType().Name, level, DateTime.Now.ToString(sdf)));
+                    statuses.Enqueue(new HS_ProgressStatus(caller.GetType().Name, level, DateTime.Now.ToString(sdf)));
                 }
             }
 

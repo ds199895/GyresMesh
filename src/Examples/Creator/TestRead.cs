@@ -35,7 +35,8 @@ namespace Examples.Creator
             fileIO = new FileIO();
             //E://0917_VERSION4.3dm"
             //f = FileIO.open("E://mesh.3dm");
-            f = FileIO.open("E://inputsurface7.3dm");
+            f = FileIO.open("/Users/hsy/Documents/tmesh.3dm");
+            //f = FileIO.open("E://inputsurface7.3dm");
             //File f = new File("E://0917.3dm");
             //FileStream f = new FileStream("E://0917.3dm", FileMode.Open, FileAccess.Read);
             //for(int i = 0; i < f.Length; i++)

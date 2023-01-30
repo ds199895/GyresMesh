@@ -161,7 +161,7 @@ namespace Hsy.GyresMesh
 
         public HS_Coord GetCenter()
         {
-            return GE_MeshOp.getEdgeCenter(this);
+            return GE_MeshOp.GetEdgeCenter(this);
         }
 
         public GE_Vertex GetEnd()
@@ -201,7 +201,7 @@ namespace Hsy.GyresMesh
 
         public HS_Coord getHalfedgeDirection()
         {
-            return GE_MeshOp.getHalfedgeTangent(this);
+            return GE_MeshOp.GetHalfedgeTangent(this);
         }
         public double GetLength()
         {

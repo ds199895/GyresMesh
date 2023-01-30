@@ -495,7 +495,7 @@ namespace Hsy.Geo
         }
         public static double angle(HS_Coord q, HS_Coord p)
         {
-            return HS_CoordOp3D.getAngleBetween(q.xd, q.yd, q.zd, p.xd, p.yd, p.zd);
+            return HS_CoordOp3D.GetAngleBetween(q.xd, q.yd, q.zd, p.xd, p.yd, p.zd);
         }
         public static double getLen2(HS_Coord v)
         {

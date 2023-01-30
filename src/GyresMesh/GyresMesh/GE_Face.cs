@@ -106,7 +106,7 @@ namespace Hsy.GyresMesh
 
         public HS_Coord getFaceCenter()
         {
-            return GE_MeshOp.getFaceCenter(this);
+            return GE_MeshOp.GetFaceCenter(this);
         }
         public void SetHalfedge(GE_Halfedge he)
         {

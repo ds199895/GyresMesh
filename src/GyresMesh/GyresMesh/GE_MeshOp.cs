@@ -377,7 +377,15 @@ namespace Hsy.GyresMesh
             }
             return result;
         }
-        public static HS_Coord getHalfedgeTangent(GE_Halfedge he)
+        public static double GetAngle(GE_Halfedge he)
+        {
+            HS_Coord c = he.GetStart();
+            HS_Coord p1 = he.GetEnd();
+            HS_Coord p2 = he.GetPrevInFace().GetStart();
+            return c == null ? Double.NaN : HS_CoordOp3D.GetAngleBetween(c.xd, c.yd, c.zd, p1.xd, p1.yd, p1.zd, p2.xd, p2.yd, p2.zd);
+        }
+
+        public static HS_Coord GetHalfedgeTangent(GE_Halfedge he)
         {
             if (he.Pair() != null && he.GetStart() != null && he.Pair().GetStart() != null)
             {
@@ -387,11 +395,11 @@ namespace Hsy.GyresMesh
             }
             return null;
         }
-        public static HS_Coord getEdgeCenter(GE_Halfedge he)
+        public static HS_Coord GetEdgeCenter(GE_Halfedge he)
         {
             return he.GetNextInFace() != null && he.GetStart() != null && he.GetNextInFace().GetStart() != null ? gf.createMidpoint(he.GetNextInFace().GetStart(), he.GetStart()) : null;
         }
-        public static HS_Coord getFaceCenter(GE_Face f)
+        public static HS_Coord GetFaceCenter(GE_Face f)
         {
             if (f.GetHalfedge() == null)
             {
@@ -507,7 +515,15 @@ namespace Hsy.GyresMesh
             }
         }
 
+        public static double GetLength(GE_Halfedge h)
+        {
+            return HS_CoordOp3D.getDistance3D(h.GetStart(), h.GetEnd());
+        }
 
+        public static double getSqLength(GE_Halfedge he)
+        {
+            return HS_CoordOp3D.getSqDistance3D(he.GetStart(), he.GetEnd());
+        }
 
         public static bool flipEdge(GE_Mesh mesh, GE_Halfedge he)
         {
@@ -593,8 +609,57 @@ namespace Hsy.GyresMesh
         }
 
         //my version
-        public static void FlipEdge(GE_Mesh mesh, GE_Halfedge h0)
+        public static bool FlipEdge(GE_Mesh mesh, GE_Halfedge h0)
         {
+            // boundary edge
+            if (h0.GetFace() == null)
+            {
+                return false;
+            }
+            // not a triangle
+            if (h0.GetFace().GetFaceDegree() != 3)
+            {
+                return false;
+            }
+            // unpaired edge
+            if (h0.Pair() == null)
+            {
+                return false;
+            }
+            // boundary edge
+            if (h0.Pair().GetFace() == null)
+            {
+                return false;
+            }
+            // not a triangle
+            if (h0.Pair().GetFace().GetFaceDegree() != 3)
+            {
+                return false;
+            }
+            // not planar
+            if (Math.PI - getEdgeDihedralAngle(h0) > HS_Epsilon.EPSILON)
+            {
+                return false;
+            }
+            // flip would result in overlapping triangles, this detected by
+            // comparing the areas of the two triangles before and after.
+            HS_Plane P = new HS_Plane(getHalfedgeCenter(h0), getEdgeNormal(h0));
+            HS_Coord a = HS_GeometryOp3D.projectOnPlane(h0.GetStart(), P);
+            HS_Coord b = HS_GeometryOp3D
+                    .projectOnPlane(h0.GetNextInFace().GetStart(), P);
+            HS_Coord c = HS_GeometryOp3D.projectOnPlane(
+                    h0.GetNextInFace().GetNextInFace().GetStart(), P);
+            HS_Coord d = HS_GeometryOp3D.projectOnPlane(
+                    h0.Pair().GetNextInFace().GetNextInFace().GetStart(), P);
+            double Ai = HS_GeometryOp3D.getArea(a, b, c);
+            Ai += HS_GeometryOp3D.getArea(a, d, b);
+            double Af = HS_GeometryOp3D.getArea(a, d, c);
+            Af += HS_GeometryOp3D.getArea(c, d, b);
+            double ratio = Ai / Af;
+            if (ratio > 1.000001 || ratio < 0.99999)
+            {
+                return false;
+            }
             GE_Halfedge h1 = h0.GetNextInFace();
             GE_Halfedge h2 = h1.GetNextInFace();
             GE_Halfedge h3 = h0.Pair();
@@ -660,6 +725,7 @@ namespace Hsy.GyresMesh
             mesh.SetHalfedge(v1, h9);
             mesh.SetHalfedge(v2, h8);
             mesh.SetHalfedge(v3, h6);
+            return true;
         }
         public static GE_Mesh ReverseFaces(GE_Mesh mesh)
         {

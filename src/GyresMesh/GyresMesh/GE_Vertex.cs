@@ -309,7 +309,7 @@ namespace Hsy.GyresMesh
         }
         public override int GetHashCode()
         {
-            return HS_HashCode.calculateHashCode(this.xd, this.yd, this.zd);
+            return (int)HS_HashCode.calculateHashCode(this.xd, this.yd, this.zd);
         }
         public void Clone(GE_Vertex ob)
         {

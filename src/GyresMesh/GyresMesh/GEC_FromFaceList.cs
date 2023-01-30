@@ -149,217 +149,217 @@ namespace Hsy.GyresMesh
                 stopwatch.Start();
 
 
-                if (duplicate)
+        if (duplicate)
+        {
+          ////    if (duplicated[i])
+          ////    {
+          ////        long kvalue = -1 ;
+          ////        pkey.TryGetValue(vertices[i], out kvalue);
+          ////        uniqueVertices[i] = vdic[kvalue];
+          ////    }
+          ////    else
+          ////    {
+          ////        v = new GE_Vertex(vertices[i]);
+          ////        if (useVertexInfo)
+          ////        {
+
+          ////        }
+          ////        else
+          ////        {
+          ////            v.SetInternalLabel(i);
+          ////        }
+          ////        if (useVertexUVW)
+          ////        {
+          ////            v.SetUVW(vertexuvws[i]);
+          ////        }
+          ////        uniqueVertices[i] = v;
+          ////        pkey.Add(vertices[i], v.GetKey());
+          ////        vdic.Add(v.GetKey(), v);
+          ////    }
+
+
+          ////    mesh.Add(uniqueVertices[i]);
+          ////}
+
+          //base on faces;
+          //Dictionary<HS_Coord, long> pkey;
+          Dictionary<int, long> phkey;
+          Dictionary<HS_Coord, long> pvkey;
+          Dictionary<long, GE_Vertex> vdic;
+          phkey = new Dictionary<int, long>();
+          pvkey = new Dictionary<HS_Coord, long>();
+          vdic = new Dictionary<long, GE_Vertex>();
+          for (int i = 0; i < faces.Length; i++)
+          {
+            GE_Vertex v;
+
+            for (int j = 0; j < faces[i].Length; j++)
+            {
+              int vid = faces[i][j];
+              if (duplicated[vid])
+              {
+                long kvalue = -1;
+                var ve = vertices[vid];
+                int hashcode = HS_HashCode.calculateHashCode(ve);
+
+                if (pvkey.ContainsKey(ve))
                 {
-                    ////    if (duplicated[i])
-                    ////    {
-                    ////        long kvalue = -1 ;
-                    ////        pkey.TryGetValue(vertices[i], out kvalue);
-                    ////        uniqueVertices[i] = vdic[kvalue];
-                    ////    }
-                    ////    else
-                    ////    {
-                    ////        v = new GE_Vertex(vertices[i]);
-                    ////        if (useVertexInfo)
-                    ////        {
+                  pvkey.TryGetValue(ve, out kvalue);
+                }
+                else
+                {
+                  phkey.TryGetValue(hashcode, out kvalue);
+                }
 
-                    ////        }
-                    ////        else
-                    ////        {
-                    ////            v.SetInternalLabel(i);
-                    ////        }
-                    ////        if (useVertexUVW)
-                    ////        {
-                    ////            v.SetUVW(vertexuvws[i]);
-                    ////        }
-                    ////        uniqueVertices[i] = v;
-                    ////        pkey.Add(vertices[i], v.GetKey());
-                    ////        vdic.Add(v.GetKey(), v);
-                    ////    }
+                //Console.WriteLine(" kvalue:   " + kvalue);
+                uniqueVertices[vid] = vdic[kvalue];
 
-
-                    ////    mesh.Add(uniqueVertices[i]);
-                    ////}
-
-                    //base on faces;
-                    //Dictionary<HS_Coord, long> pkey;
-                    Dictionary<int, long> phkey;
-                    Dictionary<HS_Coord, long> pvkey;
-                    Dictionary<long, GE_Vertex> vdic;
-                    phkey = new Dictionary<int, long>();
-                    pvkey = new Dictionary<HS_Coord, long>();
-                    vdic = new Dictionary<long, GE_Vertex>();
-                    for (int i = 0; i < faces.Length; i++)
-                    {
-                        GE_Vertex v;
-
-                        for (int j = 0; j < faces[i].Length; j++)
-                        {
-                            int vid = faces[i][j];
-                            if (duplicated[vid])
-                            {
-                                long kvalue = -1;
-                                var ve = vertices[vid];
-                                int hashcode = HS_HashCode.calculateHashCode(ve);
-
-                                if (pvkey.ContainsKey(ve))
-                                {
-                                    pvkey.TryGetValue(ve, out kvalue);
-                                }
-                                else
-                                {
-                                    phkey.TryGetValue(hashcode, out kvalue);
-                                }
-
-                                //Console.WriteLine(" kvalue:   " + kvalue);
-                                uniqueVertices[vid] = vdic[kvalue];
-
-                            }
-                            else
-                            {
-                                v = new GE_Vertex(vertices[vid]);
-                                if (useVertexInfo)
-                                {
-
-                                }
-                                else
-                                {
-                                    v.SetInternalLabel(vid);
-                                }
-                                if (useVertexUVW)
-                                {
-                                    v.SetUVW(vertexuvws[vid]);
-                                }
-                                uniqueVertices[vid] = v;
-                                int hashcode = HS_HashCode.calculateHashCode(vertices[vid]);
-
-                                if (!phkey.ContainsKey(hashcode))
-                                {
-
-                                    phkey.Add(hashcode, v.GetKey());
-                                    //pkey.Add(vertices[vid], v.GetKey());
-                                }
-                                pvkey.Add(vertices[vid], v.GetKey());
-                                vdic.Add(v.GetKey(), v);
-                            }
-                            mesh.Add(uniqueVertices[vid]);
-                        }
-                    }
+              }
+              else
+              {
+                v = new GE_Vertex(vertices[vid]);
+                if (useVertexInfo)
+                {
 
                 }
                 else
                 {
-                    duplicated = new bool[vertices.Length];
-                    GE_Vertex v;
-                    for (int i = 0; i < vertices.Length; i++)
-                    {
-                        v = new GE_Vertex(vertices[i]);
-                        if (useVertexInfo)
-                        {
-
-                        }
-                        else
-                        {
-                            v.SetInternalLabel(i);
-                        }
-                        if (useVertexUVW)
-                        {
-                            v.SetUVW(vertexuvws[i]);
-                        }
-                        v.SetInternalLabel(i);
-                        uniqueVertices[i] = v;
-                        duplicated[i] = false;
-                        mesh.Add(uniqueVertices[i]);
-                    }
+                  v.SetInternalLabel(vid);
                 }
+                if (useVertexUVW)
+                {
+                  v.SetUVW(vertexuvws[vid]);
+                }
+                uniqueVertices[vid] = v;
+                int hashcode = HS_HashCode.calculateHashCode(vertices[vid]);
 
-                //kdtree version
-                //if (duplicate)
-                //{
-                //    HS_KDTreeInteger<HS_Coord> kdtree = new HS_KDTreeInteger<HS_Coord>();
-                //    HS_KDEntryInteger<HS_Coord>[] neighbors;
-                //    GE_Vertex v = new GE_Vertex(vertices[0]);
-                //    if (useVertexInfo)
-                //    {
-                //        v.setColor(vertexColors[0]);
-                //        //v.setVisible(vertexVisibility[0]);
-                //        v.SetUserLabel(vertexLabels[0]);
-                //        v.SetInternalLabel(vertexInternalLabels[0]);
-                //    }
-                //    else
-                //    {
-                //        v.SetInternalLabel(0);
-                //    }
-                //    if (useVertexUVW)
-                //    {
-                //        v.SetUVW(vertexuvws[0]);
-                //    }
-                //    kdtree.add(v, 0);
-                //    uniqueVertices[0] = v;
-                //    duplicated[0] = false;
-                //    mesh.Add(v);
-                //    for (int i = 1; i < vertices.Length; i++)
-                //    {
-                //        v = new GE_Vertex(vertices[i]);
-                //        if (useVertexInfo)
-                //        {
-                //            v.setColor(vertexColors[i]);
-                //            //v.setVisible(vertexVisibility[i]);
-                //            v.SetUserLabel(vertexLabels[i]);
-                //            v.SetInternalLabel(vertexInternalLabels[i]);
-                //        }
-                //        else
-                //        {
-                //            v.SetInternalLabel(i);
-                //        }
-                //        if (useVertexUVW)
-                //        {
-                //            v.SetUVW(vertexuvws[i]);
-                //        }
-                //        neighbors = kdtree.getNearestNeighbors(v, 1);
-                //        if (neighbors[0].d2 < HS_Epsilon.SQEPSILON)
-                //        {
-                //            uniqueVertices[i] = uniqueVertices[neighbors[0].value];
-                //            duplicated[i] = true;
-                //        }
-                //        else
-                //        {
-                //            kdtree.add(v, i);
-                //            uniqueVertices[i] = v;
-                //            mesh.Add(uniqueVertices[i]);
-                //            duplicated[i] = false;
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    GE_Vertex v;
-                //    for (int i = 0; i < vertices.Length; i++)
-                //    {
-                //        v = new GE_Vertex(vertices[i]);
-                //        if (useVertexInfo)
-                //        {
-                //            v.setColor(vertexColors[i]);
-                //            //v.SetUsed(vertexVisibility[i]);
-                //            v.SetUserLabel(vertexLabels[i]);
-                //            v.SetInternalLabel(vertexInternalLabels[i]);
-                //        }
-                //        else
-                //        {
-                //            v.SetInternalLabel(i);
-                //        }
-                //        if (useVertexUVW)
-                //        {
-                //            v.SetUVW(vertexuvws[i]);
-                //        }
-                //        v.SetInternalLabel(i);
-                //        uniqueVertices[i] = v;
-                //        duplicated[i] = false;
-                //        mesh.Add(uniqueVertices[i]);
-                //    }
-                //}
+                if (!phkey.ContainsKey(hashcode))
+                {
 
-                Console.WriteLine("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+                  phkey.Add(hashcode, v.GetKey());
+                  //pkey.Add(vertices[vid], v.GetKey());
+                }
+                pvkey.Add(vertices[vid], v.GetKey());
+                vdic.Add(v.GetKey(), v);
+              }
+              mesh.Add(uniqueVertices[vid]);
+            }
+          }
+
+        }
+        else
+        {
+          duplicated = new bool[vertices.Length];
+          GE_Vertex v;
+          for (int i = 0; i < vertices.Length; i++)
+          {
+            v = new GE_Vertex(vertices[i]);
+            if (useVertexInfo)
+            {
+
+            }
+            else
+            {
+              v.SetInternalLabel(i);
+            }
+            if (useVertexUVW)
+            {
+              v.SetUVW(vertexuvws[i]);
+            }
+            v.SetInternalLabel(i);
+            uniqueVertices[i] = v;
+            duplicated[i] = false;
+            mesh.Add(uniqueVertices[i]);
+          }
+        }
+
+        //kdtree version
+        //if (duplicate)
+        //{
+        //  HS_KDTreeInteger<HS_Coord> kdtree = new HS_KDTreeInteger<HS_Coord>();
+        //  HS_KDEntryInteger<HS_Coord>[] neighbors;
+        //  GE_Vertex v = new GE_Vertex(vertices[0]);
+        //  if (useVertexInfo)
+        //  {
+        //    v.setColor(vertexColors[0]);
+        //    //v.setVisible(vertexVisibility[0]);
+        //    v.SetUserLabel(vertexLabels[0]);
+        //    v.SetInternalLabel(vertexInternalLabels[0]);
+        //  }
+        //  else
+        //  {
+        //    v.SetInternalLabel(0);
+        //  }
+        //  if (useVertexUVW)
+        //  {
+        //    v.SetUVW(vertexuvws[0]);
+        //  }
+        //  kdtree.add(v, 0);
+        //  uniqueVertices[0] = v;
+        //  duplicated[0] = false;
+        //  mesh.Add(v);
+        //  for (int i = 1; i < vertices.Length; i++)
+        //  {
+        //    v = new GE_Vertex(vertices[i]);
+        //    if (useVertexInfo)
+        //    {
+        //      v.setColor(vertexColors[i]);
+        //      //v.setVisible(vertexVisibility[i]);
+        //      v.SetUserLabel(vertexLabels[i]);
+        //      v.SetInternalLabel(vertexInternalLabels[i]);
+        //    }
+        //    else
+        //    {
+        //      v.SetInternalLabel(i);
+        //    }
+        //    if (useVertexUVW)
+        //    {
+        //      v.SetUVW(vertexuvws[i]);
+        //    }
+        //    neighbors = kdtree.getNearestNeighbors(v, 1);
+        //    if (neighbors[0].d2 < HS_Epsilon.SQEPSILON)
+        //    {
+        //      uniqueVertices[i] = uniqueVertices[neighbors[0].value];
+        //      duplicated[i] = true;
+        //    }
+        //    else
+        //    {
+        //      kdtree.add(v, i);
+        //      uniqueVertices[i] = v;
+        //      mesh.Add(uniqueVertices[i]);
+        //      duplicated[i] = false;
+        //    }
+        //  }
+        //}
+        //else
+        //{
+        //  GE_Vertex v;
+        //  for (int i = 0; i < vertices.Length; i++)
+        //  {
+        //    v = new GE_Vertex(vertices[i]);
+        //    if (useVertexInfo)
+        //    {
+        //      v.setColor(vertexColors[i]);
+        //      //v.SetUsed(vertexVisibility[i]);
+        //      v.SetUserLabel(vertexLabels[i]);
+        //      v.SetInternalLabel(vertexInternalLabels[i]);
+        //    }
+        //    else
+        //    {
+        //      v.SetInternalLabel(i);
+        //    }
+        //    if (useVertexUVW)
+        //    {
+        //      v.SetUVW(vertexuvws[i]);
+        //    }
+        //    v.SetInternalLabel(i);
+        //    uniqueVertices[i] = v;
+        //    duplicated[i] = false;
+        //    mesh.Add(uniqueVertices[i]);
+        //  }
+        //}
+
+        Console.WriteLine("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
                 lasttime = stopwatch.ElapsedMilliseconds;
                 int id = 0;
                 GE_Halfedge he;
@@ -693,10 +693,10 @@ namespace Hsy.GyresMesh
                     while (fEtr.MoveNext())
                     {
                         GE_Face f = fEtr.Current;
-                        if (GE_MeshOp.getFaceCenter(f).xd < ((HS_Coord)fcleft).xd)
+                        if (GE_MeshOp.GetFaceCenter(f).xd < ((HS_Coord)fcleft).xd)
                         {
                             left = f;
-                            fcleft = GE_MeshOp.getFaceCenter(f);
+                            fcleft = GE_MeshOp.GetFaceCenter(f);
                         }
                     }
                     HS_Coord leftn = GE_MeshOp.getFaceNormal(left);

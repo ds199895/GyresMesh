@@ -60,6 +60,7 @@ namespace Hsy.GyresMesh
             {
                 int nq = this.polygons.Length;
                 List<HS_Coord> vertices = new List<HS_Coord>();
+      
                 List<int[]> faces = new List<int[]>();
                 int id = 0;
                 bool[] duplicate=null;
@@ -113,7 +114,7 @@ namespace Hsy.GyresMesh
                     duplicate[i] = !vset.Add(HS_HashCode.calculateHashCode(vertex));
 
                 }
-
+                Console.WriteLine(vset.Count);
                 GEC_FromFaceList fll = (new GEC_FromFaceList()).setVertices(vertices).setFaces(faces).setDuplicate(duplicate).setCheckNormals(this.checkNormals);
                 return fll.createBase();
             }

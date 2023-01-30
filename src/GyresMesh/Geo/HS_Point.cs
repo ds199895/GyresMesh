@@ -478,4 +478,44 @@ namespace Hsy.Geo
         }
 
     }
+
+
+    public class PointEqualityComparer : IEqualityComparer<HS_Coord>
+    {
+      private double t;
+      public PointEqualityComparer()
+      {
+
+      }
+      public PointEqualityComparer(double _t)
+      {
+        t = _t;
+      }
+
+      public static bool OrthoClose(HS_Coord Point1, HS_Coord Point2, double t)
+      {
+        if (Math.Abs(Point1.xd - Point2.xd) < t && Math.Abs(Point1.yd - Point2.yd) < t && Math.Abs(Point1.zd - Point2.zd) < t)
+        {
+          return true;
+        }
+        return false;
+      }
+
+
+    public bool Equals(HS_Coord P1, HS_Coord P2)
+      {
+        //IL_0000: Unknown result type (might be due to invalid IL or missing references)
+        //IL_0001: Unknown result type (might be due to invalid IL or missing references)
+        if (OrthoClose(P1, P2, t))
+        {
+          return true;
+        }
+        return false;
+      }
+
+      public int GetHashCode(HS_Coord obj)
+      {
+        return 0;
+      }
+  }
 }

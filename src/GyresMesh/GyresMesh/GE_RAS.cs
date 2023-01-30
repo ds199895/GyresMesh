@@ -176,9 +176,7 @@ namespace Hsy.GyresMesh
         {
             int v;
             bool outcome = indices.TryGetValue(obj.GetKey(), out v);
-
-
-            return outcome ? -1 : v;
+            return outcome ? v : -1;
         }
 
         public T pollRandom(Random rnd)

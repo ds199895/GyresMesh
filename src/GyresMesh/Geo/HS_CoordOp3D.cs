@@ -134,7 +134,7 @@ namespace Hsy.Geo
         {
             return (q.xd - p.xd) * (q.xd - p.xd) + (q.yd - p.yd) * (q.yd - p.yd)+ (q.zd - p.zd) * (q.zd - p.zd);
         }
-        public static double getAngleBetween(double ux, double uy, double uz, double vx,double vy, double vz)
+        public static double GetAngleBetween(double ux, double uy, double uz, double vx,double vy, double vz)
         {
             HS_Vector v0 = new HS_Vector(ux, uy, uz);
             HS_Vector v1 = new HS_Vector(vx, vy, vz);
@@ -149,6 +149,43 @@ namespace Hsy.Geo
             {
                 d = 1.0;
             }
+            return Math.Acos(d);
+        }
+
+        public static double GetAngleBetweenNorm(double ux, double uy, double uz, double vx, double vy, double vz)
+        {
+            HS_Vector v0 = new HS_Vector(ux, uy, uz);
+            HS_Vector v1 = new HS_Vector(vx, vy, vz);
+            double d = v0.dot(v1);
+            if (d < -1.0)
+            {
+                d = -1.0;
+            }
+
+            if (d > 1.0)
+            {
+                d = 1.0;
+            }
+
+            return Math.Acos(d);
+        }
+        public static double GetAngleBetween(double cx, double cy, double cz, double px, double py, double pz, double qx, double qy, double qz)
+        {
+            HS_Vector v0 = new HS_Vector(px - cx, py - cy, pz - cz);
+            HS_Vector v1 = new HS_Vector(qx - cx, qy - cy, qz - cz);
+            v0.united();
+            v1.united();
+            double d = v0.dot(v1);
+            if (d < -1.0)
+            {
+                d = -1.0;
+            }
+
+            if (d > 1.0)
+            {
+                d = 1.0;
+            }
+
             return Math.Acos(d);
         }
         public static double getCosAngleBetween( double cx,  double cy,  double cz,  double px,double py,  double pz,  double qx,  double qy,  double qz)

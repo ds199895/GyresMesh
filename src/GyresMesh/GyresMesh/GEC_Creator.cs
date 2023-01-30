@@ -1,5 +1,4 @@
-﻿using Flowing;
-using Hsy.Geo;
+﻿using Hsy.Geo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace Hsy.GyresMesh
         //public static HS_ProgressReporter.HS_ProgressTracker tracker = reporter.tracker;
         public static HS_ProgressReporter.HS_ProgressTracker tracker = HS_ProgressTracker.instance();
 
-        public IApp home;
+
         /** Center. */
         protected HS_Point center;
         /** Rotation angle about Z-axis. */

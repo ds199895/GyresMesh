@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Hsy.Core;
+using Hsy.Core;
 using System.Threading;
 
 namespace Hsy.GyresMesh
@@ -17,7 +18,7 @@ namespace Hsy.GyresMesh
 
         class CreatorThread : HS_Thread
         {
-
+            
             GEC_Creator creator;
             GE_Mesh result;
             public CreatorThread(GEC_Creator creator)
@@ -84,7 +85,8 @@ namespace Hsy.GyresMesh
         }
         public void createThreaded(GEC_Creator creator)
         {
-            tasks.Append(new CreatorThread(creator));
+            tasks.AddLast(new CreatorThread(creator));
+            
         }
         private void replaceVertices(GE_Mesh mesh)
         {
@@ -391,7 +393,11 @@ namespace Hsy.GyresMesh
             edges.Remove(he);
             _halfedges.Remove(he);
             unpairedHalfedges.Remove(he);
-            he.Dispose();
+            if (he != null)
+            {
+                he.Dispose();
+            }
+            
             //for (GE_Selection sel : selections.values())
             //{
             //    sel.remove(v);
@@ -469,6 +475,18 @@ namespace Hsy.GyresMesh
             return edges.getWithIndex(i);
         }
 
+        public int GetIndex(GE_Face f)
+        {
+            return this._faces.indexOf(f);
+        }
+        public int GetIndex(GE_Halfedge he)
+        {
+            return this.edges.indexOf(he);
+        }
+        public int GetIndex(GE_Vertex v)
+        {
+            return this._vertices.indexOf(v);
+        }
 
         /**
          * Collect all boundary halfedges.
@@ -526,9 +544,10 @@ namespace Hsy.GyresMesh
         }
         public GE_EdgeEnumerator eEtr()
         {
-            List<GE_Halfedge> hes = new List<GE_Halfedge>(GetHalfedges());
+            List<GE_Halfedge> hes = new List<GE_Halfedge>(this.edges);
             return new GE_EdgeEnumerator(hes);
         }
+
         public GE_VertexEnumerator vEtr()
         {
             List<GE_Vertex> vs = new List<GE_Vertex>(GetVertices());
@@ -549,11 +568,38 @@ namespace Hsy.GyresMesh
         public List<GE_Halfedge> GetHalfedges()
         {
             List<GE_Halfedge> hes = new List<GE_Halfedge>();
-            hes.AddRange(_halfedges);
-            hes.AddRange(edges);
-            hes.AddRange(unpairedHalfedges);
+            hes.AddRange(_halfedges.ToList());
+            hes.AddRange(edges.ToList());
+            hes.AddRange(unpairedHalfedges.ToList());
             return hes;
         }
+        public List<GE_Halfedge> GetEdges()
+        {
+            var obj = this.edges.ToList();
+            return new List<GE_Halfedge>(obj);
+        }
+
+        public GE_Halfedge[] GetEdgesAsArray()
+        {
+            GE_Halfedge[] edges = new GE_Halfedge[this.GetNumberOfEdges()];
+            var eEtr = this.eEtr();
+
+            int i = 0;
+            while (eEtr.MoveNext())
+            {
+                edges[i] = (GE_Halfedge)eEtr.Current;
+                i++;
+            }
+
+
+            return edges;
+        }
+
+        public int GetNumberOfEdges()
+        {
+            return this.edges.Count;
+        }
+
         public int GetNumberOfVertices()
         {
             return _vertices.Count;
@@ -576,6 +622,19 @@ namespace Hsy.GyresMesh
             halfedges.AddRange(this.unpairedHalfedges);
             return halfedges;
         }
+
+        //coming soon...
+
+        //public double GetMeanEdgeLength()
+        //{
+        //    double sum = 0.0;
+
+        //    for (GE_EdgeEnumerator eEtr = this.eEtr(); eEtr.MoveNext(); sum += GE_MeshOp.GetLength(eEtr.Current))
+        //    {
+        //    }
+
+        //    return sum / (double)this.GetNumberOfEdges();
+        //}
 
         override
         public String ToString()

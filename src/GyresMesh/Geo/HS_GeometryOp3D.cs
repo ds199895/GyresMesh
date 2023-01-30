@@ -311,6 +311,10 @@ namespace Hsy.Geo
             return -HS_Math.clamp(HS_Vector.dot(n1, n2), -1, 1);
         }
 
+        public static List<HS_Coord> RemoveDupPts(List<HS_Coord>list, double tolerance)
+        {
+          return list.Distinct(new PointEqualityComparer(tolerance)).ToList();
+        }
        
 
     }

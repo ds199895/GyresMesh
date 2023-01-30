@@ -43,22 +43,25 @@ namespace Hsy.GyresMesh
             if (triangles != null)
             {
                 HS_Coord[] vertices = new HS_Point[triangles.Count * 3];
-                HashSet<HS_Coord> vset = new HashSet<HS_Coord>();
-                //HashSet<int> vset = new HashSet<int>();
+        //HashSet<HS_Coord> vset = new HashSet<HS_Coord>();
+        HashSet<int> vset = new HashSet<int>();
                 int[][] faces = new int[triangles.Count][];
-                //vset = new HashSet<HS_Coord>(vertices);
+           
                 for(int i = 0; i < triangles.Count; i++)
                 {
                     faces[i] = new int[3];
+
                     vertices[3 * i] = triangles[i].p1;
-                    duplicate[3 * i] = !vset.Add(triangles[i].p1);
-                    //duplicate[3 * i] = !vset.Add(HS_HashCode.calculateHashCode(triangles[i].p1));
+                    //duplicate[3 * i] = !vset.Add(triangles[i].p1);
+                    duplicate[3 * i] = !vset.Add(HS_HashCode.calculateHashCode(triangles[i].p1));
+
                     vertices[3 * i + 1] = triangles[i].p2;
-                    duplicate[3 * i+1] =!vset.Add(triangles[i].p2);
-                    //duplicate[3 * i+1] = !vset.Add(HS_HashCode.calculateHashCode(triangles[i].p2));
+                    //duplicate[3 * i+1] =!vset.Add(triangles[i].p2);
+                    duplicate[3 * i+1] = !vset.Add(HS_HashCode.calculateHashCode(triangles[i].p2));
+
                     vertices[3 * i + 2] = triangles[i].p3;
-                    duplicate[3 * i+2] = !vset.Add(triangles[i].p3);
-                    //duplicate[3 * i+2] = !vset.Add(HS_HashCode.calculateHashCode(triangles[i].p3));
+                    //duplicate[3 * i+2] = !vset.Add(triangles[i].p3);
+                    duplicate[3 * i+2] = !vset.Add(HS_HashCode.calculateHashCode(triangles[i].p3));
 
                     //if (duplicate[3 * i])
                     //{
@@ -75,6 +78,8 @@ namespace Hsy.GyresMesh
                     faces[i][1] = 3 * i + 1;
                     faces[i][2] = 3 * i + 2;
                 }
+
+                Console.WriteLine("vertices num: " + vertices.Length);
                 vset.Clear();
                 GEC_FromFaceList ffl = new GEC_FromFaceList().setVertices(vertices).setFaces(faces).setDuplicate(duplicate);
                 return ffl.createBase();
