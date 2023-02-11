@@ -34,7 +34,7 @@ namespace Hsy.GyresMesh
             }
 
         }
-
+        public override string Type { get { return "Mesh"; } }
 
         private GE_RAS<GE_Halfedge> _halfedges;
         private GE_RAS<GE_Vertex> _vertices;

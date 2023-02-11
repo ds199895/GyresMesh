@@ -126,6 +126,20 @@ namespace Hsy.Render
         drawFace(fEtr.Current);
       }
     }
+
+    public void drawPointCloud(HS_PointCloud pc)
+    {
+      foreach(HS_Coord c in pc)
+      {
+        if (c != null)
+        {
+          this.drawPoint(c); 
+        }
+        
+      }
+    }
+
+
     public void DisplayIObjects(List<IObject> objects, Camera cam, bool detail)
     {
 
@@ -133,7 +147,7 @@ namespace Hsy.Render
       while (oEtr.MoveNext())
       {
         var o = oEtr.Current;
-        switch (o.name())
+        switch (o.Type)
         {
           case "Mesh":
             displayHeMeshWithDegree((GE_Mesh)o, cam, detail);
@@ -230,7 +244,7 @@ namespace Hsy.Render
       displayHalfEdges(mesh);
       displayHeVertices(mesh);
     }
-    public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam, bool detail)
+    public void displayHeMeshWithDegree(GE_Mesh mesh, Camera cam, bool detail=false)
     {
       if (detail)
       {

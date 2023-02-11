@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Hsy.Geo;
 
 namespace Hsy.IO
 {
     public class IObject
     {
-        public IAttribute attribute;
+    
+    public IAttribute attribute;
         public Object[] userData;
 
         public IObject()
@@ -37,9 +39,9 @@ namespace Hsy.IO
             return this.dup();
         }
 
-        public String name()
+        public virtual String Type
         {
-            return this.attribute != null ? this.attribute.name : null;
+            get{ return this.attribute != null ? this.attribute.name : null; }
         }
 
         public IObject name(String var1)

@@ -80,6 +80,7 @@ namespace Examples.Creator
             lasttime = stopwatch.ElapsedMilliseconds;
             GEC_FromTriangles creator = new GEC_FromTriangles();
 
+            
             creator.setTriangles(tris);
             //alternatively tris can be any Collection<HS_Triangle>
             mesh = new GE_Mesh(creator);

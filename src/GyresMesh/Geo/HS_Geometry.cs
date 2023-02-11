@@ -9,6 +9,6 @@ namespace Hsy.Geo
 {
     public abstract class HS_Geometry:IObject
     {
-
-    }
+    
+  }
 }

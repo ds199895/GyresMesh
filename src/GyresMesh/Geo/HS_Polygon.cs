@@ -28,7 +28,7 @@ namespace Hsy.Geo
          *
          */
         private static HS_GeometryFactory gf = new HS_GeometryFactory();
-
+        public override string Type { get { return "Polygon"; } }
         public HS_Polygon(List<HS_Coord> points)
         {
             //numberOfPoints = points.Count;
@@ -785,7 +785,48 @@ namespace Hsy.Geo
                 return new HS_Polygon().Create(shellpoints, holepoints);
             }
         }
-        public int[] getTriangles()
+
+    public double GetSignedArea()
+    {
+      int n = this.getNumberOfShellPoints();
+      if (n < 3)
+      {
+        return 0;
+      }
+      HS_Point p1 = getPoint(0);
+      HS_Point p2 = getPoint(1);
+      HS_Point p3;
+      double area = 0;
+      for (int i = 1; i < n - 1; i++)
+      {
+        p3 = getPoint(i + 1);
+        area += HS_GeometryOp3D.getSignedArea(p1, p2, p3);
+        p2 = p3;
+      }
+      int nh = getNumberOfHoles();
+      int[] npc = GetNumberOfPointsPerContour();
+      int offset = 0;
+      for (int i = 0; i < nh; i++)
+      {
+        offset += npc[i];
+        if (npc[i + 1] < 3)
+        {
+          continue;
+        }
+        p1 = getPoint(offset);
+        p2 = getPoint(offset + 1);
+        for (int j = 1; j < npc[i + 1] - 1; j++)
+        {
+          p3 = getPoint(offset + j + 1);
+          area += HS_GeometryOp3D.getSignedArea(p1, p2, p3);
+          p2 = p3;
+        }
+      }
+      return area;
+    }
+
+
+    public int[] getTriangles()
         {
             return this.getTriangles(OPTIMIZE_DEFAULT);
         }

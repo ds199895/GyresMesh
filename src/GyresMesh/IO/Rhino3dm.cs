@@ -113,7 +113,7 @@ namespace Hsy.IO
                     {
                         var3 = var1.layers[this.attributes.layerIndex].ilayer;
                         var3.add(var2);
-                        Console.WriteLine(10 + " layer name : " + var3.name());
+                        Console.WriteLine(10 + " layer name : " + var3.Type);
                         if (!var3.isVisible())
                         {
                             var2.hide();
@@ -414,7 +414,7 @@ namespace Hsy.IO
             public ObjectAttributes(IObject var1, Rhino3dmFile var2)
             {
                 this.objectUUID = UUID.randomUUID();
-                this.name = var1.name();
+                this.name = var1.Type;
                 this.url = null;
                 //if (var1.layer() != null && var1.server != null && var1.server.layers != null)
                 //{
@@ -5842,7 +5842,7 @@ namespace Hsy.IO
                 this.locked = false;
                 this.expanded = true;
                 //this.renderingAttributes = new RenderingAttributes();
-                this.name = var1.name();
+                this.name = var1.Type;
                 this.ilayer = var1;
             }
 

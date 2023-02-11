@@ -24,7 +24,7 @@ namespace Hsy.Core
         {
             this.items = DEFAULT_SIZED_EMPTY_ARRAY;
         }
-        public new T this[int index] { get { return this.get(index); } }
+        public new T this[int index] { get { return this.get(index); }set { this.set(index, value); } }
 
         public FastList(int initialCapacity)
         {

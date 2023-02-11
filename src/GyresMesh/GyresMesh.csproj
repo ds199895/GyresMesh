@@ -81,6 +81,9 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\..\Flowing\Flowing\bin\Release\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\archijson\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\HS_HashCode.cs" />
@@ -160,10 +163,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Render\GE_Render.cs" />
     <Compile Include="GyresMeshGH\RhinoSupport.cs" />
+    <Compile Include="GyresMeshArchiJson\ServerSocket.cs" />
+    <Compile Include="GyresMeshArchiJson\ClientSocket.cs" />
+    <Compile Include="GyresMeshArchiJson\Parser.cs" />
+    <Compile Include="Geo\HS_PointCloud.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GyresMeshGH\" />
     <Folder Include="GyresMeshUnity\" />
+    <Folder Include="GyresMeshArchiJson\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">

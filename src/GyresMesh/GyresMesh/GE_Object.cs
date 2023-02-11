@@ -1,4 +1,5 @@
-﻿using Hsy.IO;
+﻿using Hsy.Geo;
+using Hsy.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.GyresMesh
 {
-    public abstract class GE_Object :IObject,IDisposable
+    public abstract class GE_Object :HS_Geometry,IDisposable
     {
         private bool disposed;
         private static long currentkey = 0;

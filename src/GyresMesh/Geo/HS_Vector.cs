@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Hsy.Geo
 {
-    public class HS_Vector : IObject, HS_MutableCoord
+    public class HS_Vector : HS_Geometry, HS_MutableCoord
     {
         public static HS_Vector origin = new HS_Vector(0.0D, 0.0D, 0.0D);
         public static HS_Vector xaxis = new HS_Vector(1.0D, 0.0D, 0.0D);

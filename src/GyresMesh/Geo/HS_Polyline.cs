@@ -1,4 +1,5 @@
 ﻿using Hsy.Core;
+using Hsy.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,47 +19,59 @@ namespace Hsy.Geo
         internal double[] incLengths;
         int hashcode;
         private HS_GeometryFactory geometryfactory = new HS_GeometryFactory();
-        protected HS_PolyLine()
+        public HS_PolyLine()
         {
         }
-
-        /**
-		 *
-		 *
-		 * @param points
-		 */
-        public HS_PolyLine Create<T>(ICollection<T> points) where T : HS_Coord
+    public override string Type { get { return "PolyLine"; } }
+    /**
+ *
+ *
+ * @param points
+ */
+    public HS_PolyLine Create<T>(ICollection<T> points) where T : HS_Coord
         {
-            this.numberOfPoints = points.Count;
-            this.points = new FastList<HS_Point>();
-            foreach (HS_Coord p in points)
-            {
-                this.points.Add(new HS_Point(p));
-            }
-            getDirections();
-            this.hashcode = -1;
-            return this;
+      //Console.WriteLine("Create the polyline!");
+      this.numberOfPoints = points.Count;
+      this.points = new FastList<HS_Point>();
+      foreach (HS_Coord p in points)
+      {
+        this.points.Add(new HS_Point(p));
+      }
+      getDirections();
+      this.hashcode = -1;
+      return this;
         }
 
-        /**
-		 *
-		 *
-		 * @param points
-		 */
-        public HS_PolyLine(params HS_Coord[] points)
-        {
-            numberOfPoints = points.Length;
-            this.points = new FastList<HS_Point>();
-            foreach (HS_Coord p in points)
-            {
-                this.points.Add(new HS_Point(p));
-            }
-            getDirections();
-            hashcode = -1;
+    /**
+     *
+     *
+     * @param points
+     */
+    public HS_PolyLine(params HS_Coord[] points)
+    {
+      this.numberOfPoints = points.Length;
+      this.points = new FastList<HS_Point>();
+      foreach (HS_Coord p in points)
+      {
+        this.points.Add(new HS_Point(p));
+      }
+      getDirections();
+      hashcode = -1;
 
-        }
+    }
+    public HS_PolyLine(List<HS_Point> points)
+    {
+      numberOfPoints = points.Count;
+      this.points = new FastList<HS_Point>();
+      foreach (HS_Coord p in points)
+      {
+        this.points.Add(new HS_Point(p));
+      }
+      getDirections();
+      hashcode = -1;
 
-        public void addPoint(HS_Coord p)
+    }
+    public void addPoint(HS_Coord p)
         {
             numberOfPoints++;
             points.Add(new HS_Point(p));
