@@ -35,10 +35,17 @@ namespace Hsy.GyresMeshGH
 
             faceList.Add(id);
           }
+      var tc = source.TextureCoordinates;
+      List<GE_TextureCoordinate> uvs = new List<GE_TextureCoordinate>();
+      foreach(var p in tc)
+      {
+        uvs.Add(new GE_TextureCoordinate(p.X, p.Y, 0));
+      }
           GEC_FromFaceList creator = new GEC_FromFaceList();
           creator.setVertices(pts);
           creator.setFaces(faceList);
           creator.setDuplicate(new bool[0]);
+          creator.SetVertexUVW(uvs);
           GE_Mesh geMesh= creator.create(); 
           return geMesh;
         }
@@ -48,9 +55,11 @@ namespace Hsy.GyresMeshGH
         {
             // could add different options for triangulating ngons later
             Mesh rMesh = new Mesh();
+   
             foreach (GE_Vertex v in source.GetVertices())
             {
                 rMesh.Vertices.Add(v.xf, v.yf, v.zf);
+        rMesh.TextureCoordinates.Add(new Point2f(v.GetVertexUVW().uf, v.GetVertexUVW().vf));
             }
             for (int i = 0; i < source.GetFaces().Count; i++)
             {
@@ -76,6 +85,10 @@ namespace Hsy.GyresMeshGH
                 }
             }
             rMesh.Normals.ComputeNormals();
+
+            
+
+
             return rMesh;
         }
     }

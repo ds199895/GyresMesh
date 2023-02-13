@@ -14,24 +14,30 @@ namespace Hsy.GyresMesh
     {
         private HS_Point pos;
         private GE_Halfedge _halfedge;
+    GE_TextureCoordinate uvw = null;
         public float xf { get { return this.pos._xf; } set { this.pos._xf = value; this.pos._xd = value; } }
         public float yf { get { return this.pos._yf; } set { this.pos._yf = value; this.pos._yd = value; } }
         public float zf { get { return this.pos._zf; } set { this.pos._zf = value; this.pos._zd = value; } }
-        public double xd { get { return this.pos._xd; } set { this.pos._xd = value; this.pos._xf = (float)value; } }
+    public float wf { get => 1.0f; }
+    public double xd { get { return this.pos._xd; } set { this.pos._xd = value; this.pos._xf = (float)value; } }
         public double yd { get { return this.pos._yd; } set { this.pos._yd = value; this.pos._yf = (float)value; } }
         public double zd { get { return this.pos._zd; } set { this.pos._zd = value; this.pos._zf = (float)value; } }
         public double wd { get { return 1; }  }
 
-        public GE_Vertex()
+    
+
+    public GE_Vertex()
         {
             pos = new HS_Point();
+      uvw = null;
         }
 
         public GE_Vertex(HS_Coord hs_coord)
         {
             
             this.pos = new HS_Point(hs_coord);
-        }
+      uvw = null;
+    }
 
         public GE_Vertex(float x,float y,float z)
         {
@@ -56,6 +62,37 @@ namespace Hsy.GyresMesh
         {
             return _halfedge;
         }
+    //public GE_Halfedge GetHalfedge(GE_Face f)
+    //{
+    //  GE_Halfedge he = _halfedge;
+    //  if (he == null)
+    //  {
+    //    return null;
+    //  }
+    //  if (f == null)
+    //  {
+    //    do
+    //    {
+    //      if (he.GetFace() == null)
+    //      {
+    //        return he;
+    //      }
+    //      he = he.GetNextInVertex();
+    //    } while (he != _halfedge);
+    //  }
+    //  else
+    //  {
+    //    do
+    //    {
+    //      if (he.GetFace() == f)
+    //      {
+    //        return he;
+    //      }
+    //      he = he.GetNextInVertex();
+    //    } while (he != _halfedge);
+    //  }
+    //  return null;
+    //}
 
         internal void SetHalfedge(GE_Halfedge halfedge)
         {
@@ -249,12 +286,12 @@ namespace Hsy.GyresMesh
 
         public void SetUVW(HS_Coord uvw)
         {
-            //if (uvw == null)
-            //{
-            //    return;
-            //}
-            //this.uvw = new GE_TextureCoordinate(uvw);
-        }
+      if (uvw == null)
+      {
+        return;
+      }
+      this.uvw = new GE_TextureCoordinate(uvw);
+    }
       
 
         public void Set(HS_Coord c)
@@ -276,8 +313,101 @@ namespace Hsy.GyresMesh
         {
             pos._zf = z;
         }
-
-        override
+    public GE_TextureCoordinate GetVertexUVW()
+    {
+      if (uvw == null)
+      {
+        return GE_TextureCoordinate.ZERO;
+      }
+      return uvw;
+    }
+    public GE_TextureCoordinate GetHalfedgeUVW(GE_Face f)
+    {
+      GE_Halfedge he = GetHalfedge(f);
+      if (he != null && he.HasHalfedgeUVW())
+      {
+        return he.GetUVW();
+      }
+      else
+      {
+        return GE_TextureCoordinate.ZERO;
+      }
+    }
+    public GE_TextureCoordinate GetUVW(GE_Face f)
+    {
+      GE_Halfedge he = GetHalfedge(f);
+      if (he != null)
+      {
+        return he.GetUVW();
+      }
+      return uvw == null ? GE_TextureCoordinate.ZERO : uvw;
+    }
+    public void CleanUVW()
+    {
+      if (_halfedge == null)
+      {
+        return;
+      }
+      List<GE_Halfedge> halfedges = GetHalfedgeStar();
+      if (halfedges.Count == 0)
+      {
+        return;
+      }
+      int i = 0;
+      while (!HasVertexUVW() && i < halfedges.Count)
+      {
+        if (halfedges[i].HasHalfedgeUVW())
+        {
+          SetUVW(halfedges[i].GetHalfedgeUVW());
+        }
+        i++;
+      }
+      if (HasVertexUVW())
+      {
+        foreach (GE_Halfedge he in halfedges)
+        {
+          if (he.HasHalfedgeUVW())
+          {
+            if (he.GetHalfedgeUVW().Equals(GetVertexUVW()))
+            {
+              he.ClearUVW();
+            }
+          }
+        }
+      }
+    }
+    /**
+ * Clear halfedge UVW.
+ */
+    public void ClearUVW()
+    {
+      uvw = null;
+    }
+    /**
+ * Check if this vertex has a vertex UVW.
+ *
+ * @return
+ */
+    public bool HasVertexUVW()
+    {
+      return uvw != null;
+    }
+    /**
+ * Check if this vertex has a halfedge UVW for this face.
+ *
+ * @param f
+ * @return
+ */
+    public bool HasHalfedgeUVW(GE_Face f)
+    {
+     GE_Halfedge he = GetHalfedge(f);
+      if (he != null && he.HasHalfedgeUVW())
+      {
+        return true;
+      }
+      return false;
+    }
+    override
         public bool Equals(Object o)
         {
             if (o == null)
@@ -314,6 +444,7 @@ namespace Hsy.GyresMesh
         public void Clone(GE_Vertex ob)
         {
             base.Clone(ob);
+            
         }
 
         protected internal override void Clear()

@@ -53,6 +53,9 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\..\Flowing\Flowing\bin\Release\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\packages\Unity3D.UnityEngine.2018.3.5.1\lib\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Creator\FromTriangles.cs" />

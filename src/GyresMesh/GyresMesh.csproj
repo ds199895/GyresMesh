@@ -84,6 +84,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\archijson\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\packages\Unity3D.UnityEngine.2018.3.5.1\lib\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\HS_HashCode.cs" />
@@ -167,6 +170,8 @@
     <Compile Include="GyresMeshArchiJson\ClientSocket.cs" />
     <Compile Include="GyresMeshArchiJson\Parser.cs" />
     <Compile Include="Geo\HS_PointCloud.cs" />
+    <Compile Include="GyresMeshUnity\UnitySupport.cs" />
+    <Compile Include="GyresMesh\GE_TextureCoordinate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GyresMeshGH\" />

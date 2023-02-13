@@ -64,7 +64,10 @@ namespace Hsy.Geo
         public double yd { get { return this._yd; } set { this._yd = value; this._yf = (float)value; } }
         public double zd { get { return this._zd; } set { this._zd = value; this._zf = (float)value; } }
         public double wd { get { return 0; } }
-        public HS_Vector()
+
+    public float wf => 1.0f;
+
+    public HS_Vector()
         {
             this.xd = 0.0D;
             this.yd = 0.0D;

@@ -23,8 +23,12 @@ namespace Hsy.Geo
         {
             get;set;
         }
+    public float wf
+    {
+      get;
+    }
 
-        public double xd
+    public double xd
         {
             get; set;
         }

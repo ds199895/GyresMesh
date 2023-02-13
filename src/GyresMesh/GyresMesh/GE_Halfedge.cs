@@ -14,8 +14,8 @@ namespace Hsy.GyresMesh
         private GE_Halfedge _nxt;
         private GE_Halfedge _pre;
         private GE_Face _face;
-        //private GE_TextureCoordinate uvw;
-        public GE_Halfedge()
+        private GE_TextureCoordinate uvw;
+    public GE_Halfedge()
         {
             _vertex = null;
             _pair = null;
@@ -140,16 +140,27 @@ namespace Hsy.GyresMesh
             this._pair = he;
             //he._pair = this;
         }
-        public void SetUVW(HS_Coord uvw)
+    public void SetUVW( double u,  double v,  double w)
+    {
+      uvw = new GE_TextureCoordinate(u, v, w);
+    }
+    public void SetUVW(HS_Coord uvw)
         {
             if (uvw == null)
             {
                 return;
             }
-            //this.uvw = new HE_TextureCoordinate(uvw);
+            this.uvw = new GE_TextureCoordinate(uvw);
         }
-
-        public GE_Face GetFace()
+    public void SetUVW(GE_TextureCoordinate uvw)
+    {
+      if (uvw == null)
+      {
+        return;
+      }
+      this.uvw = new GE_TextureCoordinate(uvw);
+    }
+    public GE_Face GetFace()
         {
             return _face;
         }
@@ -207,6 +218,53 @@ namespace Hsy.GyresMesh
         {
             return HS_GeometryOp.GetDistance3D(this.GetStart(), this.GetEnd());
         }
+
+
+    public void ClearUVW()
+    {
+      uvw = null;
+    }
+
+    public GE_TextureCoordinate GetUVW()
+    {
+      if (uvw != null)
+      {
+        if (_vertex != null)
+        {
+          return _vertex.GetVertexUVW();
+        }
+        else
+        {
+          return GE_TextureCoordinate.ZERO;
+        }
+      }
+      return uvw;
+    }
+
+    public GE_TextureCoordinate GetHalfedgeUVW()
+    {
+      if (uvw == null)
+      {
+        return GE_TextureCoordinate.ZERO;
+      }
+      return uvw;
+    }
+    public bool HasHalfedgeUVW()
+    {
+      return uvw != null;
+    }
+    public bool HasUVW()
+    {
+      if (uvw != null)
+      {
+        return true;
+      }
+      if (_vertex != null && _vertex.HasVertexUVW())
+      {
+        return true;
+      }
+      return false;
+    }
         public bool IsOuterBoundary()
         {
             if (_face == null)

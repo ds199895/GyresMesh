@@ -69,8 +69,82 @@ namespace Hsy.GyresMesh
             }
             return this;
         }
+    public GEC_FromFaceList SetVertexUVW<T>(ICollection<T>vs)where T:HS_Coord
+    {
+      int n = vs.Count;
+      var etr = vs.GetEnumerator();
+      vertexuvws = new HS_Coord[n];
+      int i = 0;
+      while (etr.MoveNext())
+      {
+        vertexuvws[i] = etr.Current;
+        i++;
+      }
+      return this;
+    }
+    public GEC_FromFaceList SetVertexUVW(HS_Coord[] vs)
+    {
+      int n = vs.Length;
+      var etr = vs.GetEnumerator();
+      vertexuvws = new HS_Coord[n];
+      int i = 0;
+  foreach(HS_Coord v in vs)
+      {
+        vertexuvws[i] = v;
+        i++;
+      }
+      return this;
+    }
 
-        public GEC_FromFaceList setFaces(int[][] fs)
+    public GEC_FromFaceList SetVertexUVW(double[][] vs)
+    {
+      int n = vs.Length;
+      vertexuvws = new HS_Point[n];
+      for(int i = 0; i < n; i++)
+      {
+        vertexuvws[i] = new HS_Point(vs[i][0], vs[i][1], vs[i][2]);
+      }
+      return this;
+    }
+
+    public GEC_FromFaceList SetFaceVertexUVW(HS_Coord[] vs)
+    {
+      int n = vs.Length;
+      uvws = new HS_Coord[n];
+      int i = 0;
+      foreach (HS_Coord v in vs)
+      {
+        uvws[i] = v;
+        i++;
+      }
+      return this;
+    }
+    public GEC_FromFaceList SetFaceVertexUVW<T>(ICollection<T> vs) where T : HS_Coord
+    {
+      int n = vs.Count;
+      var etr = vs.GetEnumerator();
+      uvws = new HS_Coord[n];
+      int i = 0;
+      while (etr.MoveNext())
+      {
+        uvws[i] = etr.Current;
+        i++;
+      }
+      return this;
+    }
+    public GEC_FromFaceList SetFaceVertexUVW(double[][] vs)
+    {
+       int n = vs.Length;
+      uvws = new HS_Point[n];
+      for (int i = 0; i < n; i++)
+      {
+        uvws[i] = new HS_Point(vs[i][0], vs[i][1], vs[i][2]);
+      }
+      return this;
+    }
+
+
+    public GEC_FromFaceList setFaces(int[][] fs)
         {
             faces = fs;
             return this;
@@ -87,7 +161,37 @@ namespace Hsy.GyresMesh
             }
             return this;
         }
-        public GEC_FromFaceList setDuplicate(bool[] b)
+
+    public GEC_FromFaceList SetFacesUVW(int[][] fs)
+    {
+      faceuvws = fs;
+      return this;
+    }
+
+    public GEC_FromFaceList SetFacesUVW( int[] fs)
+    {
+      faceuvws = new int[fs.Length / 3][];
+      for (int i = 0; i < fs.Length; i += 3)
+      {
+
+        faceuvws[i / 3] = new int[] { fs[i], fs[i + 1], fs[i + 2] };
+      }
+      return this;
+    }
+
+    public GEC_FromFaceList SetFacesUVW(List<int[]> fs)
+    {
+      faceuvws = new int[fs.Count][];
+      int i = 0;
+      foreach (int[] indices in fs)
+      {
+        faceuvws[i] = indices;
+        i++;
+      }
+      return this;
+    }
+
+    public GEC_FromFaceList setDuplicate(bool[] b)
         {
             this.duplicated = b;
             if (b.Length > 0)
@@ -196,6 +300,19 @@ namespace Hsy.GyresMesh
             for (int j = 0; j < faces[i].Length; j++)
             {
               int vid = faces[i][j];
+              v = new GE_Vertex(vertices[vid]);
+              if (useVertexInfo)
+              {
+
+              }
+              else
+              {
+                v.SetInternalLabel(vid);
+              }
+              if (useVertexUVW)
+              {
+                v.SetUVW(vertexuvws[vid]);
+              }
               if (duplicated[vid])
               {
                 long kvalue = -1;
@@ -217,19 +334,7 @@ namespace Hsy.GyresMesh
               }
               else
               {
-                v = new GE_Vertex(vertices[vid]);
-                if (useVertexInfo)
-                {
 
-                }
-                else
-                {
-                  v.SetInternalLabel(vid);
-                }
-                if (useVertexUVW)
-                {
-                  v.SetUVW(vertexuvws[vid]);
-                }
                 uniqueVertices[vid] = v;
                 int hashcode = HS_HashCode.calculateHashCode(vertices[vid]);
 
@@ -539,8 +644,16 @@ namespace Hsy.GyresMesh
                                 {
                                     if (duplicated[locface[i]])
                                     {
-
-                                    }
+                    GE_TextureCoordinate uvw = uniqueVertices[locface[i]].GetVertexUVW();
+                    if (uvw.ud != vertexuvws[locface[i]].xd
+                        || uvw.vd != vertexuvws[locface[i]]
+                            .yd
+                        || uvw.wd != vertexuvws[locface[i]]
+                            .zd)
+                    {
+                      he.SetUVW(vertexuvws[locface[i]]);
+                    }
+                  }
                                 }
                                 mesh.SetHalfedge(he.GetStart(), he);
                             }
