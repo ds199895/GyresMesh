@@ -830,7 +830,7 @@ namespace Hsy.GyresMesh
                 mesh.SetVertex(he2, he1.GetNextInFace().GetStart());
                 mesh.SetPair(he1, he2);
                 newHalfedges[i] = he2;
-                starts.Add(he2.GetStart().GetKey(), he2);
+                //starts.Add(he2.GetStart().GetKey(), he2);
                 //mesh.addDerivedElement(he2);
                 //counter.increment();
             }
@@ -844,28 +844,28 @@ namespace Hsy.GyresMesh
                 he1 = newHalfedges[i];
                 if (he1.GetNextInFace() == null)
                 {
-                    GE_Halfedge nxt;
-                    starts.TryGetValue(he1.GetEnd().GetKey(), out nxt);
-                    if (!nxt.isUsed())
-                    {
-                        mesh.SetNext(he1, nxt);
-                        nxt.SetUsed();
-                    }
+          //GE_Halfedge nxt;
+          //starts.TryGetValue(he1.GetEnd().GetKey(), out nxt);
+          //if (!nxt.isUsed())
+          //{
+          //    mesh.SetNext(he1, nxt);
+          //    nxt.SetUsed();
+          //}
 
-                    //for (int j = 0; j < nuh; j++)
-                    //{
-                    //    he2 = newHalfedges[j];
-                    //    if (!he2.isUsed())
-                    //    {
-                    //        if (he2.GetStart() == he1.Pair().GetStart())
-                    //        {
-                    //            mesh.SetNext(he1, he2);
-                    //            he2.SetUsed();
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                }
+          for (int j = 0; j < nuh; j++)
+          {
+            he2 = newHalfedges[j];
+            if (!he2.isUsed())
+            {
+              if (he2.GetStart() == he1.Pair().GetStart())
+              {
+                mesh.SetNext(he1, he2);
+                he2.SetUsed();
+                break;
+              }
+            }
+          }
+        }
 
                 //counter.increment();
             }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Hsy.Geo.HS_KDTreeInteger<Hsy.Geo.HS_Coord>;
-
+using UnityEngine;
 namespace Hsy.GyresMesh
 {
     public class GEC_FromFaceList : GEC_Creator
@@ -464,8 +464,8 @@ namespace Hsy.GyresMesh
         //  }
         //}
 
-        Console.WriteLine("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
-                lasttime = stopwatch.ElapsedMilliseconds;
+        Log.Println("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        lasttime = stopwatch.ElapsedMilliseconds;
                 int id = 0;
                 GE_Halfedge he;
                 List<long> nmedges = new List<long>();
@@ -667,8 +667,8 @@ namespace Hsy.GyresMesh
                 }
 
 
-                Console.WriteLine("baseset总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
-                lasttime = stopwatch.ElapsedMilliseconds;
+        Log.Println("baseset总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        lasttime = stopwatch.ElapsedMilliseconds;
 
                 //Dictionary<long, GE_Halfedge> centers = new Dictionary<long, GE_Halfedge>();
                 //HS_KDTreeInteger<HS_Coord> cen = new HS_KDTreeInteger<HS_Coord>();
@@ -786,15 +786,16 @@ namespace Hsy.GyresMesh
 
                 GE_MeshOp.pairHalfedges(mesh);
 
-                Console.WriteLine("pairing线程总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
-                lasttime = stopwatch.ElapsedMilliseconds;
+        Log.Println("pairing线程总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        lasttime = stopwatch.ElapsedMilliseconds;
 
                 if (this.cleanunused)
                 {
                     mesh.cleanUnusedElementsByface();
-                    GE_MeshOp.capHalfedges(mesh);
+         
+          GE_MeshOp.capHalfedges(mesh);
                 }
-                if (this.manifoldcheck)
+        if (this.manifoldcheck)
                 {
 
                 }
@@ -802,7 +803,7 @@ namespace Hsy.GyresMesh
                 {
                     GE_FaceEnumerator fEtr = mesh.fEtr();
                     GE_Face left = null;
-                    Object fcleft = new HS_Point(1.7976931348623157E308D, 1.7976931348623157E308D, 1.7976931348623157E308D);
+          System.Object fcleft = new HS_Point(1.7976931348623157E308D, 1.7976931348623157E308D, 1.7976931348623157E308D);
                     while (fEtr.MoveNext())
                     {
                         GE_Face f = fEtr.Current;
@@ -819,8 +820,8 @@ namespace Hsy.GyresMesh
                     }
                 }
 
-                Console.WriteLine("cap总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
-            }
+        Log.Println("cap总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+      }
             return mesh;
         }
         private long Ohash(int u, int v)

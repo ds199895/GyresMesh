@@ -79,7 +79,8 @@ namespace Hsy.GyresMesh
                     faces[i][2] = 3 * i + 2;
                 }
 
-                Console.WriteLine("vertices num: " + vertices.Length);
+        Console.WriteLine("vertices num: " + vertices.Length);
+        //Log.Println("vertices num: " + vertices.Length);
                 vset.Clear();
                 GEC_FromFaceList ffl = new GEC_FromFaceList().setVertices(vertices).setFaces(faces).setDuplicate(duplicate);
                 return ffl.createBase();

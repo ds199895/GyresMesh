@@ -172,6 +172,7 @@
     <Compile Include="Geo\HS_PointCloud.cs" />
     <Compile Include="GyresMeshUnity\UnitySupport.cs" />
     <Compile Include="GyresMesh\GE_TextureCoordinate.cs" />
+    <Compile Include="Core\Log.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GyresMeshGH\" />
