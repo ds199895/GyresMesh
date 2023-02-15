@@ -14,7 +14,7 @@ namespace Hsy.GyresMeshArchiJson
     byte[] result = new byte[1024];
     public String msg = "";
     public List<String> msgList = new List<string>();
-
+    public string recvmsg;
     public ClientSocket(String address,int port)
     {
 
@@ -48,7 +48,7 @@ namespace Hsy.GyresMeshArchiJson
     /// <summary>
     /// 开始接收消息
     /// </summary>
-    public void StartReceive()
+    public void UnityReceive()
     {
       //异步接收数据 参数1：接收信息载体，参数2：从0开始，参数3：信息长度，参数4：目前为空，参数5：回调函数，参数6：回调函数需要用到的参数
       //接收到的消息将在回调函数中进行处理
@@ -93,11 +93,11 @@ namespace Hsy.GyresMeshArchiJson
       
       //输出消息
       Console.WriteLine(con);
-      Debug.Log(str);
+      Debug.Log(con);
 
       #endregion
       //4，循环接收消息并对消息进行处理（第一条数据解析完后，对后面服务器发送的消息进行处理）
-      StartReceive();
+      UnityReceive();
     }
 
     /// <summary>
@@ -119,17 +119,19 @@ namespace Hsy.GyresMeshArchiJson
         socket.Connect(new IPEndPoint(ip, this.port));
       }
 
-      byte[] result = new byte[1024];
+      //byte[] result = new byte[1024];
       string sendMsg = msg;
       socket.Send(Encoding.ASCII.GetBytes(sendMsg));//传送信息
       socket.Send(Encoding.ASCII.GetBytes("end"));//传送信息
       Console.WriteLine("msg: " + sendMsg + " 发送成功");
-      //int receiveLength = socket.Receive(result);//接收回复，成功则说明已经接通
-      //string recvmsg = Encoding.UTF8.GetString(result, 0, receiveLength);
-      //Console.WriteLine("从服务器接收信息: " + recvmsg);
+      int receiveLength = socket.Receive(result);//接收回复，成功则说明已经接通
+      recvmsg = Encoding.UTF8.GetString(result, 0, receiveLength);
+      Console.WriteLine("从服务器接收信息: " + recvmsg);
       //clientSocket.Disconnect(true);
     }
-    public string Receive()
+
+
+    public string RhinoReceive()
     {
       if (!socket.Connected)
       {
@@ -143,6 +145,7 @@ namespace Hsy.GyresMeshArchiJson
       int receiveLength = socket.Receive(result);//接收回复，成功则说明已经接通
       string recvmsg = Encoding.UTF8.GetString(result, 0, receiveLength);
       Console.WriteLine("从服务器接收信息: " + recvmsg);
+      msgList.Insert(0, recvmsg);
       //clientSocket.Disconnect(true);
       return recvmsg;
     }

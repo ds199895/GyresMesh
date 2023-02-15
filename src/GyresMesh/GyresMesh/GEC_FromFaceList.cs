@@ -464,7 +464,7 @@ namespace Hsy.GyresMesh
         //  }
         //}
 
-        Log.Println("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        Console.WriteLine("checkduplicate总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
         lasttime = stopwatch.ElapsedMilliseconds;
                 int id = 0;
                 GE_Halfedge he;
@@ -667,7 +667,8 @@ namespace Hsy.GyresMesh
                 }
 
 
-        Log.Println("baseset总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        Console.WriteLine("baseset总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+       
         lasttime = stopwatch.ElapsedMilliseconds;
 
                 //Dictionary<long, GE_Halfedge> centers = new Dictionary<long, GE_Halfedge>();
@@ -786,7 +787,7 @@ namespace Hsy.GyresMesh
 
                 GE_MeshOp.pairHalfedges(mesh);
 
-        Log.Println("pairing线程总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        Console.WriteLine("pairing线程总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
         lasttime = stopwatch.ElapsedMilliseconds;
 
                 if (this.cleanunused)
@@ -820,7 +821,7 @@ namespace Hsy.GyresMesh
                     }
                 }
 
-        Log.Println("cap总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
+        Console.WriteLine("cap总用   " + (stopwatch.ElapsedMilliseconds - lasttime) + "ms");
       }
             return mesh;
         }

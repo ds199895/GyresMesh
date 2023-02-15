@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
 
 namespace Hsy.Core
@@ -13,7 +12,6 @@ namespace Hsy.Core
     public static void Println(string s)
     {
       Console.WriteLine(s);
-      Debug.Log(s);
     }
   }
 }
